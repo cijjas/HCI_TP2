@@ -47,7 +47,7 @@ export default {
         </v-list>
         <v-list density="compact" nav>
               <v-list-item to="/" prepend-icon="mdi-home" title="Home" value="myfiles"></v-list-item>
-              <v-list-item to="/Rooms" prepend-icon="mdi-sofa-outlines" title="Rooms" value="shared"></v-list-item>
+              <v-list-item to="/Rooms" prepend-icon="mdi-sofa" title="Rooms" value="shared"></v-list-item>
               <v-list-item to="/Routines" prepend-icon="mdi-list-box-outline" title="Routines" value="starred"></v-list-item>
               <v-list-item to="/Settings" prepend-icon="mdi-cog" title="Settings" value="starred"></v-list-item>
               <v-list-item to="/Contact" prepend-icon="mdi-account-box-outline" title="Contact" value="starred"></v-list-item>

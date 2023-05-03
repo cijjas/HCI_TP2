@@ -1,5 +1,5 @@
 <script setup>
-/* import component */
+    import ProfileBox from '../components/ProfileBox.vue';
 </script>
 
 <template>
@@ -9,7 +9,8 @@
         <v-row justify-end>
 
         <v-col cols="3">
-            <v-list>
+            <ProfileBox class="grid-item"></ProfileBox>
+            <!-- <v-list>
                 <v-list-item
                     prepend-avatar="https://www.paperflodesigns.com/wp-content/uploads/2020/01/How-to-Draw-a-Bee-step-6.png"
                     title="Gabor"
@@ -18,7 +19,7 @@
                 <v-list-item title="EditProfile"></v-list-item>
                 <v-list-item title="ManageAccount"></v-list-item>
 
-            </v-list>
+            </v-list> -->
         </v-col>
 
         <v-col cols="6">
