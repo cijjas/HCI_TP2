@@ -7,7 +7,9 @@
       
       <v-spacer></v-spacer>
       
-      <v-btn icon @click="isOn = !isOn" :class="{'primary': isOn}">
+      <v-btn icon @click="isOn = !isOn" 
+          :class="{'primary': isOn}"
+          >
         <v-icon>{{ isOn ? 'mdi-power' : 'mdi-power-standby' }}</v-icon>
       </v-btn>
 
@@ -19,17 +21,30 @@
       
     <v-row no-gutters class="button-row">
   <v-col cols="auto">
-    <v-btn icon class="back-button" @click="goBack">
+    <v-btn icon class="back-button" @click="goBack" 
+          :disabled="!isOn">
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
   </v-col>
   <v-col cols="auto" class="ml-auto">
     <v-row no-gutters>
       <v-col cols="auto">
-        <v-btn :color="isOn ? (switchValue ? 'primary' : 'offcolor') : 'offcolor'" dark :block="true" @click.stop="toggleAspiradora" class="text-right small-button">{{ aspiradoraText }}</v-btn>
+
+        <v-btn :color="isOn ? (switchValue ? 'primary' : 'offcolor') : 'offcolor'" dark 
+          :block="true" @click.stop="toggleAspiradora" class="text-right small-button"
+          :disabled="!isOn"
+          >{{ aspiradoraText }}
+        </v-btn>
+      
       </v-col>
       <v-col cols="auto">
-        <v-btn :color="isOn ? (switchValue ? 'offcolor' : 'primary') : 'offcolor'" dark :block="true" @click.stop="toggleTrapeadora" class="text-right small-button small-right-button">{{ trapeadoraText }}</v-btn>
+
+        <v-btn :color="isOn ? (switchValue ? 'offcolor' : 'primary') : 'offcolor'" dark 
+          :block="true" @click.stop="toggleTrapeadora" class="text-right small-button small-right-button"
+          :disabled="!isOn"
+          >{{ trapeadoraText }}
+        </v-btn>
+
       </v-col>
     </v-row>
   </v-col>
@@ -54,6 +69,9 @@ export default {
   methods: {
     toggleCard() {
       /* IR A ASPIRADORA */ 
+    },
+    goBack() {
+      
     },
     toggleAspiradora() {
       if(this.isOn){// si esta prendida la aspiradora
@@ -81,7 +99,6 @@ export default {
   cursor: pointer;
   padding: 16px;  
   border-radius: 10px;
-  border: 1px solid #ccc;
   background-color: #EECC66;
   transition: all .2s ease-in-out;
   max-height: 200px;

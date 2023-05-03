@@ -19,18 +19,19 @@ import GrifoBox from '@/components/GrifoBox.vue';
 
 <style scoped>
 
-
-.canvas{
+.canvas {
   width: 95%;
   margin-top: 3%;
-  height: 2632px; /* debe dejar de ser fijo esto */
+  height: 2632px;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%), rgba(233, 247, 242, 0.03);
   border-radius: 38px;
   display: grid;
-  grid-template-columns: auto auto auto auto auto auto auto ;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap:  2%;
   padding: 2.5%;
-
 }
+
+
 
 
 
