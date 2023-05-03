@@ -6,7 +6,7 @@
 
 // Components
 import App from './App.vue'
-
+import '@mdi/font/css/materialdesignicons.css'
 // Estilo Global
 import './assets/main.css'
 

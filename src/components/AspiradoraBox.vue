@@ -1,22 +1,41 @@
 <template>
-  <v-card class="toggle-card" @click="toggleCard">
-    <v-toolbar :elevation="8" title="Aspiradora" color="primary" dark rounded>
+  <v-card :class="{'bg-on': isOn, 'bg-off': !isOn}" class="toggle-card" @click="toggleCard">
+    <v-toolbar  :rounded="true" class="rounded-toolbar" transparent>
+
+      
+      <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">Aspiradora</v-toolbar-title>
+      
       <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>mdi-close</v-icon>
+      
+      <v-btn icon @click="isOn = !isOn" :class="{'primary': isOn}">
+        <v-icon>{{ isOn ? 'mdi-power' : 'mdi-power-standby' }}</v-icon>
       </v-btn>
+
     </v-toolbar>
 
-    <v-row justify-end>
-
-      <v-col cols="6">
-        <v-btn :color="buttonColor" dark :block="true" @click.stop="toggleFeature" color="primary" class="text-right">{{ buttonText }}</v-btn>
+    <v-col cols="12">
+        <v-subheader>Ubicación</v-subheader>
+    </v-col>
+      
+    <v-row no-gutters class="button-row">
+  <v-col cols="auto">
+    <v-btn icon class="back-button" @click="goBack">
+      <v-icon>mdi-arrow-left</v-icon>
+    </v-btn>
+  </v-col>
+  <v-col cols="auto" class="ml-auto">
+    <v-row no-gutters>
+      <v-col cols="auto">
+        <v-btn :color="isOn ? (switchValue ? 'primary' : 'offcolor') : 'offcolor'" dark :block="true" @click.stop="toggleAspiradora" class="text-right small-button">{{ aspiradoraText }}</v-btn>
       </v-col>
-      <v-col cols="6">
-        <v-btn :color="switchValue ? 'offcolor' : 'primary'" dark :block="true" @click.stop="toggleSwitch" color="primary" class="text-right">{{ switchText }}</v-btn>
+      <v-col cols="auto">
+        <v-btn :color="isOn ? (switchValue ? 'offcolor' : 'primary') : 'offcolor'" dark :block="true" @click.stop="toggleTrapeadora" class="text-right small-button small-right-button">{{ trapeadoraText }}</v-btn>
       </v-col>
-
     </v-row>
+  </v-col>
+</v-row>
+
+
   </v-card>
 </template>
 
@@ -24,29 +43,34 @@
 export default {
   data() {
     return {
-      switchValue: false,
-      switchLabel: 'Aspirar/Trapear',
+      isOn: false,
+      switchValue: true,
       buttonColor: 'primary',
       titleColor: 'secondary',
-      buttonText: 'Feature is Off',
-      switchText: 'Switch Off'
+      aspiradoraText: 'Aspiradora',
+      trapeadoraText: 'Trapear',
     }
   },
   methods: {
     toggleCard() {
-      /* IR A ASPIRADORA */
+      /* IR A ASPIRADORA */ 
     },
-    toggleFeature() {
-      this.buttonColor = this.buttonColor === 'primary' ? 'offcolor' : 'primary';
-      this.buttonText = this.buttonColor === 'primary' ? 'Aspiradora Off' : 'Aspiradora On';
-      this.switchValue = !this.switchValue; // toggle switch value
-      this.switchText = this.switchValue ? 'Trapear Off' : 'Switch On'; // update switch text
+    toggleAspiradora() {
+      if(this.isOn){// si esta prendida la aspiradora
+        this.trapearIsOn = !this.trapearIsOn;
+        if(this.buttonColor !== 'primary'){
+          this.buttonColor = this.buttonColor === 'primary' ? 'offcolor' : 'primary';
+          this.switchValue = !this.switchValue; // toggle switch value
+        }
+      }
     },
-    toggleSwitch() {
-      this.switchValue = !this.switchValue; // toggle switch value
-      this.switchText = this.switchValue ? 'Trapear On' : 'Trapear Off'; // update switch text
-      this.buttonColor = this.switchValue ? 'primary' : 'offcolor'; // update button color
-      this.buttonText = this.switchValue ? 'Aspiradora Off' : 'Aspiradora On'; // update button text
+    toggleTrapeadora() {
+      if (this.isOn) {// si esta prendida la aspiradora
+        if(this.buttonColor !== 'offcolor'){ 
+          this.switchValue = !this.switchValue; // toggle switch value
+          this.buttonColor = this.switchValue ? 'primary' : 'offcolor'; // update button color
+        }
+      }
     }
   }
 }
@@ -55,16 +79,39 @@ export default {
 <style scoped>
 .toggle-card {
   cursor: pointer;
-  padding: 16px;
+  padding: 16px;  
   border-radius: 10px;
   border: 1px solid #ccc;
   background-color: #EECC66;
   transition: all .2s ease-in-out;
   max-height: 200px;
-  max-width: 400px;
+  max-width: 450px;
 }
 
 .toggle-card:hover {
   box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
+}
+
+.rounded-toolbar {
+  border-radius: 20px;
+  background-color: transparent;
+
+}
+.bg-on {
+  background-color: #EECC66;
+}
+
+/* background color when turned off */
+.bg-off {
+  background-color: #8C783A;
+}
+
+.small-button {
+  padding: 5px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+}
+.v-subheader {
+  margin-top: -34px;
 }
 </style>
