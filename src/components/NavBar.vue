@@ -36,41 +36,25 @@ export default {
     </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" app class="primary" color="gris">
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title class="text-h6"> Pepe </v-list-item-title>
-          <v-list-item-subtitle> Marta's Home</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-      <v-divider></v-divider>
 
-      <v-list dense nav>
+      <v-card color="gris">
+        <v-list>
+          <v-list-item
+            prepend-avatar="https://www.paperflodesigns.com/wp-content/uploads/2020/01/How-to-Draw-a-Bee-step-6.png"
+            title="Gabor"
+            subtitle="Chris' Home"
+          ></v-list-item>
+        </v-list>
+        <v-list density="compact" nav>
+              <v-list-item to="/" prepend-icon="mdi-home" title="Home" value="myfiles"></v-list-item>
+              <v-list-item to="/Rooms" prepend-icon="mdi-sofa-outlines" title="Rooms" value="shared"></v-list-item>
+              <v-list-item to="/Routines" prepend-icon="mdi-list-box-outline" title="Routines" value="starred"></v-list-item>
+              <v-list-item to="/Settings" prepend-icon="mdi-cog" title="Settings" value="starred"></v-list-item>
+              <v-list-item to="/Contact" prepend-icon="mdi-account-box-outline" title="Contact" value="starred"></v-list-item>
+              <v-list-item to="/Help" prepend-icon="mdi-help-circle-outline" title="Help" value="starred"></v-list-item>
 
-        <v-list-item-content>
-          <v-icon icon="mdi-home" color="white"></v-icon>
-          <v-icon icon="mdi-heart"></v-icon>
-          <v-list-item-title> Home </v-list-item-title>
-          <v-list-item-title> Rooms </v-list-item-title>
-        </v-list-item-content>
-
-
-
-        <!--
-          <v-list-item v-for="item in items" :key="item.title" link>
-          <v-list-item-icon>
-            <v-icon></v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title></v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        -->
-
-
-      </v-list>
-
-      <span>LAALA</span>
+            </v-list>
+      </v-card>
     </v-navigation-drawer>
   </nav>
 

@@ -32,7 +32,6 @@ export default createVuetify({
           offcolor: '#7E9694',
           gris: '#AFC1BB',
           primaryclarito: '#497065'
-
         },
       },
     },

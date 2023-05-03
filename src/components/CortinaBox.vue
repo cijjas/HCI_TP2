@@ -17,12 +17,12 @@
                 class="ui button toggle"
                 @click="toggle"
                 :class="[isVacuumMode ? 'active' : '']"
-            >Credit Card</button>
+            >Info 1</button>
             <button
                 class="ui button toggle"
                 @click="toggle"
                 :class="[!isVacuumMode ? 'active' : '']"
-            >Paypal</button>
+            >Info 2</button>
         </div>
         <!-- <v-switch class="ml-auto" v-model="isVacuumMode">
           <template v-slot:label>

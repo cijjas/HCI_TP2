@@ -2,6 +2,7 @@
 import Box from '../components/Box.vue';
 import AspiradoraBox from '../components/AspiradoraBox.vue';
 import CortinaBox from '@/components/CortinaBox.vue';
+import GrifoBox from '@/components/GrifoBox.vue';
 
 
 </script>
@@ -11,7 +12,7 @@ import CortinaBox from '@/components/CortinaBox.vue';
     <div class="canvas">
       <AspiradoraBox class="grid-item"></AspiradoraBox>
       <CortinaBox class="grid-item"></CortinaBox>
-
+      <GrifoBox class="grid-item"></GrifoBox>
     </div>
   </main>
 </template>
