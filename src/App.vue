@@ -15,8 +15,6 @@ import NavBar from './components/NavBar.vue';
       </div>
     </div> -->
 
-  <v-icon icon="mdi-heart"></v-icon>
-
   <NavBar></NavBar>
   <RouterView />
   </v-app>
