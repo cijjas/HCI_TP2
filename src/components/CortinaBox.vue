@@ -1,14 +1,15 @@
 <template>
-  <v-card :class="{'bg-on': isOn, 'bg-off': !isOn}" class="toggle-card" @click="toggleCard">
+  <v-card :class="{'bg-on': isOn, 'bg-off': !isOn}" :style="{ backgroundColor: computedBackgroundColor }" class="toggle-card" @click="toggleCard">
     <v-toolbar  :rounded="true" class="rounded-toolbar" transparent>
 
       <v-row align="center">
         <v-col>
-          <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">Cortina</v-toolbar-title>
+          <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0 card-title">Cortina</v-toolbar-title>
         </v-col>
         <v-col>
-          <v-card-text class="text--white font-weight-bold text-h4 mb-0" >{{ sliderValue }}</v-card-text>
-        </v-col>
+    <v-card-text  class="text--white font-weight-bold text-h4 mb-0 slider-value" >{{ sliderValue }}</v-card-text>
+  
+  </v-col>
       </v-row>
       <v-spacer></v-spacer>
 
@@ -18,28 +19,22 @@
 
     </v-toolbar>
 
-    <v-col cols="12">
-      <v-subheader>Ubicación</v-subheader>
-    </v-col>
+    <v-row no-gutters align="center" style="padding-bottom: 40px">
+      <v-col cols="12">
+        <v-subheader class="ml-1">Ubicación</v-subheader>
+      </v-col>
+    </v-row>
 
     <v-row no-gutters class="button-row">
-      <v-col>
-        <v-slider :color="isOn ? 'primary' : 'offcolor'"
+        <v-slider color="primary"
           v-model="sliderValue"
           :ticks="true"
           :max="100"
           :min="0"
           :step="1"
-          :disabled="!isOn"
           thumb-label
         >
-          <template v-slot:thumb-label>
-            <span class="slider-value">{{ sliderValue }}</span>
-          </template>
         </v-slider>
-        <v-card-text class="text-center">{{ sliderPercentage }}%</v-card-text>
-      </v-col>
-      <v-card-text class="text-center">{{ sliderValue }}%</v-card-text>
     </v-row>
 
   </v-card>
@@ -50,12 +45,36 @@ export default {
   data() {
     return {
       isOn: false,
-      sliderValue: 50,
+      sliderValue: 10,
     }
   },
   computed: {
     sliderPercentage() {
       return Math.round(this.sliderValue);
+    },
+    computedBackgroundColor() {
+      const color1 = [140, 120, 58]; // RGB values for #8C783A
+      const color2 = [238, 204, 102]; // RGB values for #EECC66
+      const ratio = this.sliderValue / 100;
+      const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
+      return `rgb(${color.join(',')})`;
+    },
+  },
+  watch: {
+    sliderValue(value) {
+      if (value <= 0) {
+        this.isOn = false;
+      } else {
+        this.isOn = true;
+      }
+    },
+    isOn(value) {
+      if(value){
+        this.sliderValue = 100;
+      }
+      if (!value) {
+        this.sliderValue = 0;
+      }
     }
   },
   methods: {
@@ -94,5 +113,14 @@ export default {
 .bg-off {
   background-color: #8C783A;
 }
+
+
+.slider-value {
+  color: #1C4035; /* Change the color to your desired value */
+}
+.card-title{
+  color: #1C4035; /* Change the color to your desired value */
+}
+
 
 </style>

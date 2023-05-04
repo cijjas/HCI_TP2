@@ -3,7 +3,7 @@ import Box from '../components/Box.vue';
 import AspiradoraBox from '../components/AspiradoraBox.vue';
 import CortinaBox from '@/components/CortinaBox.vue';
 import GrifoBox from '@/components/GrifoBox.vue';
-
+import HornoBox from '@/components/HornoBox.vue';
 
 </script>
 
@@ -13,6 +13,7 @@ import GrifoBox from '@/components/GrifoBox.vue';
       <AspiradoraBox class="grid-item"></AspiradoraBox>
       <CortinaBox class="grid-item"></CortinaBox>
       <GrifoBox class="grid-item"></GrifoBox>
+      <HornoBox class="grid-item"></HornoBox>
     </div>
   </main>
 </template>

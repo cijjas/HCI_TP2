@@ -3,7 +3,7 @@
     <v-toolbar  :rounded="true" class="rounded-toolbar" transparent>
 
       
-      <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">Aspiradora</v-toolbar-title>
+      <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0 card-title">Aspiradora</v-toolbar-title>
       
       <v-spacer></v-spacer>
       
@@ -14,21 +14,21 @@
       </v-btn>
 
     </v-toolbar>
-
-    <v-col cols="12">
-        <v-subheader>Ubicación</v-subheader>
-    </v-col>
-      
+    <v-row no-gutters align="center" style="padding-bottom: 30px">
+      <v-col cols="12">
+        <v-subheader class="ml-4">Ubicación</v-subheader>
+      </v-col>
+    </v-row>
+        
     <v-row no-gutters class="button-row">
   <v-col cols="auto">
-    <v-btn icon class="back-button" @click="goBack" 
-          :disabled="!isOn">
-      <v-icon>mdi-arrow-left</v-icon>
-    </v-btn>
+    <v-card-actions>
+      <v-btn color="primary" block @click="returnToBase">Return to Base</v-btn>
+    </v-card-actions>
   </v-col>
   <v-col cols="auto" class="ml-auto">
     <v-row no-gutters>
-      <v-col cols="auto">
+      <v-col cols="auto" style="padding-top: 10px">
 
         <v-btn :color="isOn ? (switchValue ? 'primary' : 'offcolor') : 'offcolor'" dark 
           :block="true" @click.stop="toggleAspiradora" class="text-right small-button"
@@ -37,7 +37,7 @@
         </v-btn>
       
       </v-col>
-      <v-col cols="auto">
+      <v-col cols="auto" style="padding-top: 10px">
 
         <v-btn :color="isOn ? (switchValue ? 'offcolor' : 'primary') : 'offcolor'" dark 
           :block="true" @click.stop="toggleTrapeadora" class="text-right small-button small-right-button"
@@ -62,16 +62,16 @@ export default {
       switchValue: true,
       buttonColor: 'primary',
       titleColor: 'secondary',
-      aspiradoraText: 'Aspiradora',
-      trapeadoraText: 'Trapear',
+      aspiradoraText: 'Vacuum',
+      trapeadoraText: 'Mop',
     }
   },
   methods: {
     toggleCard() {
       /* IR A ASPIRADORA */ 
     },
-    goBack() {
-      
+    returnToBase() {
+      // Code to execute when button is clicked
     },
     toggleAspiradora() {
       if(this.isOn){// si esta prendida la aspiradora
@@ -128,7 +128,21 @@ export default {
   font-size: 12px;
   border-radius: 4px;
 }
-.v-subheader {
-  margin-top: -34px;
+
+
+.card-title{
+  color: #1C4035; /* Change the color to your desired value */
+  white-space: nowrap;
+  overflow: hidden;
+  animation: marquee 5s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 </style>
