@@ -1,10 +1,10 @@
 // EditValuesPopup
 
 <template>
-    <v-dialog v-model="dialog" max-width="500">
+    <v-dialog v-model="dialog" max-width="500" >
       <v-card>
         <v-toolbar color="primary" dark>
-          <v-btn icon @click="close">
+          <v-btn icon @click.stop="close">
             <v-icon>mdi-close</v-icon>
           </v-btn>
           <v-toolbar-title>Edit Values</v-toolbar-title>
@@ -14,17 +14,17 @@
         <v-card-text>
           <v-row align="center">
             <v-col>
-              <v-slider v-model="slider1Value" label="Temperatura Freezer (°C)" :max="-8" :min="-20" />
+              <v-slider v-model="sliderFreezer" label="Temperatura Freezer (°C)" thumb-label :max="-8" :min="-20" />
             </v-col>
           </v-row>
           <v-row align="center">
             <v-col>
-              <v-slider v-model="slider2Value" label="Temperatura Heladera (°C)" :max="8" :min="2" />
+              <v-slider v-model="sliderFridge" label="Temperatura Fridge (°C)" thumb-label :max="8" :min="2" />
             </v-col>
           </v-row>
           <v-row align="center">
             <v-col>
-              <v-select v-model="selectedItem" :items="dropdownItems" label="Modo" />
+              <v-select v-model="selectedMode" :items="modes" label="Modo" />
             </v-col>
           </v-row>
         </v-card-text>
@@ -36,15 +36,15 @@
   export default {
     name: 'EditValuesPopup',
     props: {
-      initialValue1: {
+      initialValueFreezer: {
         type: Number,
         required: true,
       },
-      initialValue2: {
+      initialValueHeladera: {
         type: Number,
         required: true,
       },
-      initialSelectedItem: {
+      initialSelectedMode: {
         type: String,
         required: true,
       },
@@ -52,16 +52,16 @@
     data() {
       return {
         dialog: false,
-        slider1Value: -20,
-        slider2Value: 2,
-        selectedItem: null,
-        dropdownItems: ['Normal', 'Fiesta', 'Vacaciones'],
+        sliderFreezer: -20,
+        sliderFridge: 2,
+        selectedMode: 'Normal',
+        modes: ['Normal', 'Fiesta', 'Vacaciones'],
       };
     },
     created() {
-      this.slider1Value = this.initialValue1;
-      this.slider2Value = this.initialValue2;
-      this.selectedItem = this.initialSelectedItem;
+      this.sliderFreezer = this.initialValueFreezer;
+      this.sliderFridge = this.initialValueHeladera;
+      this.selectedMode = this.initialSelectedMode;
     },
     methods: {
       open() {
@@ -72,9 +72,9 @@
       },
       save() {
         this.$emit('save', {
-          value1: this.slider1Value,
-          value2: this.slider2Value,
-          selectedItem: this.selectedItem,
+          value1: this.sliderFreezer,
+          value2: this.sliderFridge,
+          selectedMode: this.selectedMode,
         });
         this.dialog = false;
       },

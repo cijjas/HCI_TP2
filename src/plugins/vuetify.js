@@ -29,7 +29,7 @@ export default createVuetify({
         colors: {
           primary: '#1C4035',
           secondary: '#EECC66',
-          offcolor: '#7E9694',
+          offcolor: '#81938E',
           gris: '#AFC1BB',
           primaryclarito: '#497065'
         },

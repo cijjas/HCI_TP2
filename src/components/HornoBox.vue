@@ -135,18 +135,9 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    animation: spin 3s linear infinite;
   
   }
   
   
-  @keyframes spin {
-    0% {
-      transform: rotateY(0deg);
-    }
-    100% {
-      transform: rotateY(360deg);
-    }
-  }
   </style>
   

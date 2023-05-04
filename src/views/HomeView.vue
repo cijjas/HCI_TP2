@@ -1,7 +1,6 @@
 // HomeView
 
 <script setup>
-import Box from '../components/Box.vue';
 import AspiradoraBox from '../components/AspiradoraBox.vue';
 import CortinaBox from '@/components/CortinaBox.vue';
 import GrifoBox from '@/components/GrifoBox.vue';
@@ -11,37 +10,73 @@ import HornoBox from '@/components/HornoBox.vue';
 
 <template>
   <main>
-    <div class="canvas">
-      <AspiradoraBox class="grid-item" />
-      <CortinaBox class="grid-item" />
-      <GrifoBox class="grid-item" />
-      <HeladeraBox class="grid-item" />
-      <HornoBox class="grid-item" />
 
+    <div class="canvas">
+      <v-container class="my-5">
+        <v-layout row wrap>
+          <v-flex xs12 sm6 md4 lg3>
+            <AspiradoraBox class="grid-item" />
+          </v-flex>
+          <v-flex xs12 sm6 md4 lg3>
+            <CortinaBox class="grid-item" />
+          </v-flex>
+          <v-flex xs12 sm6 md4 lg3>
+            <HeladeraBox class="grid-item" />
+          </v-flex>
+          <v-flex xs12 sm6 md4 lg3>
+            <GrifoBox class="grid-item" />
+          </v-flex>
+          <v-flex xs12 sm6 md4 lg3>
+            <AspiradoraBox class="grid-item" />
+          </v-flex>
+          <v-flex xs12 sm6 md4 lg3>
+            <GrifoBox class="grid-item" />
+          </v-flex>
+          <v-flex xs12 sm6 md4 lg3>
+            <GrifoBox class="grid-item" />
+          </v-flex>
+          <v-flex xs12 sm6 md4 lg3>
+            <AspiradoraBox class="grid-item" />
+          </v-flex>
+          <v-flex xs12 sm6 md4 lg3>
+            <GrifoBox class="grid-item" />
+          </v-flex>
+          <v-flex xs12 sm6 md4 lg3>
+            <GrifoBox class="grid-item" />
+          </v-flex>
+          <v-flex xs12 sm6 md4 lg3>
+            <CortinaBox class="grid-item" />
+          </v-flex>
+          <v-flex xs12 sm6 md4 lg3>
+            <CortinaBox class="grid-item" />
+          </v-flex>
+          <v-flex xs12 sm6 md4 lg3>
+            <CortinaBox class="grid-item" />
+          </v-flex>
+        </v-layout>
+      </v-container>
     </div>
+
   </main>
 </template>
 
 <style scoped>
-.canvas {
-  width: 95%;
-  margin-top: 3%;
-  height: auto;
-  background: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 0.2) 100%
-    ),
-    rgba(233, 247, 242, 0.03);
-  border-radius: 38px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 2%;
-  padding: 2.5%;
+.grid-item {
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin: 1rem;
+  padding: 1rem;
+  transition: box-shadow 0.2s ease;
 }
 
-.grid-item {
-  width: 100%;
-  height: 100%;
+.grid-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
+.v-layout {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
 </style>

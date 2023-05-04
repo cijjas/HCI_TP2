@@ -3,7 +3,7 @@
     <v-toolbar  :rounded="true" class="rounded-toolbar" transparent>
 
       
-      <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0 card-title">Aspiradora</v-toolbar-title>
+      <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0 card-title">Vacuum Cleaner</v-toolbar-title>
       
       <v-spacer></v-spacer>
       
@@ -30,19 +30,17 @@
     <v-row no-gutters>
       <v-col cols="auto" style="padding-top: 10px">
 
-        <v-btn :color="isOn ? (switchValue ? 'primary' : 'offcolor') : 'offcolor'" dark 
-          :block="true" @click.stop="toggleAspiradora" class="text-right small-button"
-          :disabled="!isOn"
-          >{{ aspiradoraText }}
-        </v-btn>
+        <v-btn :disabled="!isOn" :color="isOn ? (switchValue ? 'primary' : 'offcolor') : 'offcolor'" dark 
+          :block="true" @click.stop="toggleAspiradora" class="secondary text-right small-button-vacuum"
+          >Vacuum</v-btn>
       
       </v-col>
       <v-col cols="auto" style="padding-top: 10px">
 
         <v-btn :color="isOn ? (switchValue ? 'offcolor' : 'primary') : 'offcolor'" dark 
-          :block="true" @click.stop="toggleTrapeadora" class="text-right small-button small-right-button"
+          :block="true" @click.stop="toggleTrapeadora" class="text-right small-button-mop"
           :disabled="!isOn"
-          >{{ trapeadoraText }}
+          >Mop
         </v-btn>
 
       </v-col>
@@ -62,8 +60,6 @@ export default {
       switchValue: true,
       buttonColor: 'primary',
       titleColor: 'secondary',
-      aspiradoraText: 'Vacuum',
-      trapeadoraText: 'Mop',
     }
   },
   methods: {
@@ -123,26 +119,28 @@ export default {
   background-color: #8C783A;
 }
 
-.small-button {
+.small-button-vacuum {
   padding: 5px 8px;
   font-size: 12px;
-  border-radius: 4px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
+.small-button-mop {
+  padding: 5px 8px;
+  font-size: 12px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 
+}
 
 .card-title{
   color: #1C4035; /* Change the color to your desired value */
   white-space: nowrap;
   overflow: hidden;
-  animation: marquee 5s linear infinite;
 }
 
-@keyframes marquee {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
 </style>
