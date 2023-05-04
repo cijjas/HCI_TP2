@@ -40,6 +40,11 @@ const router = createRouter({
       name: 'todo',
       component: () => import('../views/TodoView.vue')
     },
+    {
+      path: '/test',
+      name: 'test',
+      component: () => import('../views/TestView.vue')
+    },
     /* Este routing deberia ser dinamico o sea que segun cuantos rooms tiene deberia poder acceder a la view general de cada uno */
     {
       path: '/rooms',
