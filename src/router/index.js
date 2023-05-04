@@ -42,9 +42,9 @@ const router = createRouter({
     },
     /* Este routing deberia ser dinamico o sea que segun cuantos rooms tiene deberia poder acceder a la view general de cada uno */
     {
-      path: '/room',
-      name: 'room',
-      component: () => import('../views/RoomView.vue')
+      path: '/rooms',
+      name: 'rooms',
+      component: () => import('../views/RoomsView.vue')
     },
     /* ----------------------------- */
     {

@@ -1,76 +1,51 @@
 <template>
     <v-col cols="12">
-      <v-card class="profile-card">
-        <v-card-text class="profile-info">
-          <v-avatar size="100">
-            <img src="https://www.paperflodesigns.com/wp-content/uploads/2020/01/How-to-Draw-a-Bee-step-6.png" alt="Profile Picture" />
-          </v-avatar>
-          <div class="profile-name">Gabor</div>
-          <div class="profile-subtitle">Chris' Home</div>
-        </v-card-text>
+      <div class="profile-container">
+        <v-card class="profile-card" color="secondary">
+          <v-card-text class="profile-info">
+            <v-avatar size="175">
+              <img src="https://media.npr.org/assets/img/2013/05/13/honeycomb-2_wide-49ae2c6ec87d4b4092881baf81e2de967926cba5-s1400-c100.jpg" alt="Profile Picture" />
+            </v-avatar>
+            <div class="profile-name">Gabor</div>
+            <div class="profile-subtitle">Chris' Home</div>
+          </v-card-text>
+        </v-card>
         <v-card-actions>
-          <v-btn color="primary" text>Edit Profile</v-btn>
-          <v-btn color="primary" text>Manage Account</v-btn>
+          <v-btn color="gris" text>Edit Profile</v-btn>
+          <v-btn color="gris" text>Manage Account</v-btn>
         </v-card-actions>
-      </v-card>
+      </div>
     </v-col>
   </template>
 
-
-<!-- <template>
-
-    <v-col cols="12">
-        <v-card :class="{'bg-on': isOn, 'bg-off': !isOn}" class="toggle-card" @click="toggleCard">
-            <v-list>
-            <v-list-item
-                prepend-avatar="https://www.paperflodesigns.com/wp-content/uploads/2020/01/How-to-Draw-a-Bee-step-6.png"
-                title="Gabor"
-                subtitle="Chris' Home"
-            ></v-list-item>
-            </v-list>
-            
-            <div> Edit Profile </div>
-
-        </v-card>
-        
-    </v-col> 
-  </template> -->
   
   <script>
-  export default {
-    data() {
-      return {
-        isOn: false,
-        switchValue: true,
-        buttonColor: 'primary',
-        titleColor: 'secondary',
-        aspiradoraText: 'Aspiradora',
-        trapeadoraText: 'Trapear',
-      }
-    },
-    methods: {
-      toggleCard() {
-        /* IR A ASPIRADORA */ 
-      },
-    }
-  }
   </script>
   
   <style scoped>
   .profile-card {
   text-align: center;
 }
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 .profile-info {
   margin-bottom: 16px;
+  margin-left: 40px;
+  margin-right: 40px;
 }
 
 .profile-name {
-  font-size: 24px;
+  margin-top: 20px;
+  font-size: 30px;
   font-weight: bold;
 }
 
 .profile-subtitle {
+  margin-top: 10px;
   font-size: 16px;
   color: grey;
 }

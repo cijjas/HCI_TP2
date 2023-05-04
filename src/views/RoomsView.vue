@@ -1,6 +1,5 @@
 <script setup>
-    import ProfileBox from '../components/ProfileBox.vue';
-    import SettingsBox from '../components/SettingsBox.vue';
+    import RoomsBox from '../components/RoomsBox.vue';
 </script>
 
 <template>
@@ -8,16 +7,12 @@
     <main>
         <div class="canvas">
             <v-card class="vcard">
-                <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Settings</v-card-title>
+                <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Rooms</v-card-title>
                 <v-divider color="gris"></v-divider>
                 
                 <v-row justify-end>
-                    <v-col cols="3">
-                        <ProfileBox class="grid-item"></ProfileBox>
-                    </v-col>
-                    
-                    <v-col cols="8">
-                        <SettingsBox class="grid-item"></SettingsBox>
+                    <v-col cols="7">
+                        <RoomBox class="grid-item"></RoomBox>
                     </v-col>
                 </v-row>  
             </v-card>
@@ -29,9 +24,8 @@
 
 .canvas {
   width: 95%;
-  margin-top: 3%;
   height: 2632px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%), rgba(233, 247, 242, 0.03);
+  background: primary;
   border-radius: 38px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
