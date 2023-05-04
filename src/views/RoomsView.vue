@@ -1,5 +1,11 @@
 <script setup>
     import RoomsBox from '../components/RoomsBox.vue';
+    import { reactive } from 'vue';
+    import { ref, computed, defineProps, defineEmits } from 'vue'
+    import { useAppStore } from '@/store/app';
+
+    const store = useAppStore();
+    
 </script>
 
 <template>
@@ -11,9 +17,11 @@
                 <v-divider color="gris"></v-divider>
                 
                 <v-row justify-end>
-                    <v-col cols="7">
-                        <RoomBox class="grid-item"></RoomBox>
-                    </v-col>
+ 
+                        <v-col cols="4" v-for="room in store.getRooms">
+                            <RoomsBox class="grid-item" :roomName="room.name" :devicesCount="room.devices.length"></RoomsBox>
+                        </v-col>
+
                 </v-row>  
             </v-card>
         </div>
