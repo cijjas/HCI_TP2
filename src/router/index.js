@@ -41,6 +41,21 @@ const router = createRouter({
       component: () => import('../views/TodoView.vue')
     },
     {
+      path: '/AddRoom',
+      name: 'AddRoom',
+      component: () => import('../views/AddRoomView.vue')
+    },
+    {
+      path: '/AddRoutine',
+      name: 'AddRoutine',
+      component: () => import('../views/AddRoutineView.vue')
+    },
+    {
+      path: '/AddDevice',
+      name: 'AddDevice',
+      component: () => import('../views/AddDeviceView.vue')
+    },
+    {
       path: '/test',
       name: 'test',
       component: () => import('../views/TestView.vue')

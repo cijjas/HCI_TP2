@@ -32,6 +32,10 @@ export default {
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
+      <v-btn to="/AddRoom">Add Room</v-btn>
+      <v-btn to="/AddRoutine">Add Routine</v-btn>
+      <v-btn to="/AddDevice">Add Device</v-btn>
+
 
     </v-app-bar>
 
@@ -52,7 +56,7 @@ export default {
               <v-list-item to="/Settings" prepend-icon="mdi-cog" title="Settings" value="starred"></v-list-item>
               <v-list-item to="/Contact" prepend-icon="mdi-account-box-outline" title="Contact" value="starred"></v-list-item>
               <v-list-item to="/Help" prepend-icon="mdi-help-circle-outline" title="Help" value="starred"></v-list-item>
-              <v-list-item to="/test" prepend-icon="mdi-account-cowboy-hat-outline" title="Test" value="test"></v-list-item>
+              <v-list-item to="/Test" prepend-icon="mdi-account-cowboy-hat-outline" title="Test" value="test"></v-list-item>
 
             </v-list>
       </v-card>
