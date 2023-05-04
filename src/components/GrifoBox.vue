@@ -13,10 +13,10 @@
     <v-card-text>
       <v-row align="center">
         <v-col>
-          <v-text-field v-model="numericValue" type="number" label="Cantidad"  />
+          <v-text-field v-model="numericValue" type="number" label="Cantidad" :disabled="!toggleValue" :min="0" />
         </v-col>
         <v-col>
-          <v-select v-model="selectedItem" :items="dropdownItems" label="Unidad"  />
+          <v-select v-model="selectedItem" :disabled="!toggleValue" :items="dropdownItems" label="Unidad"  />
         </v-col>
         <v-col>
           <v-btn :disabled="!toggleValue" color="primary" @click="handleButtonClick();">Dispensar</v-btn>
@@ -82,5 +82,9 @@ export default {
 /* background color when turned off */
 .bg-off {
   background-color: #8C783A;
+}
+
+.rounded-toolbar .text--white {
+  color: #1C4035;
 }
 </style>

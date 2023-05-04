@@ -6,23 +6,23 @@
         <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">Heladera</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
+        
         <v-row align="center">
-          <v-col>
-            <span class="font-weight-bold text-h5 mb-0">{{ slider1Value }}°C</span>
-            <p>Temperatura Freezer</p>
-          </v-col>
-        </v-row>
+        <v-col>
+            <v-subheader class="ml-1">Temperatura Freezer</v-subheader>
+          <br />
+          <span class="font-weight-bold text-body mb-0">{{ slider1Value }}°C</span>
+        </v-col>
+        <v-col>
+            <v-subheader class="ml-1">Temperatura Heladera</v-subheader>
+          <br />
+          <span class="font-weight-bold text-body mb-0">{{ slider2Value }}°C</span>
+        </v-col>
+      </v-row>
+
         <v-row align="center">
-          <v-col>
-            <span class="font-weight-bold text-h5 mb-0">{{ slider2Value }}°C</span>
-            <p>Temperatura Heladera</p>
-          </v-col>
-        </v-row>
-        <v-row align="center">
-          <v-col>
-            <span class="font-weight-bold text-h5 mb-0">{{ selectedItem }}</span>
-            <p>Unidad</p>
-          </v-col>
+            <v-subheader class="ml-1">Modo&nbsp;</v-subheader>
+            <span class="font-weight-bold text-body mb-0">{{ selectedItem }}</span>
         </v-row>
       </v-card-text>
       <EditValuesPopup :slider1Value="slider1Value" :slider2Value="slider2Value" :selectedItem="selectedItem" :dropdownItems="dropdownItems" v-model="showPopup" @save="handleSave" />
@@ -110,4 +110,9 @@
   flex-direction: column;
   align-items: center;
 }
+
+.rounded-toolbar .text--white {
+  color: #1C4035;
+}
+
 </style>

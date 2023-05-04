@@ -24,7 +24,7 @@
           </v-row>
           <v-row align="center">
             <v-col>
-              <v-select v-model="selectedItem" :items="dropdownItems" label="Unidad" />
+              <v-select v-model="selectedItem" :items="dropdownItems" label="Modo" />
             </v-col>
           </v-row>
         </v-card-text>
@@ -52,10 +52,10 @@
     data() {
       return {
         dialog: false,
-        slider1Value: 0,
-        slider2Value: 0,
+        slider1Value: -20,
+        slider2Value: 2,
         selectedItem: null,
-        dropdownItems: ['normal', 'fiesta', 'vacaciones'],
+        dropdownItems: ['Normal', 'Fiesta', 'Vacaciones'],
       };
     },
     created() {
