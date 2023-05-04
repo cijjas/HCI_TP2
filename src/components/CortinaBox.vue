@@ -1,16 +1,20 @@
 <template>
-  <v-card :class="{'bg-on': isOn, 'bg-off': !isOn}" :style="{ backgroundColor: computedBackgroundColor }" class="toggle-card" @click="toggleCard">
+    <v-card :class="{'bg-on': isOn, 'bg-off': !isOn}" :style="{ backgroundColor: computedBackgroundColor, width: '400px' }" class="toggle-card" @click="toggleCard">
+
     <v-toolbar  :rounded="true" class="rounded-toolbar" transparent>
 
       <v-row align="center">
         <v-col>
-          <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0 card-title">Cortina</v-toolbar-title>
+          <v-btn @click="openCortinaPopUp" text color="transparent">
+            <v-toolbar-title class="font-weight-bold text-h4 card-title">Cortina</v-toolbar-title>
+          </v-btn>
         </v-col>
+        
         <v-col>
-    <v-card-text  class="text--white font-weight-bold text-h4 mb-0 slider-value" >{{ sliderValue }}</v-card-text>
-  
-  </v-col>
+          <v-card-text  class="text--white font-weight-bold text-h4 mb-0 slider-value" >{{ sliderValue }}</v-card-text>
+        </v-col>
       </v-row>
+
       <v-spacer></v-spacer>
 
       <v-btn @click="isOn = !isOn" :class="{'primary': isOn}">
@@ -18,7 +22,8 @@
       </v-btn>
 
     </v-toolbar>
-
+    
+      <!-- locations for-->
     <v-row no-gutters align="center" style="padding-bottom: 40px">
       <v-col cols="12">
         <v-subheader class="ml-1">Ubicación</v-subheader>
@@ -121,6 +126,14 @@ export default {
 .card-title{
   color: #1C4035; /* Change the color to your desired value */
 }
+.card-title{
+  color: #1C4035; /* Change the color to your desired value */
+  white-space: nowrap;
+  overflow: hidden;
+  margin-left: -10px;
 
-
+}
+.v-btn:hover .card-title {
+  color: #19642d;
+}
 </style>
