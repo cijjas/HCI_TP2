@@ -1,11 +1,11 @@
 // HomeView
 
 <script setup>
-import AspiradoraBox from '../components/AspiradoraBox.vue';
-import CurtainBox from '@/components/CurtainBox.vue';
-import GrifoBox from '@/components/GrifoBox.vue';
-import FridgeBox from '@/components/FridgeBox.vue';
-import OvenBox from '@/components/OvenBox.vue';
+import VacuumBox from '../components/DeviceComponents/VacuumBox.vue';
+import CurtainBox from '@/components/DeviceComponents/CurtainBox.vue';
+import TapBox from '@/components/DeviceComponents/TapBox.vue';
+import FridgeBox from '@/components/DeviceComponents/FridgeBox.vue';
+import OvenBox from '@/components/DeviceComponents/OvenBox.vue';
 </script>
 
 <template>
@@ -15,7 +15,7 @@ import OvenBox from '@/components/OvenBox.vue';
       <v-container class="my-5">
         <v-layout row wrap>
           <v-flex xs12 sm6 md4 lg3>
-            <AspiradoraBox class="grid-item" />
+            <VacuumBox class="grid-item" />
           </v-flex>
           <v-flex xs12 sm6 md4 lg3>
             <CurtainBox class="grid-item" />
@@ -24,17 +24,17 @@ import OvenBox from '@/components/OvenBox.vue';
             <FridgeBox class="grid-item" />
           </v-flex>
           <v-flex xs12 sm6 md4 lg3>
-            <GrifoBox class="grid-item" />
+            <TapBox class="grid-item" />
           </v-flex>
           
           <v-flex xs12 sm6 md4 lg3>
-            <GrifoBox class="grid-item" />
+            <TapBox class="grid-item" />
           </v-flex>
           <v-flex xs12 sm6 md4 lg3>
-            <GrifoBox class="grid-item" />
+            <TapBox class="grid-item" />
           </v-flex>
           <v-flex xs12 sm6 md4 lg3>
-            <AspiradoraBox class="grid-item" />
+            <VacuumBox class="grid-item" />
           </v-flex>
           <v-flex xs12 sm6 md4 lg3>
             <FridgeBox class="grid-item" />

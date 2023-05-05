@@ -58,7 +58,7 @@
     
 <script>
   import { ref, computed } from 'vue';
-  import EditValuesPopup from './EditValuesPopup.vue';
+  import EditValuesPopup from './DevicePopups/EditValuesPopup.vue';
 
   export default {
     name: 'FridgeBox',

@@ -33,7 +33,7 @@
                 <v-col cols="auto" style="padding-top: 10px">
 
                   <v-btn :disabled="!isOn" :color="isOn ? (switchValue ? 'primary' : 'offcolor') : 'offcolor'" dark 
-                    :block="true" @click.stop="toggleAspiradora" class="secondary text-right small-button-vacuum"
+                    :block="true" @click.stop="toggleVacuum" class="secondary text-right small-button-vacuum"
                     >Vacuum
                   </v-btn>
                 
@@ -41,7 +41,7 @@
                 <v-col cols="auto" style="padding-top: 10px">
 
                   <v-btn :color="isOn ? (switchValue ? 'offcolor' : 'primary') : 'offcolor'" dark 
-                    :block="true" @click.stop="toggleTrapeadora" class="text-right small-button-mop"
+                    :block="true" @click.stop="toggleMop" class="text-right small-button-mop"
                     :disabled="!isOn"
                     >Mop
                   </v-btn>
@@ -72,16 +72,16 @@ export default {
     returnToBase() {
       // Code to execute when button is clicked
     },
-    toggleAspiradora() {
+    toggleVacuum() {
       if(this.isOn){// si esta prendida la aspiradora
-        this.trapearIsOn = !this.trapearIsOn;
+        this.mopIsOn = !this.mopIsOn;
         if(this.buttonColor !== 'primary'){
           this.buttonColor = this.buttonColor === 'primary' ? 'offcolor' : 'primary';
           this.switchValue = !this.switchValue; // toggle switch value
         }
       }
     },
-    toggleTrapeadora() {
+    toggleMop() {
       if (this.isOn) {// si esta prendida la aspiradora
         if(this.buttonColor !== 'offcolor'){ 
           this.switchValue = !this.switchValue; // toggle switch value

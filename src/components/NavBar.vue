@@ -19,7 +19,7 @@ export default {
       <v-spacer></v-spacer>
 
       <v-btn to="/Routines">Routines</v-btn>
-      <v-btn to="/Scenes">Scenes</v-btn>
+      <v-btn to="/Rooms">Rooms</v-btn>
       <v-btn to="/About">About</v-btn>
       <!-- Aca falta un for que recorra las habitaciones vivas -->
 

@@ -7,20 +7,20 @@
           </v-btn>
           <v-toolbar-title>Confirmation</v-toolbar-title>
           <v-spacer></v-spacer>
-          <!-- <v-btn color="secondary" @click="save">Save</v-btn> -->
         </v-toolbar>
         <v-card-text>
           <v-row align="center">
             <v-col>
-              <v-card-text>Are you sure you want to delete?</v-card-text>
+              <v-card-text prepend-icon="mdi-message-alert-outline">Are you sure you want to {{ message }}</v-card-text>
             </v-col>
           </v-row>
           <v-row align="center">
-            <v-col class="pl-3" align="start">
-              <v-btn variant="outlined" color="primary">Delete room</v-btn>  
-            </v-col>
-            <v-col class="pl-3" align="end">
-              <v-btn color="secondary" @click="save">Save changes</v-btn>  
+            <v-col class="pl-3" align="center">
+              <v-btn color="gris" class="pl-10 pr-10 mr-5">Yes</v-btn>  
+            <!-- </v-col>
+            <v-col class="pl-3" align="end"> -->
+                
+              <v-btn color="primary" class="pl-10 pr-10" @click="save">Cancel</v-btn>  
             </v-col>
           </v-row>
         </v-card-text>
@@ -40,17 +40,15 @@
   
   const emits = defineEmits(['save', 'close']);
   
-  const nameRoom = ref(props.roomName);
-  const tempRoomName = ref('');
+  const message = ref(props.confirmation);
   
   const save = () => {
-    nameRoom.value = tempRoomName.value; // Update the roomName variable with the new value
     emits.save(); // Emit the 'save' event
   };
   
   const close = () => {
-    tempRoomName.value = ''; // Clear the tempRoomName input
     emits.close(); // Emit the 'close' event
   };
   </script>
   
+

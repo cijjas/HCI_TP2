@@ -1,9 +1,9 @@
-// GrifoBox
+// TapBox
 
 <template>
   <v-card :class="{'bg-on': toggleValue, 'bg-off': !toggleValue}" class="toggle-card" @click="toggleCard">
     <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
-      <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">Grifo</v-toolbar-title>
+      <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">Tap</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon @click="toggleValue = !toggleValue; if (!toggleValue) resetValues()" 
           :class="{'primary': toggleValue}">
@@ -28,7 +28,7 @@
 
 <script>
 export default {
-  name: 'GrifoBox',
+  name: 'TapBox',
   data() {
     return {
       toggleValue: false,
