@@ -36,7 +36,7 @@
 
 
 <template>
-  <v-card :class="{'bg-on': isOn, 'bg-off': !isOn}" class="toggle-card" style="width: 400px;" @click="toggleCard">
+  <v-card :class="{'bg-on': isOn, 'bg-off': !isOn}" class="toggle-card"  @click="toggleCard">
         <v-toolbar  :rounded="true" class="rounded-toolbar" transparent>
 
           
@@ -99,7 +99,8 @@
   border-radius: 10px;
   background-color: #EECC66;
   transition: all .2s ease-in-out;
-  max-height: 200px;
+  height: 200px;
+  width: 400px;
 }
 
 .toggle-card:hover {

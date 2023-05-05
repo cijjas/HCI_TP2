@@ -99,8 +99,8 @@
     border-radius: 10px;
     background-color: #EECC66;
     transition: all .2s ease-in-out;
-    max-height: 200px;
-    max-width: 450px;
+    height: 200px;
+    width: 400px;
   }
 
   .toggle-card:hover {

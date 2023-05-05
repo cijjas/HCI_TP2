@@ -44,10 +44,9 @@ export default {
 <template>
     <v-card
     :class="{'bg-on': isOn, 'bg-off': !isOn}"
-    :style="{ width: '400px' }"
     class="toggle-card"
-    @click="toggleCard"
-  >
+    @click="toggleCard">
+
     <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
       <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">Tap</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -108,8 +107,8 @@ export default {
   border-radius: 10px;
   background-color: #EECC66;
   transition: all .2s ease-in-out;
-  max-height: 200px;
-  max-width: 450px;
+  height: 200px;
+  width: 400px;
 }
 
 .toggle-card:hover {

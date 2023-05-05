@@ -52,7 +52,7 @@ const openCurtainPopUp = () => {
 <template>
   <v-card
     :class="{'bg-on': isOn, 'bg-off': !isOn}"
-    :style="{ backgroundColor: computedBackgroundColor, width: '400px' }"
+    :style="{ backgroundColor: computedBackgroundColor }"
     class="toggle-card"
     @click="toggleCard"
   >
@@ -110,8 +110,8 @@ const openCurtainPopUp = () => {
   border-radius: 10px;
   background-color: #EECC66;
   transition: all .2s ease-in-out;
-  max-height: 200px;
-  max-width: 500px;
+  height: 200px;
+  width: 400px;
 }
 
 .toggle-card:hover {

@@ -2,9 +2,8 @@
 import { ref, computed, watch } from 'vue';
 
 const isOn = ref(false);
-const sliderValue = ref(10);
+const sliderValue = ref(90);
 
-const sliderPercentage = computed(() => Math.round(sliderValue.value));
 
 const computedBackgroundColor = computed(() => {
   const color1 = isOn.value ? [238, 204, 102] : [140, 120, 58]; // RGB values for #EECC66 and #8C783A
@@ -51,7 +50,7 @@ const openOvenPopup = () => {
 <template>
   <v-card
     :class="{'bg-on': isOn, 'bg-off': !isOn}"
-    :style="{ backgroundColor: computedBackgroundColor, width: '400px' }"
+    :style="{ backgroundColor: computedBackgroundColor}"
     class="toggle-card"
     @click="toggleCard"
   >
@@ -110,8 +109,8 @@ const openOvenPopup = () => {
   border-radius: 10px;
   background-color: #EECC66;
   transition: all .2s ease-in-out;
-  max-height: 200px;
-  max-width: 500px;
+  height: 200px;
+  width: 400px;
 }
 
 .toggle-card:hover {
