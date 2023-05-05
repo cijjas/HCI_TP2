@@ -14,13 +14,15 @@ export default {
 <template>
   <nav>
     <v-app-bar app clipped-left color="primary">
-      <v-app-bar-nav-icon class="grey--text" @click="drawer = !drawer"><img src="../../public/hamburgerMenu.png" alt=""></v-app-bar-nav-icon>
-      <v-btn to="/">HomeHive</v-btn>
+      <v-app-bar-nav-icon class="grey--text" @click="drawer = !drawer">
+        <v-icon icon="mdi-menu" color="secondary" size="x-large"></v-icon>
+      </v-app-bar-nav-icon>
+      <v-btn to="/" size="x-large">HomeHive</v-btn>
       <v-spacer></v-spacer>
 
-      <v-btn to="/Routines">Routines</v-btn>
-      <v-btn to="/Rooms">Rooms</v-btn>
-      <v-btn to="/About">About</v-btn>
+      <v-btn to="/Routines" variant="text">Routines</v-btn>
+      <v-btn to="/Rooms" variant="text">Rooms</v-btn>
+      <v-btn to="/About" variant="text">About</v-btn>
       <!-- Aca falta un for que recorra las habitaciones vivas -->
 
       <v-spacer></v-spacer>
