@@ -1,51 +1,41 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
+  import { ref, computed, watch } from 'vue';
 
-const isOn = ref(false);
-const sliderValue = ref(90);
+  const isOn = ref(false);
+  const sliderValue = ref(90);
+  const isDialogOpen = ref(false);
+  const temperature = ref(0);
 
+  const rules = {
+    required: value => !!value || 'This field is required',
+    min: value => value >= 90 || 'Temperature must be at least 90 degrees',
+  };
+  const computedBackgroundColor = computed(() => {
+    const color1 = isOn.value ? [238, 204, 102] : [140, 120, 58]; // RGB values for #EECC66 and #8C783A
+    const color2 = [236, 94, 63]; // RGB values for #EC5E3F
+    const ratio = (sliderValue.value-90) / 100;
+    const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
+    return `rgb(${color.join(',')})`;
+  });
 
-const computedBackgroundColor = computed(() => {
-  const color1 = isOn.value ? [238, 204, 102] : [140, 120, 58]; // RGB values for #EECC66 and #8C783A
-  const color2 = [236, 94, 63]; // RGB values for #EC5E3F
-  const ratio = (sliderValue.value-90) / 100;
-  const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
-  return `rgb(${color.join(',')})`;
-});
-
-watch(
-  () => sliderValue.value,
-  (newValue) => {
-    if (newValue <= 90) {
-      isOn.value = false;
-    } else {
-      isOn.value = true;
+  watch(
+    () => isOn.value,
+    (newValue) => {
+      if (newValue) {
+        sliderValue.value = 90;
+      } else {
+        sliderValue.value = 90;
+      }
     }
-  }
-);
+  );
 
-const toggleOnOff = () => {
-  isOn.value = !isOn.value;
-};
+  const toggleCard = () => {
+    /* IR A ASPIRADORA */
+  };
 
-watch(
-  () => isOn.value,
-  (newValue) => {
-    if (newValue) {
-      sliderValue.value = 90;
-    } else {
-      sliderValue.value = 90;
-    }
-  }
-);
-
-const toggleCard = () => {
-  /* IR A ASPIRADORA */
-};
-
-const openOvenPopup = () => {
-  /* Abrir ventana emergente de cortina */
-};
+  const openOvenDialog = () => {
+    isDialogOpen.value = !isDialogOpen.value;
+  };
 </script>
 
 
@@ -54,13 +44,12 @@ const openOvenPopup = () => {
     :class="{'bg-on': isOn, 'bg-off': !isOn}"
     :style="{ backgroundColor: computedBackgroundColor}"
     class="toggle-card"
-    @click="toggleCard">
-
-
+    @click="toggleCard"
+  >
     <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
       <v-row align="center">
         <v-col>
-          <v-btn @click="openOvenPopup" text color="transparent">
+          <v-btn @click="openOvenDialog" text color="transparent">
             <v-toolbar-title class="font-weight-bold text-h4 card-title"
               >Oven</v-toolbar-title
             >
@@ -76,9 +65,8 @@ const openOvenPopup = () => {
 
       <v-spacer></v-spacer>
       <v-btn icon @click="isOn = !isOn" :class="{'primary': isOn}">
-            <v-icon>{{ isOn ? 'mdi-power' : 'mdi-power-standby' }}</v-icon>
-          </v-btn>
-      
+        <v-icon>{{ isOn ? 'mdi-power' : 'mdi-power-standby' }}</v-icon>
+      </v-btn>
     </v-toolbar>
 
     <!-- locations for-->
@@ -100,12 +88,55 @@ const openOvenPopup = () => {
         thumb-label
       ></v-slider>
     </v-row>
+    
+    <v-dialog v-model="isDialogOpen" width="1024" persistent>
+      <v-card class="toggle-card-popup">
+        <v-card-title class="headline">Oven Settings</v-card-title>
+        <v-card-text>
+          <v-text-field
+            label="Temperature"
+            v-model.number="temperature"
+            type="number"
+            :rules="[rules.required, rules.min]"
+            :disabled="!isOn"
+          ></v-text-field>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="saveSettings">Save</v-btn>
+          <v-btn color="primary" @click="openOvenDialog">Cancel</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </v-card>
 </template>
 
 
-
 <style scoped>
+
+.toggle-card-popup {
+  cursor: pointer;
+  padding: 16px;
+  border-radius: 10px;
+  background-color: #EECC66;
+  transition: all .2s ease-in-out;
+
+}
+
+.toggle-card-popup::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("./DeviceAssets/del-fire.png");
+  background-size: 70%;
+  background-position: calc(100% - 0px) top;
+  background-repeat: no-repeat;
+  opacity: 0.05;
+}
 .toggle-card {
   cursor: pointer;
   padding: 16px;

@@ -10,7 +10,6 @@
     const deviceName = ref('Fridge');
 
     const handleSave = (updatedValues) => {
-      console.log(deviceName);
       temperatureFreezer.value = updatedValues.valueFreezer;
       temperatureFridge.value = updatedValues.valueFridge;
       selectedMode.value = updatedValues.selectedMode;
@@ -31,11 +30,11 @@
 </script>
 
 <template>
-    <v-card
-    :class="{'bg-on': isOn, 'bg-off': !isOn}"
-    class="toggle-card"
-    @click="toggleCard"
-    >
+  <v-card
+  :class="{'bg-on': isOn, 'bg-off': !isOn}"
+  class="toggle-card"
+  @click="toggleCard"
+  >
 
     <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
       <v-btn @click="showPopup = true" text color="transparent">
@@ -44,7 +43,6 @@
       
     </v-toolbar>
     <v-card-text>
-      
     
       <v-row align="center">
         <v-col>
@@ -60,34 +58,40 @@
         </v-col>
       </v-row>
 
-    <v-row no-gutters class="button-row">
-      <v-col cols="auto" class="ml-auto">
-        <v-row no-gutters>
-            <v-col cols="auto" style="padding-top: 10px">
-              <v-btn :color="(getMode==0 ? 'primary' : 'offcolor')" dark 
-                :block="true" @click.stop="toggleModeNormal" class="secondary text-right small-button-normal"
-                >normal
-              </v-btn>
-            </v-col>
-            <v-col cols="auto" style="padding-top: 10px">
-              <v-btn :color="(getMode==1 ? 'primary' : 'offcolor')" dark 
-                :block="true" @click.stop="toggleModeFiesta" class="text-right small-button-fiesta"
-                >fiesta
-              </v-btn>
-            </v-col>
-            <v-col cols="auto" style="padding-top: 10px">
-              <v-btn :color="(getMode==2 ? 'primary' : 'offcolor')" dark 
-                :block="true" @click.stop="toggleModeVacation" class="text-right small-button-vacation"
-                >vacation
-              </v-btn>
-            </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
-      
+      <v-row no-gutters class="button-row">
+        <v-col cols="auto" class="ml-auto">
+          <v-row no-gutters>
+              <v-col cols="auto" style="padding-top: 10px">
+                <v-btn :color="(getMode==0 ? 'primary' : 'offcolor')" dark 
+                  :block="true" @click.stop="toggleModeNormal" class="secondary text-right small-button-normal"
+                  >normal
+                </v-btn>
+              </v-col>
+              <v-col cols="auto" style="padding-top: 10px">
+                <v-btn :color="(getMode==1 ? 'primary' : 'offcolor')" dark 
+                  :block="true" @click.stop="toggleModeFiesta" class="text-right small-button-fiesta"
+                  >fiesta
+                </v-btn>
+              </v-col>
+              <v-col cols="auto" style="padding-top: 10px">
+                <v-btn :color="(getMode==2 ? 'primary' : 'offcolor')" dark 
+                  :block="true" @click.stop="toggleModeVacation" class="text-right small-button-vacation"
+                  >vacation
+                </v-btn>
+              </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
 
     </v-card-text>
-    <FridgePopup :temperatureFreezer="temperatureFreezer" :temperatureFridge="temperatureFridge" :deviceName="deviceName" v-model="showPopup" @save="handleSave" />
+
+    <FridgePopup 
+    :temperatureFreezer="temperatureFreezer" 
+    :temperatureFridge="temperatureFridge" 
+    :deviceName="deviceName" 
+    v-model="showPopup" 
+    @save="handleSave" />
+
   </v-card>
 </template>
 

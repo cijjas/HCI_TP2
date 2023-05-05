@@ -1,73 +1,73 @@
 <script>
-import { defineComponent } from "vue";
+  import { defineComponent } from "vue";
 
-export default defineComponent({
-  name: "FridgePopup",
-  props: {
-    initialValueFreezer: {
-      type: Number,
-      required: true,
+  export default defineComponent({
+    name: "FridgePopup",
+    props: {
+      initialValueFreezer: {
+        type: Number,
+        required: true,
+      },
+      initialValueHeladera: {
+        type: Number,
+        required: true,
+      },
+      initialSelectedMode: {
+        type: Number,
+        required: true,
+      },
     },
-    initialValueHeladera: {
-      type: Number,
-      required: true,
+    data() {
+      return {
+        dialog: false,
+        sliderFreezer: -20,
+        sliderFridge: 2,
+        selectedMode: 0,
+        modes: [0, 1, 2],
+        deviceName: "Fridge",
+      };
     },
-    initialSelectedMode: {
-      type: Number,
-      required: true,
+    created() {
+      this.sliderFreezer = this.initialValueFreezer;
+      this.sliderFridge = this.initialValueHeladera;
+      this.selectedMode = this.initialSelectedMode;
     },
-  },
-  data() {
-    return {
-      dialog: false,
-      sliderFreezer: -20,
-      sliderFridge: 2,
-      selectedMode: 0,
-      modes: [0, 1, 2],
-      deviceName: "Fridge",
-    };
-  },
-  created() {
-    this.sliderFreezer = this.initialValueFreezer;
-    this.sliderFridge = this.initialValueHeladera;
-    this.selectedMode = this.initialSelectedMode;
-  },
-  methods: {
-    open() {
-      this.dialog = true;
+    methods: {
+      open() {
+        this.dialog = true;
+      },
+      close() {
+        this.dialog = false;
+      },
+      save() {
+        if(this.deviceName == "" || this.deviceName == null) {
+          this.deviceName = "Fridge";
+        }
+        if(this.selectedMode == "" || this.selectedMode == null) {
+          this.selectedMode = 0;
+        }
+        if(this.sliderFreezer == "" || this.sliderFreezer == null) {
+          this.sliderFreezer = -20;
+        }
+        if(this.sliderFridge == "" || this.sliderFridge == null) {
+          this.sliderFridge = 2;
+        }
+        this.$emit("save", {
+          deviceName: this.deviceName,
+          valueFreezer: this.sliderFreezer,
+          valueFridge: this.sliderFridge,
+          selectedMode: this.selectedMode,
+        });
+        this.dialog = false;
+      },
     },
-    close() {
-      this.dialog = false;
-    },
-    save() {
-      if(this.deviceName == "" || this.deviceName == null) {
-        this.deviceName = "Fridge";
-      }
-      if(this.selectedMode == "" || this.selectedMode == null) {
-        this.selectedMode = 0;
-      }
-      if(this.sliderFreezer == "" || this.sliderFreezer == null) {
-        this.sliderFreezer = -20;
-      }
-      if(this.sliderFridge == "" || this.sliderFridge == null) {
-        this.sliderFridge = 2;
-      }
-      this.$emit("save", {
-        deviceName: this.deviceName,
-        valueFreezer: this.sliderFreezer,
-        valueFridge: this.sliderFridge,
-        selectedMode: this.selectedMode,
-      });
-      this.dialog = false;
-    },
-  },
-});
+  });
 </script>
 
 
 <template>
   <v-dialog v-model="dialog" max-width="700" >
-    <v-card rounde>
+    <v-card >
 
       <v-toolbar color="primary" dark>
         
