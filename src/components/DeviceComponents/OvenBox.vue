@@ -7,9 +7,9 @@ const sliderValue = ref(10);
 const sliderPercentage = computed(() => Math.round(sliderValue.value));
 
 const computedBackgroundColor = computed(() => {
-  const color1 = [140, 120, 58]; // RGB values for #8C783A
-  const color2 = [238, 204, 102]; // RGB values for #EECC66
-  const ratio = sliderValue.value / 100;
+  const color1 = isOn.value ? [238, 204, 102] : [140, 120, 58]; // RGB values for #EECC66 and #8C783A
+  const color2 = [236, 94, 63]; // RGB values for #EC5E3F
+  const ratio = (sliderValue.value-90) / 100;
   const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
   return `rgb(${color.join(',')})`;
 });
@@ -17,7 +17,7 @@ const computedBackgroundColor = computed(() => {
 watch(
   () => sliderValue.value,
   (newValue) => {
-    if (newValue <= 0) {
+    if (newValue <= 90) {
       isOn.value = false;
     } else {
       isOn.value = true;
@@ -33,9 +33,9 @@ watch(
   () => isOn.value,
   (newValue) => {
     if (newValue) {
-      sliderValue.value = 100;
+      sliderValue.value = 90;
     } else {
-      sliderValue.value = 0;
+      sliderValue.value = 90;
     }
   }
 );
@@ -73,10 +73,10 @@ const openOvenPopup = () => {
       </v-row>
 
       <v-spacer></v-spacer>
-
-      <v-btn @click="toggleOnOff" :class="{'primary': isOn}">
-        {{ isOn ? 'CLOSE' : 'OPEN' }}
-      </v-btn>
+      <v-btn icon @click="isOn = !isOn" :class="{'primary': isOn}">
+            <v-icon>{{ isOn ? 'mdi-power' : 'mdi-power-standby' }}</v-icon>
+          </v-btn>
+      
     </v-toolbar>
 
     <!-- locations for-->
@@ -91,9 +91,10 @@ const openOvenPopup = () => {
         color="primary"
         v-model="sliderValue"
         :ticks="true"
-        :max="100"
-        :min="0"
+        :max="230"
+        :min="90"
         :step="1"
+        :disabled="!isOn"
         thumb-label
       ></v-slider>
     </v-row>
