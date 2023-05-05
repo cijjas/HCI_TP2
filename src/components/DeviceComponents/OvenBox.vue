@@ -47,13 +47,16 @@ const openOvenPopup = () => {
   /* Abrir ventana emergente de cortina */
 };
 </script>
+
+
 <template>
   <v-card
     :class="{'bg-on': isOn, 'bg-off': !isOn}"
     :style="{ backgroundColor: computedBackgroundColor}"
     class="toggle-card"
-    @click="toggleCard"
-  >
+    @click="toggleCard">
+
+
     <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
       <v-row align="center">
         <v-col>
@@ -111,6 +114,21 @@ const openOvenPopup = () => {
   transition: all .2s ease-in-out;
   height: 200px;
   width: 400px;
+
+}
+
+.toggle-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("./DeviceAssets/del-fire.png");
+  background-size: 70%;
+  background-position: calc(100% - 0px) top;
+  background-repeat: no-repeat;
+  opacity: 0.05;
 }
 
 .toggle-card:hover {

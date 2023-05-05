@@ -110,7 +110,20 @@ export default {
   height: 200px;
   width: 400px;
 }
-
+.toggle-card::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 30px;
+    bottom: 300;
+    width: 100%;
+    height: 100%;
+    background-image: url("./DeviceAssets/del-tap.png");
+    background-size: 50%;
+    background-position: calc(100% - 0px) top;
+    background-repeat: no-repeat;
+    opacity: 0.05;
+}
 .toggle-card:hover {
   box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
 }
