@@ -13,7 +13,7 @@
           
 
         </v-toolbar>
-        
+
         <!-- locations for-->
         <v-row no-gutters align="center" style="padding-bottom: 30px">
           <v-col cols="12">
@@ -22,32 +22,35 @@
         </v-row>
             
         <v-row no-gutters class="button-row">
-      <v-col cols="auto">
-        <v-card-actions>
-          <v-btn color="primary" block @click="returnToBase">Return to Base</v-btn>
-        </v-card-actions>
-      </v-col>
-      <v-col cols="auto" class="ml-auto">
-        <v-row no-gutters>
-          <v-col cols="auto" style="padding-top: 10px">
-
-            <v-btn :disabled="!isOn" :color="isOn ? (switchValue ? 'primary' : 'offcolor') : 'offcolor'" dark 
-              :block="true" @click.stop="toggleAspiradora" class="secondary text-right small-button-vacuum"
-              >Vacuum</v-btn>
+          <v-col cols="auto">
+            <v-card-actions>
+              <v-btn color="primary" block @click="returnToBase">Return to Base</v-btn>
+            </v-card-actions>
+          </v-col>
           
-          </v-col>
-          <v-col cols="auto" style="padding-top: 10px">
+          <v-col cols="auto" class="ml-auto">
+            <v-row no-gutters>
+                <v-col cols="auto" style="padding-top: 10px">
 
-            <v-btn :color="isOn ? (switchValue ? 'offcolor' : 'primary') : 'offcolor'" dark 
-              :block="true" @click.stop="toggleTrapeadora" class="text-right small-button-mop"
-              :disabled="!isOn"
-              >Mop
-            </v-btn>
+                  <v-btn :disabled="!isOn" :color="isOn ? (switchValue ? 'primary' : 'offcolor') : 'offcolor'" dark 
+                    :block="true" @click.stop="toggleAspiradora" class="secondary text-right small-button-vacuum"
+                    >Vacuum
+                  </v-btn>
+                
+                </v-col>
+                <v-col cols="auto" style="padding-top: 10px">
 
+                  <v-btn :color="isOn ? (switchValue ? 'offcolor' : 'primary') : 'offcolor'" dark 
+                    :block="true" @click.stop="toggleTrapeadora" class="text-right small-button-mop"
+                    :disabled="!isOn"
+                    >Mop
+                  </v-btn>
+
+              </v-col>
+            </v-row>
           </v-col>
+
         </v-row>
-      </v-col>
-    </v-row>
   </v-card>
 </template>
 
@@ -150,7 +153,5 @@ export default {
   color: #19642d;
 }
 
-.card-title {
-  transition: color 0.3s;
-}
+
 </style>

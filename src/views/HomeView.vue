@@ -2,10 +2,10 @@
 
 <script setup>
 import AspiradoraBox from '../components/AspiradoraBox.vue';
-import CortinaBox from '@/components/CortinaBox.vue';
+import CurtainBox from '@/components/CurtainBox.vue';
 import GrifoBox from '@/components/GrifoBox.vue';
-import HeladeraBox from '@/components/HeladeraBox.vue';
-import HornoBox from '@/components/HornoBox.vue';
+import FridgeBox from '@/components/FridgeBox.vue';
+import OvenBox from '@/components/OvenBox.vue';
 </script>
 
 <template>
@@ -18,10 +18,17 @@ import HornoBox from '@/components/HornoBox.vue';
             <AspiradoraBox class="grid-item" />
           </v-flex>
           <v-flex xs12 sm6 md4 lg3>
-            <CortinaBox class="grid-item" />
+            <CurtainBox class="grid-item" />
           </v-flex>
           <v-flex xs12 sm6 md4 lg3>
-            <HeladeraBox class="grid-item" />
+            <FridgeBox class="grid-item" />
+          </v-flex>
+          <v-flex xs12 sm6 md4 lg3>
+            <GrifoBox class="grid-item" />
+          </v-flex>
+          
+          <v-flex xs12 sm6 md4 lg3>
+            <GrifoBox class="grid-item" />
           </v-flex>
           <v-flex xs12 sm6 md4 lg3>
             <GrifoBox class="grid-item" />
@@ -30,28 +37,16 @@ import HornoBox from '@/components/HornoBox.vue';
             <AspiradoraBox class="grid-item" />
           </v-flex>
           <v-flex xs12 sm6 md4 lg3>
-            <GrifoBox class="grid-item" />
+            <FridgeBox class="grid-item" />
           </v-flex>
           <v-flex xs12 sm6 md4 lg3>
-            <GrifoBox class="grid-item" />
+            <FridgeBox class="grid-item" />
           </v-flex>
           <v-flex xs12 sm6 md4 lg3>
-            <AspiradoraBox class="grid-item" />
+            <FridgeBox class="grid-item" />
           </v-flex>
           <v-flex xs12 sm6 md4 lg3>
-            <GrifoBox class="grid-item" />
-          </v-flex>
-          <v-flex xs12 sm6 md4 lg3>
-            <GrifoBox class="grid-item" />
-          </v-flex>
-          <v-flex xs12 sm6 md4 lg3>
-            <CortinaBox class="grid-item" />
-          </v-flex>
-          <v-flex xs12 sm6 md4 lg3>
-            <CortinaBox class="grid-item" />
-          </v-flex>
-          <v-flex xs12 sm6 md4 lg3>
-            <CortinaBox class="grid-item" />
+            <CurtainBox class="grid-item" />
           </v-flex>
         </v-layout>
       </v-container>
