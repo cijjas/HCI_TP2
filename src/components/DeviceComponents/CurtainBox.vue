@@ -1,3 +1,54 @@
+<script setup>
+import { ref, computed, watch } from 'vue';
+
+const isOn = ref(false);
+const sliderValue = ref(10);
+
+const sliderPercentage = computed(() => Math.round(sliderValue.value));
+
+const computedBackgroundColor = computed(() => {
+  const color1 = [140, 120, 58]; // RGB values for #8C783A
+  const color2 = [238, 204, 102]; // RGB values for #EECC66
+  const ratio = sliderValue.value / 100;
+  const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
+  return `rgb(${color.join(',')})`;
+});
+
+watch(
+  () => sliderValue.value,
+  (newValue) => {
+    if (newValue <= 0) {
+      isOn.value = false;
+    } else {
+      isOn.value = true;
+    }
+  }
+);
+
+const toggleOnOff = () => {
+  isOn.value = !isOn.value;
+};
+
+watch(
+  () => isOn.value,
+  (newValue) => {
+    if (newValue) {
+      sliderValue.value = 100;
+    } else {
+      sliderValue.value = 0;
+    }
+  }
+);
+
+const toggleCard = () => {
+  /* IR A ASPIRADORA */
+};
+
+const openCurtainPopUp = () => {
+  /* Abrir ventana emergente de cortina */
+};
+</script>
+
 <template>
   <v-card
     :class="{'bg-on': isOn, 'bg-off': !isOn}"
@@ -50,71 +101,6 @@
   </v-card>
 </template>
 
-<script>
-import { ref, computed, watch } from 'vue';
-
-export default {
-  setup() {
-    const isOn = ref(false);
-    const sliderValue = ref(10);
-
-    const sliderPercentage = computed(() => Math.round(sliderValue.value));
-
-    const computedBackgroundColor = computed(() => {
-      const color1 = [140, 120, 58]; // RGB values for #8C783A
-      const color2 = [238, 204, 102]; // RGB values for #EECC66
-      const ratio = sliderValue.value / 100;
-      const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
-      return `rgb(${color.join(',')})`;
-    });
-
-    watch(
-      () => sliderValue.value,
-      (newValue) => {
-        if (newValue <= 0) {
-          isOn.value = false;
-        } else {
-          isOn.value = true;
-        }
-      }
-    );
-
-    const toggleOnOff = () => {
-      isOn.value = !isOn.value;
-    };
-
-    watch(
-      () => isOn.value,
-      (newValue) => {
-        if (newValue) {
-          sliderValue.value = 100;
-        } else {
-          sliderValue.value = 0;
-        }
-      }
-    );
-
-    const toggleCard = () => {
-      /* IR A ASPIRADORA */
-    };
-
-    const openCurtainPopUp = () => {
-      /* Abrir ventana emergente de cortina */
-    };
-
-    return {
-      isOn,
-      sliderValue,
-      sliderPercentage,
-      computedBackgroundColor,
-      toggleOnOff,
-      toggleCard,
-      openCurtainPopUp
-
-    };
-  },
-};
-</script>
 
 
 <style scoped>

@@ -1,3 +1,40 @@
+<script setup>
+  import { ref } from 'vue'
+
+  const isOn = ref(false);
+  const switchValue = ref(true);
+  const buttonColor = ref('primary');
+  const mopIsOn = ref(false);
+
+  const toggleCard = () => {
+    /* IR A ASPIRADORA */ 
+  };
+
+  const returnToBase = () => {
+    // Code to execute when button is clicked
+  };
+
+  const toggleVacuum = () => {
+    if (isOn.value) {// si esta prendida la aspiradora
+      mopIsOn.value = !mopIsOn.value;
+      if (buttonColor.value !== 'primary') {
+        buttonColor.value = buttonColor.value === 'primary' ? 'offcolor' : 'primary';
+        switchValue.value = !switchValue.value; // toggle switch value
+      }
+    }
+  };
+
+  const toggleMop = () => {
+    if (isOn.value) {// si esta prendida la aspiradora
+      if (buttonColor.value !== 'offcolor') {
+        switchValue.value = !switchValue.value; // toggle switch value
+        buttonColor.value = switchValue.value ? 'primary' : 'offcolor'; // update button color
+      }
+    }
+  };
+</script>
+
+
 <template>
   <v-card :class="{'bg-on': isOn, 'bg-off': !isOn}" class="toggle-card" style="width: 400px;" @click="toggleCard">
         <v-toolbar  :rounded="true" class="rounded-toolbar" transparent>
@@ -54,44 +91,6 @@
   </v-card>
 </template>
 
-<script>
-
-export default {
-  data() {
-    return {
-      isOn: false,
-      switchValue: true,
-      buttonColor: 'primary',
-      titleColor: 'secondary',
-    }
-  },
-  methods: {
-    toggleCard() {
-      /* IR A ASPIRADORA */ 
-    },
-    returnToBase() {
-      // Code to execute when button is clicked
-    },
-    toggleVacuum() {
-      if(this.isOn){// si esta prendida la aspiradora
-        this.mopIsOn = !this.mopIsOn;
-        if(this.buttonColor !== 'primary'){
-          this.buttonColor = this.buttonColor === 'primary' ? 'offcolor' : 'primary';
-          this.switchValue = !this.switchValue; // toggle switch value
-        }
-      }
-    },
-    toggleMop() {
-      if (this.isOn) {// si esta prendida la aspiradora
-        if(this.buttonColor !== 'offcolor'){ 
-          this.switchValue = !this.switchValue; // toggle switch value
-          this.buttonColor = this.switchValue ? 'primary' : 'offcolor'; // update button color
-        }
-      }
-    }
-  }
-}
-</script>
 
 <style scoped>
 .toggle-card {

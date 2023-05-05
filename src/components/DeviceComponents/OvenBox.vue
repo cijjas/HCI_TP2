@@ -1,66 +1,116 @@
+<script setup>
+import { ref, computed, watch } from 'vue';
+
+const isOn = ref(false);
+const sliderValue = ref(10);
+
+const sliderPercentage = computed(() => Math.round(sliderValue.value));
+
+const computedBackgroundColor = computed(() => {
+  const color1 = [140, 120, 58]; // RGB values for #8C783A
+  const color2 = [238, 204, 102]; // RGB values for #EECC66
+  const ratio = sliderValue.value / 100;
+  const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
+  return `rgb(${color.join(',')})`;
+});
+
+watch(
+  () => sliderValue.value,
+  (newValue) => {
+    if (newValue <= 0) {
+      isOn.value = false;
+    } else {
+      isOn.value = true;
+    }
+  }
+);
+
+const toggleOnOff = () => {
+  isOn.value = !isOn.value;
+};
+
+watch(
+  () => isOn.value,
+  (newValue) => {
+    if (newValue) {
+      sliderValue.value = 100;
+    } else {
+      sliderValue.value = 0;
+    }
+  }
+);
+
+const toggleCard = () => {
+  /* IR A ASPIRADORA */
+};
+
+const openOvenPopup = () => {
+  /* Abrir ventana emergente de cortina */
+};
+</script>
 <template>
-  <v-card :class="{'bg-on': isOn, 'bg-off': !isOn}" class="toggle-card" style="width: 400px;" >
+  <v-card
+    :class="{'bg-on': isOn, 'bg-off': !isOn}"
+    :style="{ backgroundColor: computedBackgroundColor, width: '400px' }"
+    class="toggle-card"
+    @click="toggleCard"
+  >
     <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
-      <v-btn @click="openOvenPopUp" text color="transparent">
-        <v-toolbar-title class="font-weight-bold text-h4 card-title">Oven</v-toolbar-title>
-      </v-btn>
+      <v-row align="center">
+        <v-col>
+          <v-btn @click="openOvenPopup" text color="transparent">
+            <v-toolbar-title class="font-weight-bold text-h4 card-title"
+              >Oven</v-toolbar-title
+            >
+          </v-btn>
+        </v-col>
+
+        <v-col>
+          <v-card-text class="text--white font-weight-bold text-h4 mb-0 slider-value">
+            {{ sliderValue }}
+          </v-card-text>
+        </v-col>
+      </v-row>
+
       <v-spacer></v-spacer>
-      <v-btn icon @click="isOn = !isOn" :class="{'primary': isOn}" >
-        <v-icon>{{ isOn ? 'mdi-power' : 'mdi-power-standby' }}</v-icon>
+
+      <v-btn @click="toggleOnOff" :class="{'primary': isOn}">
+        {{ isOn ? 'CLOSE' : 'OPEN' }}
       </v-btn>
     </v-toolbar>
 
-    <v-row no-gutters align="center" style="padding-bottom: 30px">
+    <!-- locations for-->
+    <v-row no-gutters align="center" style="padding-bottom: 40px">
       <v-col cols="12">
-        <v-subheader class="ml-4">Ubicación</v-subheader>
+        <v-subheader class="ml-1">Ubicación</v-subheader>
       </v-col>
     </v-row>
 
+    <v-row no-gutters class="button-row">
+      <v-slider
+        color="primary"
+        v-model="sliderValue"
+        :ticks="true"
+        :max="100"
+        :min="0"
+        :step="1"
+        thumb-label
+      ></v-slider>
+    </v-row>
   </v-card>
 </template>
 
-<script>
-import { ref } from 'vue';
-
-export default {
-  name: 'OvenBox',
-    
-  setup() {
-    const isOn = ref(false);
-
-    const togglePower = () => {
-      isOn.value = !isOn.value;
-    }
-
-    
-
-    const returnToBase = () => {
-      // handle return to base action
-    }
-
-    const openVacuumPopUp = () => {
-      // handle opening vacuum popup
-    }
-
-    return {
-      isOn,
-      togglePower,
-      returnToBase,
-      openVacuumPopUp,
-    };
-  },
-};
-</script>
 
 
 <style scoped>
 .toggle-card {
   cursor: pointer;
-  padding: 16px;  
+  padding: 16px;
   border-radius: 10px;
   background-color: #EECC66;
   transition: all .2s ease-in-out;
   max-height: 200px;
+  max-width: 500px;
 }
 
 .toggle-card:hover {
@@ -70,8 +120,8 @@ export default {
 .rounded-toolbar {
   border-radius: 20px;
   background-color: transparent;
-
 }
+
 .bg-on {
   background-color: #EECC66;
 }
@@ -81,26 +131,13 @@ export default {
   background-color: #8C783A;
 }
 
-.small-button-vacuum {
-  font-size: 12px;
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
-  border-top-left-radius: 30px;
-  border-bottom-left-radius: 30px;
 
+.slider-value {
+  color: #1C4035; /* Change the color to your desired value */
 }
-
-
-.small-button-mop {
-  padding: 5px 8px;
-  font-size: 12px;
-  border-top-right-radius: 30px;
-  border-bottom-right-radius: 30px;
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-
+.card-title{
+  color: #1C4035; /* Change the color to your desired value */
 }
-
 .card-title{
   color: #1C4035; /* Change the color to your desired value */
   white-space: nowrap;
@@ -108,12 +145,7 @@ export default {
   margin-left: -10px;
 
 }
-
 .v-btn:hover .card-title {
   color: #19642d;
-}
-
-.card-title {
-  transition: color 0.3s;
 }
 </style>

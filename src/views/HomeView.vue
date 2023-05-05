@@ -26,7 +26,9 @@ import OvenBox from '@/components/DeviceComponents/OvenBox.vue';
           <v-flex xs12 sm6 md4 lg3>
             <TapBox class="grid-item" />
           </v-flex>
-          
+          <v-flex xs12 sm6 md4 lg3>
+            <OvenBox class="grid-item" />
+          </v-flex>
           <v-flex xs12 sm6 md4 lg3>
             <TapBox class="grid-item" />
           </v-flex>
