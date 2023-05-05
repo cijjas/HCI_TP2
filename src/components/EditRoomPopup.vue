@@ -7,7 +7,6 @@
           </v-btn>
           <v-toolbar-title>Edit {{ nameRoom }}</v-toolbar-title>
           <v-spacer></v-spacer>
-          <!-- <v-btn color="secondary" @click="save">Save</v-btn> -->
         </v-toolbar>
         <v-card-text>
           <v-row align="center">
@@ -17,19 +16,22 @@
           </v-row>
           <v-row align="center">
             <v-col class="pl-3" align="start">
-              <v-btn variant="outlined" color="primary">Delete room</v-btn>  
+              <v-btn variant="outlined" color="primary" @click="showPopup = true">Delete room</v-btn>
             </v-col>
             <v-col class="pl-3" align="end">
-              <v-btn color="secondary" @click="save">Save changes</v-btn>  
+              <v-btn color="secondary" @click="save">Save changes</v-btn>
             </v-col>
           </v-row>
         </v-card-text>
+        <ConfirmationPopup :confirmation="`delete ${roomName}?`" v-model="showPopup" @save="handleSave" @close="handlePopupClose" />
       </v-card>
     </v-dialog>
   </template>
   
+  
   <script setup>
   import { ref, defineProps, defineEmits } from 'vue';
+  import ConfirmationPopup from './ConfirmationPopup.vue';
   
   const props = defineProps({
     roomName: {
@@ -42,9 +44,12 @@
   
   const nameRoom = ref(props.roomName);
   const tempRoomName = ref('');
+  const showPopup = ref(false); // Initialize the showPopup variable
   
   const save = () => {
-    nameRoom.value = tempRoomName.value; // Update the roomName variable with the new value
+    if (tempRoomName.value !== '') {
+        nameRoom.value = tempRoomName.value; // Update the roomName variable with the new value
+    }
     emits.save(); // Emit the 'save' event
   };
   
@@ -52,5 +57,16 @@
     tempRoomName.value = ''; // Clear the tempRoomName input
     emits.close(); // Emit the 'close' event
   };
+  
+  const handleSave = () => {
+    // Handle the save event
+  };
+  
+  const handlePopupClose = () => {
+    showPopup.value = false; // Close the popup
+  };
+  
   </script>
+  
+  
   

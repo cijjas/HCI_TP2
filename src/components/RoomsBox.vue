@@ -1,5 +1,6 @@
 <template>
-    <v-card :class="{'bg-on': toggleValue, 'bg-off': !toggleValue}" class="toggle-card" @click="showPopup = true">
+    <v-card :class="{'bg-on': toggleValue, 'bg-off': !toggleValue}" class="toggle-card" >
+    
       <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
         <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">
             {{ roomName }}
@@ -19,7 +20,7 @@
           <v-spacer></v-spacer> -->
           <v-btn color="primary" class="mr-10 pl-10 pr-10" @click="showPopup = true">Edit Room</v-btn>
           
-          <v-btn to="/" color="primary" class="pl-10 pr-10">Add Device</v-btn>
+          <v-btn color="primary" class="pl-10 pr-10">Add Device</v-btn>
           <span class="font-weight-bold text-body mb-0">{{ selectedItem }}</span>
         </v-row>
       </v-card-text>
