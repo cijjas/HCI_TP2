@@ -12,7 +12,6 @@ const tempRoomName = ref("");
             <v-card-title class="ml-n3 mb-3 mt-3 text-h4 font-weight-bold text-uppercase text-medium-emphasis">Rooms</v-card-title>
             <v-divider></v-divider>
             <v-card-title v-if="store.getRooms.length !=0" class="ml-n3 mt-3 mb-3 text-h5 font-weight-bold">Your Rooms :</v-card-title>
-
             <v-card v-if="store.getRooms.length !=0">
                 <v-list rounded>
                 <v-list-item v-for="room in store.getRooms">

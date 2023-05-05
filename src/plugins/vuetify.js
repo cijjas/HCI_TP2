@@ -31,7 +31,8 @@ export default createVuetify({
           secondary: '#EECC66',
           offcolor: '#81938E',
           gris: '#AFC1BB',
-          primaryclarito: '#497065'
+          lightergray: '#326D3F',
+
         },
       },
     },
