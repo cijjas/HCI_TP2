@@ -24,6 +24,6 @@ class DevicesApi{
 
 
 /*
-controlar???
+controlar????
 */
 export { DevicesApi }

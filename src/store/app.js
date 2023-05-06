@@ -8,6 +8,7 @@ import { getIdByName } from '@/Lib/lib.js'
 
 import { DevicesApi } from '@/API/devices';
 import { RoomApi } from '@/API/room.js';
+import { RoutinesApi } from '@/API/routines';
 
 /*
 Prototipos :
@@ -222,22 +223,110 @@ export const useAppStore = defineStore('app', {
 
 
     /* -------------------------------------------------- ROUTINES -------------------------------------------------- */
-    addRoutine(routineName){
-      this.routines.push({
-        id : this.routineId,
-        name : routineName,
-        actions : []
-      });
-      this.routineId++;
+    getAllRoutines(){
+      return this.routines;
     },
-    addAction(routineName, changes){
-      /*
-          esto va a ser un find segun routine name, y le agrega una accion
-          como platnear las acciones, podria ser una funcion eterna donde la mayoria es null
-          podria ser un objeto y se buscan matches pero medio feo
-          podria recibir el type y facilitar el destructuring, y asume que vienen en orden, lo que es controlable
-      */
+    async getAllRoutinesAPI() {
+      try {
+        const result = await RoutinesApi.getAll();
+        this.routines = result;
+        return result;
+      } catch (error) {
+        console.error(error);
+      }
     },
+    getARoutine(id){
+      return this.routines.find( routines => routines.id == id);
+    },
+    getARoutineByName(name){
+      var routineId = getIdByName(this.routines, name);
+      return this.getARoutine(routineId);
+    },
+
+
+    /*  async createADevice(deviceName, type){
+      try {
+        var deviceObj = {
+          type : {
+            id : typeId
+          },
+          name : deviceName
+        }
+        var result = await DevicesApi.add(deviceObj);
+        this.devices.push(result);
+        return result;
+      } catch (error) {
+        console.error(error);
+      }
+    }, */
+
+    // se deberia reempazar la defaultAction por actions, que tiene
+    // que ser un array de objetos
+    async createARoutine(routineName, actions){
+      try {
+        var routineObj = {
+          name : routineName,
+          actions : actions,
+          meta : {}
+        }
+        var result = await RoutinesApi.add(routineObj);
+        this.routines.push(result);
+        return result;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+
+
+    // De nuevo el problema con Actions[]
+    async updateARoutine(id, newname, actions){
+      try {
+        var routineObj = {
+          id : id,
+          actions : {
+            id : "4551cd84667ff8e1"
+          },
+          actionName : "turnOff",
+          params : [],
+          meta : {}
+        }
+        var result = await RoutinesApi.modify(routineObj);
+        this.routines.find( routine => routine.id == id).name = newname;
+        return result;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async updateARoutineByName(oldname, newname, actions){
+      try {
+        var routineId = getIdByName(this.routines, oldname);
+        this.updateARoutine(routineId, newname, actions);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+
+
+    async deleteARoutine(id){
+      try {
+        var result = await RoutinesApi.remove(id);
+        removeItemFromArray(this.routines, id);
+        return result;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async deleteARoutineByName(name){
+      try {
+        var routineId = getIdByName(this.routines, name);
+        return this.deleteARoutine(routineId);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
   },
   getters :{
     getRoomNames(){
@@ -251,6 +340,13 @@ export const useAppStore = defineStore('app', {
       var arr = [];
       for ( let i = 0; i < this.devices.length; i++ ){
         arr.push( this.devices[i].name );
+      }
+      return arr;
+    },
+    getRoutinesNames(){
+      var arr = [];
+      for ( let i = 0; i < this.routines.length; i++ ){
+        arr.push( this.routines[i].name );
       }
       return arr;
     },
