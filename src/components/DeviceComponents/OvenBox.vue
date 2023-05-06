@@ -2,6 +2,7 @@
   import { ref, computed, watch } from 'vue';
 
   const isOn = ref(false);
+  const id = ref(0);
   const sliderValue = ref(90);
   const isDialogOpen = ref(false);
   const temperature = ref(0);
@@ -88,9 +89,10 @@
         thumb-label
       ></v-slider>
     </v-row>
-    
+    <!-- Aca empieza el popup -->
     <v-dialog v-model="isDialogOpen" width="1024" persistent>
       <v-card class="toggle-card-popup">
+
         <v-card-title class="headline">Oven Settings</v-card-title>
         <v-card-text>
           <v-text-field
@@ -100,12 +102,80 @@
             :rules="[rules.required, rules.min]"
             :disabled="!isOn"
           ></v-text-field>
+          
+          <v-row no-gutters class="button-row">
+            <v-col cols="auto" class="ml-auto " >
+              <v-row no-gutters>
+                  <v-col cols="auto" style="padding-top: 10px">
+                    <v-btn :color="(getMode==0 ? 'primary' : 'offcolor')" dark 
+                      :block="true" @click.stop="toggleGrillModeOff" class="secondary text-right small-button-left"
+                      >Off
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="auto" style="padding-top: 10px">
+                    <v-btn :color="(getMode==1 ? 'primary' : 'offcolor')" dark 
+                      :block="true" @click.stop="toggleGrillModeEconomic" class="text-right small-button-center"
+                      >Economic
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="auto" style="padding-top: 10px">
+                    <v-btn :color="(getMode==2 ? 'primary' : 'offcolor')" dark 
+                      :block="true" @click.stop="toggleGrillModeComplete" class="text-right small-button-right"
+                      >Complete
+                    </v-btn>
+                  </v-col>
+              </v-row>
+              <v-row no-gutters>
+                  <v-col cols="auto" style="padding-top: 10px">
+                    <v-btn :color="(getMode==3 ? 'primary' : 'offcolor')" dark 
+                      :block="true" @click.stop="toggleConvectionModeOff" class="text-right small-button-left"
+                      >Off
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="auto" style="padding-top: 10px">
+                    <v-btn :color="(getMode==4 ? 'primary' : 'offcolor')" dark 
+                      :block="true" @click.stop="toggleConvectionModeEconomic" class="text-right small-button-center"
+                      >Economic
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="auto" style="padding-top: 10px">
+                    <v-btn :color="(getMode==5 ? 'primary' : 'offcolor')" dark 
+                      :block="true" @click.stop="toggleConvectionModeConventional" class="text-right small-button-right"
+                      >Conventional
+                    </v-btn>
+                  </v-col>
+              </v-row>
+              <v-row no-gutters>
+                  <v-col cols="auto" style="padding-top: 10px">
+                    <v-btn :color="(getMode==3 ? 'primary' : 'offcolor')" dark 
+                      :block="true" @click.stop="toggleSourceModeConventional" class="text-right small-button-left"
+                      >Conventional
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="auto" style="padding-top: 10px">
+                    <v-btn :color="(getMode==4 ? 'primary' : 'offcolor')" dark 
+                      :block="true" @click.stop="toggleSourceModeAbove" class="text-right small-button-center"
+                      >Above
+                    </v-btn>
+                  </v-col>
+                  <v-col cols="auto" style="padding-top: 10px">
+                    <v-btn :color="(getMode==5 ? 'primary' : 'offcolor')" dark 
+                      :block="true" @click.stop="toggleSourceModeBelow" class="text-right small-button-right"
+                      >Below
+                    </v-btn>
+                  </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+
         </v-card-text>
+        
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="saveSettings">Save</v-btn>
           <v-btn color="primary" @click="openOvenDialog">Cancel</v-btn>
+          <v-btn color="primary" @click="saveSettings">Save</v-btn>
         </v-card-actions>
+
       </v-card>
     </v-dialog>
 
@@ -114,6 +184,24 @@
 
 
 <style scoped>
+.small-button-left {
+  width: 200px;
+  height: 40px;
+  border-radius: 10px 0px 0px 10px;
+  margin-right: 10px;
+}
+.small-button-center {
+  width: 200px;
+  height: 40px;
+  border-radius: 0px;
+  margin-right: 10px;
+}
+.small-button-right {
+  width: 200px;
+  height: 40px;
+  border-radius: 0px 10px 10px 0px;
+  margin-right: 10px;
+}
 
 .toggle-card-popup {
   cursor: pointer;
