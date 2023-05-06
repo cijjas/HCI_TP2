@@ -11,7 +11,7 @@
           </v-card-text>
         </v-card>
         <v-card-actions>
-          <v-btn color="gris" text>Edit Profile</v-btn>
+          <v-btn to="/Settings/Profile" color="gris" text>Edit Profile</v-btn>
           <v-btn color="gris" text>Manage Account</v-btn>
         </v-card-actions>
       </div>

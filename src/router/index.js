@@ -36,6 +36,11 @@ const router = createRouter({
       component: () => import('../views/SettingsView.vue')
     },
     {
+      path: '/Settings/Profile',
+      name: 'profile',
+      component: () => import('../views/ProfileView.vue')
+    },
+    {
       path: '/todo',
       name: 'todo',
       component: () => import('../views/TodoView.vue')
@@ -66,7 +71,14 @@ const router = createRouter({
       name: 'rooms',
       component: () => import('../views/RoomsView.vue')
     },
-    /* ----------------------------- */
+    /* Para acceder a cuartos en particular y ver los devices dentro de ese mismo*/
+    {
+      path: '/rooms/:roomName',
+      name: 'room',
+      params: ':roomName',
+      component: () => import('../views/RoomDevicesView.vue')
+    },
+
     {
       path: '/:pathMatch(.*)*',
       name: 'notFound',

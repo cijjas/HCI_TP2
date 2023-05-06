@@ -1,15 +1,25 @@
 <script setup>
     import RoomsBox from '../components/RoomsBox.vue';
+    import { onMounted } from '@vue/runtime-core';
+    import { RoomApi } from '@/API/room.js';
     import { reactive } from 'vue';
     import { ref, computed, defineProps, defineEmits } from 'vue'
     import { useAppStore } from '@/store/app';
 
     const store = useAppStore();
+
+    onMounted(async () => {             // cuando se monta la pagina pido los datos
+    try {
+    // pido el update de los datos
+    await store.getAllRoomsAPI();
+    } catch (error) {
+    console.error(error);
+    }
+});
     
 </script>
 
 <template>
-    <!-- <cComponent> -->
     <main>
         <div class="canvas">
             <v-card class="vcard">
@@ -17,10 +27,10 @@
                 <v-divider color="gris"></v-divider>
                 
                 <v-row justify-end>
- 
-                        <v-col cols="4" v-for="room in store.getRooms">
-                            <RoomsBox class="grid-item" :roomName="room.name" :devicesCount="room.devices.length"></RoomsBox>
-                        </v-col>
+
+                    <v-col cols="5" v-for="room in store.getAllRooms()" :key="room">
+                        <RoomsBox class="grid-item" :roomName="room.name" :roomId="room.id"></RoomsBox>
+                    </v-col>
 
                 </v-row>  
             </v-card>

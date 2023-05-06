@@ -1,13 +1,56 @@
 <script setup>
+    import RoutinesBox from '../components/RoutinesBox.vue';
+    import { reactive } from 'vue';
+    import { onMounted } from '@vue/runtime-core';
+    import { ref, computed, defineProps, defineEmits } from 'vue'
+    import { useAppStore } from '@/store/app';
 
+    const store = useAppStore();
+
+    onMounted(async () => {             // cuando se monta la pagina pido los datos
+    try {
+    // pido el update de los datos
+    await store.getAllRoomsAPI();
+    } catch (error) {
+    console.error(error);
+    }
+    }); 
 </script>
 
 <template>
     <main>
-        <h1>Routines View</h1>
+        <div class="canvas">
+            <v-card class="vcard">
+                <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Routines</v-card-title>
+                <v-divider color="gris"></v-divider>
+                
+                <v-row justify-end>
+                    <!-- <RoutinesBox class="grid-item" :routineName="routine.name" :actionsCount="routine.actions.length"></RoutinesBox> -->
+                        <v-col cols="5" v-for="routine in store.getAllRoutines()">
+                            <RoutinesBox class="grid-item" :routineName="routine.name" :routineId="routine.id"></RoutinesBox>
+                        </v-col>
+                </v-row>  
+            </v-card>
+        </div>
     </main>
 </template>
 
+
 <style scoped>
+.canvas {
+  width: 95%;
+  height: 2632px;
+  background: primary;
+  border-radius: 38px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap:  2%;
+  padding: 2.5%;
+}
+
+.vcard {
+    border-radius: 8px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%), rgba(233, 247, 242, 0.03);
+}
 
 </style>
