@@ -8,8 +8,8 @@ const store = useAppStore();
 
 const loading = ref(true);
 
-const selectedRoomName = ref("");
-const newRoomName = ref("");
+const selectedRoutineName = ref("");
+const newRoutineName = ref("");
 const creationRoutineName = ref("");
 const actions = ref([]);
 const defaultAction = ref([{
@@ -23,7 +23,7 @@ const defaultAction = ref([{
 
 
 function clearVar(){
-    selectedRoomName.value = "";
+    selectedRoutineName.value = "";
 }
 
 onMounted(async () => {             // cuando se monta la pagina pido los datos
@@ -57,7 +57,7 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
                     </v-card-title>
                     <v-card class="ml-10" v-if="store.routines.length !=0" flat>
                     <v-list rounded  bg-color="secondary" >
-                        <v-list-item  v-for="routineName in store.getRoutinesNames" >
+                        <v-list-item  v-for="routineName in store.getAllRoutines" >
                             {{ routineName }}
                             <v-divider></v-divider>
                         </v-list-item>
@@ -71,7 +71,7 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
                     <v-card-title>
                         <v-card-text class="text-h5 font-weight-bold ">Create a Routine </v-card-text>
                     </v-card-title>
-                    <v-text-field class="pa-8" label="Room Name" v-model="creationRoutineName"></v-text-field>
+                    <v-text-field class="pa-8" label="Routine Name" v-model="creationRoutineName"></v-text-field>
                     <v-btn elevation="0" color="secondary" class="ml-8 mb-8" @click="store.createARoutine(creationRoutineName, defaultAction)"> CONFIRM </v-btn>
                 </v-card>
 
@@ -82,26 +82,26 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
                     </v-card-title>
                     <v-select
                     class="pl-8 pt-8 pr-8"
-                    label="Select the Room"
-                    :items="store.getRoomNames"
-                    v-model="selectedRoomName"
+                    label="Select the Routine"
+                    :items="store.getRoutineNames"
+                    v-model="selectedRoutineName"
                     ></v-select>
-                    <v-text-field class="pa-8" label="New Name" v-model="newRoomName"></v-text-field>
-                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8"  @click="() => { store.updateARoomByName(selectedRoomName, newRoomName); clearVar(); }" > CONFIRM </v-btn>
+                    <v-text-field class="pa-8" label="New Name" v-model="newRoutineName"></v-text-field>
+                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8"  @click="() => { store.updateARoutineByName(selectedRoutineName, newRoutineName); clearVar(); }" > CONFIRM </v-btn>
                 </v-card>
 
                 <!-- DELETE A ROUTINES -->
                 <v-card class="mb-4" color="lightersecondary" elevation="0">
                     <v-card-title>
-                        <v-card-text class="text-h5 font-weight-bold">Delete a Room :</v-card-text>
+                        <v-card-text class="text-h5 font-weight-bold">Delete a Routine :</v-card-text>
                     </v-card-title>
                     <v-select
                     class="pl-8 pt-8 pr-8"
-                    label="Select the Room"
-                    :items="store.getRoomNames"
-                    v-model="selectedRoomName"
+                    label="Select the Routine"
+                    :items="store.getRoutineNames"
+                    v-model="selectedRoutineName"
                     ></v-select>
-                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8"  @click="() => { store.deleteARoomByName(selectedRoomName); clearVar(); }" > CONFIRM </v-btn>
+                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8"  @click="() => { store.deleteARoutineByName(selectedRoutineName); clearVar(); }" > CONFIRM </v-btn>
                 </v-card>
 
             </v-card>

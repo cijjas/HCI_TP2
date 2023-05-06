@@ -252,6 +252,15 @@ export const useAppStore = defineStore('app', {
       }
       return null;
     },
+    // no testeada
+    getRoomDevices(idRoom){
+      var arr = [];
+      var room = this.getARoomByName(idRoom);
+      for ( let i = 0; i < room.meta.devices ; i++ ){
+        arr.push(this.getADevice(room.meta.devices));
+      }
+      return arr;
+    },
 
 
     /* -------------------------------------------------- ROUTINES -------------------------------------------------- */
@@ -342,15 +351,6 @@ export const useAppStore = defineStore('app', {
         console.error(error);
       }
     },
-
-
-
-
-
-
-
-
-
 
 
   },
