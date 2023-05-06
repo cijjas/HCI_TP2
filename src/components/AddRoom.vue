@@ -1,40 +1,108 @@
 <script setup>
-import { ref, computed, defineProps, defineEmits } from 'vue'
+import { onMounted } from '@vue/runtime-core';
 import { useAppStore } from '@/store/app';
+import { RoomApi } from '@/API/room.js';
+import { ref, computed, defineProps, defineEmits, reactive } from 'vue'
 const store = useAppStore();
-const tempRoomName = ref("");
+
+
+const loading = ref(true);
+
+const selectedRoomName = ref("");
+const newRoomName = ref("");
+const creationRoomName = ref("");
+
+
+function clearVar(){
+    selectedRoomName.value = "";
+}
+
+onMounted(async () => {             // cuando se monta la pagina pido los datos
+    try {
+    // pido el update de los datos
+    await store.getAllRoomsAPI();
+    loading.value = false;          // una vez updateados los uso
+    } catch (error) {
+    console.error(error);
+    }
+});
+
 </script>
 
 <template>
     <main>
-        <!-- ROOMS -->
-        <v-card elevation="5" class="pa-8 pt-4" color="gris">
-            <v-card-title class="ml-n3 mb-3 mt-3 text-h4 font-weight-bold text-uppercase text-medium-emphasis">Rooms</v-card-title>
-            <v-divider></v-divider>
-            <v-card-title v-if="store.getRooms.length !=0" class="ml-n3 mt-3 mb-3 text-h5 font-weight-bold">Your Rooms :</v-card-title>
-            <v-card v-if="store.getRooms.length !=0">
-                <v-list rounded>
-                <v-list-item v-for="room in store.getRooms">
-                    {{ room.name }}
-                    <v-divider></v-divider>
-                </v-list-item>
-            </v-list>
+        <v-card class="pa-8">
+
+            <v-card  v-if="loading.value">
+                <v-card-title>
+                    <v-card-text>Loading...</v-card-text>
+                </v-card-title>
             </v-card>
-            <v-spacer></v-spacer>
-            <v-card-title  class="ml-n3 mt-3 mb-3 text-h5 font-weight-bold">Add a Room : </v-card-title>
-            <v-text-field prepend-icon="mdi-home-plus" label="Room Name" v-model="tempRoomName"></v-text-field>
-            <v-spacer></v-spacer>
-            <v-btn append-icon="mdi-plus" class="pl-10 pr-10" @click="store.addRoom(`${tempRoomName}`)">Add</v-btn>
+
+            <v-card v-else flat>
+
+                <!-- ROOMS -->
+                <v-card class="mb-4 pr-8" color="lightersecondary"  elevation="0">
+                    <v-card-title>
+                        <v-card-text class="text-h4 font-weight-bold text-uppercase ">Rooms </v-card-text>
+                    </v-card-title>
+                    <v-card class="ml-10" v-if="store.rooms.length !=0" flat>
+                    <v-list rounded  bg-color="secondary" >
+                        <v-list-item  v-for="roomName in store.getRoomNames" >
+                            {{ roomName }}
+                            <v-divider></v-divider>
+                        </v-list-item>
+                    </v-list>
+                    </v-card>
+                        <v-card-text>{{ store.rooms }}</v-card-text>
+                </v-card>
+
+                <!-- CREATE A ROOM -->
+                <v-card class="mb-4" color="lightersecondary" elevation="0">
+                    <v-card-title>
+                        <v-card-text class="text-h5 font-weight-bold ">Create a Room </v-card-text>
+                    </v-card-title>
+                    <v-text-field class="pa-8" label="Room Name" v-model="creationRoomName"></v-text-field>
+                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8" @click="store.createARoom(creationRoomName)"> CONFIRM </v-btn>
+                </v-card>
+
+                <!-- UPDATE A ROOM -->
+                <v-card class="mb-4" color="lightersecondary" elevation="0">
+                    <v-card-title>
+                        <v-card-text class="text-h5 font-weight-bold">Update a Room :</v-card-text>
+                    </v-card-title>
+                    <v-select
+                    class="pl-8 pt-8 pr-8"
+                    label="Select the Room"
+                    :items="store.getRoomNames"
+                    v-model="selectedRoomName"
+                    ></v-select>
+                    <v-text-field class="pa-8" label="New Name" v-model="newRoomName"></v-text-field>
+                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8"  @click="() => { store.updateARoomByName(selectedRoomName, newRoomName); clearVar(); }" > CONFIRM </v-btn>
+                </v-card>
+
+                <!-- DELETE A ROOM -->
+                <v-card class="mb-4" color="lightersecondary" elevation="0">
+                    <v-card-title>
+                        <v-card-text class="text-h5 font-weight-bold">Delete a Room :</v-card-text>
+                    </v-card-title>
+                    <v-select
+                    class="pl-8 pt-8 pr-8"
+                    label="Select the Room"
+                    :items="store.getRoomNames"
+                    v-model="selectedRoomName"
+                    ></v-select>
+                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8"  @click="() => { store.deleteARoomByName(selectedRoomName); clearVar(); }" > CONFIRM </v-btn>
+                </v-card>
+
+            </v-card>
         </v-card>
-        <v-divider></v-divider>
-        <v-btn @click="store.startDummy">START DUMMY</v-btn>
     </main>
 </template>
 
+
 <style scoped>
 main{
-    padding-top: 5%;
-    padding-right: 13%;
-    padding-left: 13%;
+    padding: 5%;
 }
 </style>

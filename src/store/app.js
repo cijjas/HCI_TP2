@@ -1,20 +1,395 @@
 // Utilities
 import { defineStore } from 'pinia'
 
+
+import { removeItemFromArray } from '@/Lib/lib.js'
+import { getIdByName } from '@/Lib/lib.js'
+
+
+import { DevicesApi } from '@/API/devices';
+import { RoomApi } from '@/API/room.js';
+import { RoutinesApi } from '@/API/routines';
+
+/*
+
+
+
+*/
+
+
 export const useAppStore = defineStore('app', {
   state: () => ({
-    roomId : 0,
-    routineId : 0,
-    deviceId : 0,
-
     rooms : [],
     routines : [],
     devices : [],
-
-    supportedDevices : ['Sprinkler/Tap','Vacuum Cleaner', 'Oven', 'Fridge', 'Curtain']
+    // vacuum cleaner, oven, fridge, curtain, tap/sprinkler
+    supportedDevices : [{
+      id: "eu0v2xgprrhhg41g",
+      name: "Blinds"
+      },{
+      id: "im77xxyulpegfmv8",
+      name: "Oven"
+      },{
+      id: "ofglvd9gqx8yfl3l",
+      name: "Vacuum"
+      },{
+      id: "rnizejqr2di0okho",
+      name: "Refrigerator"
+      },{
+      id: "dbrlsh7o5sn8ur4i",
+      name: "Faucet"
+    }]
   }),
+
+
+
   actions :{
-    startDummy(){
+    /* -------------------------------------------------- ROOMS -------------------------------------------------- */
+    getAllRooms(){
+      return this.rooms;
+    },
+    async getAllRoomsAPI() {
+      try {
+        const result = await RoomApi.getAll();
+        this.rooms = result;
+        return result;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    getARoom(id){
+      return this.rooms.find( room => room.id == id);
+    },
+    getARoomByName(name){
+      var roomId = getIdByName(this.rooms, name);
+      return this.getARoom(roomId);
+    },
+
+
+
+    async createARoom(roomName){
+      try {
+        var roomObj = {
+          name : roomName,
+          meta : {
+            devices : []
+          }
+        }
+        var result = await RoomApi.add(roomObj);
+        this.rooms.push(result);
+        return result;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+
+
+    async updateARoom(id, newname){
+      try {
+        var roomObj = {
+          id : id,
+          name : newname,
+          meta : {
+            devices : this.getARoom(id).meta.devices
+          }
+        }
+        var result = await RoomApi.modify(roomObj);
+        this.rooms.find( room => room.id == id).name = newname;
+        return result;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async updateARoomByName(oldname, newname){
+      try {
+        var roomId = getIdByName(this.rooms, oldname);
+        return this.updateARoom(roomId, newname);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+
+
+    async deleteARoom(id){
+      try {
+        var result = await RoomApi.remove(id);
+        removeItemFromArray(this.rooms, id);
+        return result;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async deleteARoomByName(name){
+      try {
+        var roomId = getIdByName(this.rooms, name);
+        return this.deleteARoom(roomId);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+
+
+    /* -------------------------------------------------- DEVICES -------------------------------------------------- */
+    getAllDevices(){
+      return this.devices;
+    },
+    async getAllDevicesAPI() {
+      try {
+        const result = await DevicesApi.getAll();
+        this.devices = result;
+        return result;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    getADevice(id){
+      return this.devices.find( devices => devices.id == id);
+    },
+    getADeviceByName(name){
+      var deviceId = getIdByName(this.devices, name);
+      return this.getADevice(deviceId);
+    },
+
+
+
+    async createADevice(roomName, deviceName, type){
+      try {
+        // UPDATE DE DEVICES
+        // remoto
+        var typeId = getIdByName(this.supportedDevices, type);
+        var deviceObj = {
+          type : {
+            id : typeId
+          },
+          name : deviceName
+        }
+        var result = await DevicesApi.add(deviceObj);
+        // local
+        this.devices.push(result);
+        // UPDATE DE ROOMS
+        // local
+        var room = this.getARoomByName(roomName);
+        room.meta.devices.push(result.id);
+        // remoto
+        this.updateARoom(room.id, room.name);
+        return result;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+
+
+    async updateADevice(id, newname){
+      try {
+        // UPDATE DE DEVICES
+        // remoto
+        var deviceObj = {
+          id : id,
+          name : newname,
+        }
+        var result = await DevicesApi.modify(deviceObj);
+        // local
+        this.devices.find( device => device.id == id).name = newname;
+        // no necesito hacer el update de ROOMS porque solo tiene el ID de referencia
+        return result;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async updateADeviceByName(oldname, newname){
+      try {
+        var deviceId = getIdByName(this.devices, oldname);
+        this.updateADevice(deviceId, newname);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+
+
+    async deleteADevice(id){
+      try {
+        // UPDATE DE DEVICES
+        // remoto
+        var result = await DevicesApi.remove(id);
+        // local
+        removeItemFromArray(this.devices, id);
+        // UPDATE DE ROOMS
+        // update local
+        var room = this.getARoomByName(this.searchDevicesRoom(id));                        // room es el cuarto que tiene el dispositivo con id
+        var index = room.meta.devices.findIndex(dId => dId === id);   // el index del dispositivo dentro de room que tiene el id que busco
+        if (index !== -1) {
+          room.meta.devices.splice(index, 1);                         // lo extraigo
+        }
+        // update remoto
+        this.updateARoom(room.id, room.name);
+        return result;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async deleteADeviceByName(name){
+      try {
+        var deviceId = getIdByName(this.devices, name);
+        return this.deleteADevice(deviceId);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    /* -------------------------------------------------- ROOM - DEVICES -------------------------------------------------- */
+
+    searchDevicesRoom(id){
+      for ( let i = 0; i < this.rooms.length; i++ ){
+        for ( let j = 0; j < this.rooms[i].meta.devices.length; j++){
+          if ( this.rooms[i].meta.devices[j] == id ){
+            return this.rooms[i].name;
+          }
+        }
+      }
+      return null;
+    },
+    // no testeada
+    getRoomDevices(idRoom){
+      var arr = [];
+      var room = this.getARoomByName(idRoom);
+      for ( let i = 0; i < room.meta.devices ; i++ ){
+        arr.push(this.getADevice(room.meta.devices));
+      }
+      return arr;
+    },
+
+
+    /* -------------------------------------------------- ROUTINES -------------------------------------------------- */
+    getAllRoutines(){
+      return this.routines;
+    },
+    async getAllRoutinesAPI() {
+      try {
+        const result = await RoutinesApi.getAll();
+        this.routines = result;
+        return result;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    getARoutine(id){
+      return this.routines.find( routines => routines.id == id);
+    },
+    getARoutineByName(name){
+      var routineId = getIdByName(this.routines, name);
+      return this.getARoutine(routineId);
+    },
+
+
+    // se deberia reempazar la defaultAction por actions, que tiene
+    // que ser un array de objetos
+    async createARoutine(routineName, actions){
+      try {
+        var routineObj = {
+          name : routineName,
+          actions : actions,
+          meta : {}
+        }
+        var result = await RoutinesApi.add(routineObj);
+        this.routines.push(result);
+        return result;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+
+
+    // De nuevo el problema con Actions[]
+    async updateARoutine(id, newname, actions){
+      try {
+        var routineObj = {
+          id : id,
+          actions : {
+            id : "4551cd84667ff8e1"
+          },
+          actionName : "turnOff",
+          params : [],
+          meta : {}
+        }
+        var result = await RoutinesApi.modify(routineObj);
+        this.routines.find( routine => routine.id == id).name = newname;
+        return result;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async updateARoutineByName(oldname, newname, actions){
+      try {
+        var routineId = getIdByName(this.routines, oldname);
+        this.updateARoutine(routineId, newname, actions);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+
+
+    async deleteARoutine(id){
+      try {
+        var result = await RoutinesApi.remove(id);
+        removeItemFromArray(this.routines, id);
+        return result;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async deleteARoutineByName(name){
+      try {
+        var routineId = getIdByName(this.routines, name);
+        return this.deleteARoutine(routineId);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+
+  },
+  getters :{
+    getRoomNames(){
+      var arr = [];
+      for ( let i = 0; i < this.rooms.length; i++ ){
+        arr.push( this.rooms[i].name );
+      }
+      return arr;
+    },
+    getDevicesNames(){
+      var arr = [];
+      for ( let i = 0; i < this.devices.length; i++ ){
+        arr.push( this.devices[i].name );
+      }
+      return arr;
+    },
+    getRoutinesNames(){
+      var arr = [];
+      for ( let i = 0; i < this.routines.length; i++ ){
+        arr.push( this.routines[i].name );
+      }
+      return arr;
+    },
+    getSupportedDevicesNames(){
+      var arr = [];
+      for ( let i = 0; i < this.supportedDevices.length; i++ ){
+        arr.push( this.supportedDevices[i].name );
+      }
+      return arr;
+    },
+  }
+})
+
+
+
+
+/* startDummy(){
       this.addRoom('Kitchen');
       this.addDevice('Main Tap','Sprinkler/Tap','Kitchen');
       this.addDevice('Super Oven','Oven','Kitchen');
@@ -33,124 +408,4 @@ export const useAppStore = defineStore('app', {
       this.addRoutine('Cooking!');
       this.addRoutine('Relaxing!');
 
-    },
-    addRoom(roomName){
-      this.rooms.push({
-        id : this.roomId,
-        name : roomName,
-        devices : []
-      });
-      this.roomId++;
-    },
-    addRoutine(routineName){
-      this.routines.push({
-        id : this.routineId,
-        name : routineName,
-        actions : []
-      });
-      this.routineId++;
-    },
-    addAction(routineName, changes){
-      /*
-          esto va a ser un find segun routine name, y le agrega una accion
-          como platnear las acciones, podria ser una funcion eterna donde la mayoria es null
-          podria ser un objeto y se buscan matches pero medio feo
-          podria recibir el type y facilitar el destructuring, y asume que vienen en orden, lo que es controlable
-      */
-    },
-
-    addDevice(deviceName, deviceType, deviceRoom){
-      if ( this.rooms.length == 0 )
-        return;
-      /* Lo agrego a los devices de un room */
-      this.rooms.find( room => room.name == deviceRoom).devices.push(
-        {
-          id: this.deviceId,
-          name: deviceName,
-          deviceType : deviceType,
-        }
-      )
-      /* va a haber un case aca */
-      /*
-        Yo supongo que esta seccion se va a cambiar por objetos a los cuales les haces new
-        y utilizas sus getters y setters para obtener
-      */
-      /* Agrego el device a los devices */
-      if ( deviceType === 'Vacuum Cleaner'){
-        this.devices.push({
-          id: this.deviceId,
-          name: deviceName,
-          deviceType : deviceType,
-          icon : "mdi-vacuum",
-          room : deviceRoom,
-          state : "Off",
-          mode : "Vacuum",
-          base : deviceRoom
-          })
-      }
-      if ( deviceType === 'Sprinkler/Tap'){
-        this.devices.push({
-          id: this.deviceId,
-          name: deviceName,
-          deviceType : deviceType,
-          icon : "mdi-water",
-          room : deviceRoom,
-          state : "Off"
-          })
-      }
-      if ( deviceType === 'Curtain'){
-        this.devices.push({
-          id: this.deviceId,
-          name: deviceName,
-          deviceType : deviceType,
-          icon : "mdi-curtains-closed",
-          room : deviceRoom,
-          state : "Open",
-          position : 0,
-          })
-      }
-      if ( deviceType === 'Oven'){
-        this.devices.push({
-          id: this.deviceId,
-          name: deviceName,
-          deviceType : deviceType,
-          icon : "mdi-stove",
-          room : deviceRoom,
-          state : "Off",
-          temperature : 0,
-          source : "",
-          grill : "Off",
-          convection : "Off"
-          })
-      }
-      if ( deviceType === 'Fridge'){
-        this.devices.push({
-          id: this.deviceId,
-          name: deviceName,
-          deviceType : deviceType,
-          icon : "mdi-fridge",
-          room : deviceRoom,
-          freezerTemp : 0,
-          fridgeTemp : 0,
-          mode : 'Normal'
-          })
-      }
-      this.deviceId++;
-    }
-  },
-  getters :{
-    getRooms : (state) =>{
-      return state.rooms;
-    },
-    getRoutines : (state) =>{
-      return state.routines;
-    },
-    getDevices : (state) =>{
-      return state.devices;
-    },
-    getSupportedDevices : (state) =>{
-      return state.supportedDevices;
-    },
-
-  }
-})
+    }, */
