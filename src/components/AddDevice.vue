@@ -10,6 +10,7 @@ const loading = ref(true);
 
 const selectedDeviceName = ref("");
 const selectedDeviceName2 = ref("");
+const selectedDeviceRoom = ref("");
 const selectedDeviceType = ref("");
 const newDeviceName = ref("");
 const creationDeviceName = ref("");
@@ -22,7 +23,8 @@ function clearVar(){
 
 onMounted(async () => {             // cuando se monta la pagina pido los datos
     try {
-    // pido el update de los datos
+    // pido el update de los dato
+    await store.getAllRoomsAPI();
     await store.getAllDevicesAPI();
     loading.value = false;          // una vez updateados los uso
     } catch (error) {
@@ -67,12 +69,18 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
                     </v-card-title>
                     <v-select
                     class="pl-8 pt-8 pr-8"
+                    label="Select the Device's Room"
+                    :items="store.getRoomNames"
+                    v-model="selectedDeviceRoom"
+                    ></v-select>
+                    <v-select
+                    class="pl-8 pt-8 pr-8"
                     label="Select the Device Type"
                     :items="store.getSupportedDevicesNames"
                     v-model="selectedDeviceType"
                     ></v-select>
                     <v-text-field class="pa-8" label="Device Name" v-model="creationDeviceName"></v-text-field>
-                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8" @click="store.createADevice(creationDeviceName, selectedDeviceType)"> CONFIRM </v-btn>
+                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8" @click="store.createADevice(selectedDeviceRoom, creationDeviceName, selectedDeviceType)"> CONFIRM </v-btn>
                 </v-card>
 
                 <!-- UPDATE A DEVICE -->

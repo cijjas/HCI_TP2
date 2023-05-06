@@ -11,17 +11,7 @@ import { RoomApi } from '@/API/room.js';
 import { RoutinesApi } from '@/API/routines';
 
 /*
-Prototipos :
-  Rooms :
-    rooms[] getAllRooms();
-    rooms[] getAllRoomsAPI();                     [ASYNC]   // esta funcion no deberia fuera del Mount
-    room{}  getARoom(id);
-    room{}  getARoomByName(name);
-    room{}  createARoom(roomName);                [ASYNC]
-    boolean updateARoom(id, newname);             [ASYNC]
-    boolean updateARoomByName(oldname, newname);  [ASYNC]
-    boolean deleteARoom(id):                      [ASYNC]
-    boolean deleteARoomByName(name, id):          [ASYNC]
+
 
 
 */
@@ -80,7 +70,10 @@ export const useAppStore = defineStore('app', {
     async createARoom(roomName){
       try {
         var roomObj = {
-          name : roomName
+          name : roomName,
+          meta : {
+            devices : []
+          }
         }
         var result = await RoomApi.add(roomObj);
         this.rooms.push(result);
@@ -96,7 +89,10 @@ export const useAppStore = defineStore('app', {
       try {
         var roomObj = {
           id : id,
-          name : newname
+          name : newname,
+          meta : {
+            devices : this.getARoom(id).meta.devices
+          }
         }
         var result = await RoomApi.modify(roomObj);
         this.rooms.find( room => room.id == id).name = newname;
@@ -159,8 +155,10 @@ export const useAppStore = defineStore('app', {
 
 
 
-    async createADevice(deviceName, type){
+    async createADevice(roomName, deviceName, type){
       try {
+        // UPDATE DE DEVICES
+        // remoto
         var typeId = getIdByName(this.supportedDevices, type);
         var deviceObj = {
           type : {
@@ -169,7 +167,14 @@ export const useAppStore = defineStore('app', {
           name : deviceName
         }
         var result = await DevicesApi.add(deviceObj);
+        // local
         this.devices.push(result);
+        // UPDATE DE ROOMS
+        // local
+        var room = this.getARoomByName(roomName);
+        room.meta.devices.push(result.id);
+        // remoto
+        this.updateARoom(room.id, room.name);
         return result;
       } catch (error) {
         console.error(error);
@@ -180,13 +185,16 @@ export const useAppStore = defineStore('app', {
 
     async updateADevice(id, newname){
       try {
+        // UPDATE DE DEVICES
+        // remoto
         var deviceObj = {
           id : id,
           name : newname,
-          meta : {}
         }
         var result = await DevicesApi.modify(deviceObj);
+        // local
         this.devices.find( device => device.id == id).name = newname;
+        // no necesito hacer el update de ROOMS porque solo tiene el ID de referencia
         return result;
       } catch (error) {
         console.error(error);
@@ -205,8 +213,20 @@ export const useAppStore = defineStore('app', {
 
     async deleteADevice(id){
       try {
+        // UPDATE DE DEVICES
+        // remoto
         var result = await DevicesApi.remove(id);
+        // local
         removeItemFromArray(this.devices, id);
+        // UPDATE DE ROOMS
+        // update local
+        var room = this.getARoomByName(this.searchDevicesRoom(id));                        // room es el cuarto que tiene el dispositivo con id
+        var index = room.meta.devices.findIndex(dId => dId === id);   // el index del dispositivo dentro de room que tiene el id que busco
+        if (index !== -1) {
+          room.meta.devices.splice(index, 1);                         // lo extraigo
+        }
+        // update remoto
+        this.updateARoom(room.id, room.name);
         return result;
       } catch (error) {
         console.error(error);
@@ -219,6 +239,18 @@ export const useAppStore = defineStore('app', {
       } catch (error) {
         console.error(error);
       }
+    },
+    /* -------------------------------------------------- ROOM - DEVICES -------------------------------------------------- */
+
+    searchDevicesRoom(id){
+      for ( let i = 0; i < this.rooms.length; i++ ){
+        for ( let j = 0; j < this.rooms[i].meta.devices.length; j++){
+          if ( this.rooms[i].meta.devices[j] == id ){
+            return this.rooms[i].name;
+          }
+        }
+      }
+      return null;
     },
 
 
@@ -243,22 +275,6 @@ export const useAppStore = defineStore('app', {
       return this.getARoutine(routineId);
     },
 
-
-    /*  async createADevice(deviceName, type){
-      try {
-        var deviceObj = {
-          type : {
-            id : typeId
-          },
-          name : deviceName
-        }
-        var result = await DevicesApi.add(deviceObj);
-        this.devices.push(result);
-        return result;
-      } catch (error) {
-        console.error(error);
-      }
-    }, */
 
     // se deberia reempazar la defaultAction por actions, que tiene
     // que ser un array de objetos
@@ -326,6 +342,16 @@ export const useAppStore = defineStore('app', {
         console.error(error);
       }
     },
+
+
+
+
+
+
+
+
+
+
 
   },
   getters :{

@@ -1,5 +1,5 @@
 export function removeItemFromArray(array, itemId) {
-    const index = array.findIndex(item => item.id === itemId);
+    var index = array.findIndex(item => item.id === itemId);
     if (index !== -1) {
         array.splice(index, 1);
     }
