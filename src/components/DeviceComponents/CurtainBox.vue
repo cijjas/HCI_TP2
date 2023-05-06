@@ -75,8 +75,9 @@ const openCurtainPopUp = () => {
 
       <v-spacer></v-spacer>
 
-      <v-btn @click="toggleOnOff" :class="{'primary': isOn}">
-        {{ isOn ? 'CLOSE' : 'OPEN' }}
+      <v-btn @click="isOn = !isOn" 
+            :class="{'on-button': isOn, 'off-button': !isOn}">
+            {{ isOn ? 'CLOSE' : 'OPEN' }}
       </v-btn>
     </v-toolbar>
 
@@ -112,6 +113,10 @@ const openCurtainPopUp = () => {
   transition: all .2s ease-in-out;
   height: 200px;
   width: 400px;
+}
+.toggle-card:hover {
+  transition: transform 0.3s ease-out;
+  transform: scale(1.01);
 }
 .toggle-card::before {
     content: "";
@@ -159,7 +164,20 @@ const openCurtainPopUp = () => {
   margin-left: -10px;
 
 }
-.v-btn:hover .card-title {
-  color: #19642d;
+
+
+.on-button:active {
+  color: #631414;
 }
+.off-button:active {
+  color: #1f8a3c;
+}
+.on-button{
+  color: #1f8a3c;
+
+}
+.on-button:hover{
+  color: #631414;
+}
+
 </style>

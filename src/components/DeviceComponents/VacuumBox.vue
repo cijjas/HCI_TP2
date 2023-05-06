@@ -2,36 +2,61 @@
   import { ref } from 'vue'
 
   const isOn = ref(false);
-  const switchValue = ref(true);
-  const buttonColor = ref('primary');
-  const mopIsOn = ref(false);
+  const isDialogOpen = ref(false);
+  //real values
+  const deviceName = ref('Vacuum');
+  const vacuumMode = ref(0);
+  const chargingBaseLocation = ref(0);
+  const returningToBase = ref(false);
+  const location = ref(0);
+
+  //temp values
+  const tempDeviceName = ref(deviceName.value);
+  const tempVacuumMode = ref(vacuumMode.value);
+  const tempChargingBaseLocation = ref(chargingBaseLocation.value);
+  const tempReturningToBase = ref(returningToBase.value);
+  const tempLocation = ref(location.value);
+
+  const rules = {
+    minLength: value => value.length >= 1 || 'Min 1 characters',
+    maxLength: value => value.length <= 15 || 'Max 15 characters',
+  };
+  const openVacuumDialog = () => {
+    isDialogOpen.value = true;
+  };
+  const closeVacuumDialog = () => {
+    isDialogOpen.value = false;
+  };
+
+  const saveSettings = () => {
+    if(tempDeviceName.value.length < 1 || tempDeviceName.value.length > 15) {
+      return;
+    }
+    deviceName.value = tempDeviceName.value;
+    vacuumMode.value = tempVacuumMode.value;
+    chargingBaseLocation.value = tempChargingBaseLocation.value;
+    returningToBase.value = tempReturningToBase.value;
+    location.value = tempLocation.value;
+    closeVacuumDialog();
+  };
+  const cancelSettings = () => {
+    tempDeviceName.value = deviceName.value;
+    tempVacuumMode.value = vacuumMode.value;
+    tempChargingBaseLocation.value = chargingBaseLocation.value;
+    tempReturningToBase.value = returningToBase.value;
+    tempLocation.value = location.value;
+    closeVacuumDialog();
+  };
 
   const toggleCard = () => {
-    /* IR A ASPIRADORA */ 
+    
   };
 
   const returnToBase = () => {
     // Code to execute when button is clicked
   };
 
-  const toggleVacuum = () => {
-    if (isOn.value) {// si esta prendida la aspiradora
-      mopIsOn.value = !mopIsOn.value;
-      if (buttonColor.value !== 'primary') {
-        buttonColor.value = buttonColor.value === 'primary' ? 'offcolor' : 'primary';
-        switchValue.value = !switchValue.value; // toggle switch value
-      }
-    }
-  };
-
-  const toggleMop = () => {
-    if (isOn.value) {// si esta prendida la aspiradora
-      if (buttonColor.value !== 'offcolor') {
-        switchValue.value = !switchValue.value; // toggle switch value
-        buttonColor.value = switchValue.value ? 'primary' : 'offcolor'; // update button color
-      }
-    }
-  };
+  
 </script>
 
 
@@ -40,11 +65,15 @@
         <v-toolbar  :rounded="true" class="rounded-toolbar" transparent>
 
           
-          <v-btn @click="openVacuumPopUp" text color="transparent">
-            <v-toolbar-title class="font-weight-bold text-h4 card-title">Vacuum Cleaner</v-toolbar-title>
+          <v-btn @click="openVacuumDialog" text color="transparent">
+            <v-toolbar-title class="font-weight-bold text-h4 card-title">{{deviceName}}</v-toolbar-title>
           </v-btn>
           <v-spacer></v-spacer>
-          <v-btn icon @click="isOn = !isOn" :class="{'primary': isOn}">
+          <v-btn 
+            icon 
+            @click="isOn = !isOn" 
+            :class="{'on-button': isOn, 'off-button': !isOn}"
+            >
             <v-icon>{{ isOn ? 'mdi-power' : 'mdi-power-standby' }}</v-icon>
           </v-btn>
           
@@ -52,8 +81,11 @@
         </v-toolbar>
 
         <!-- locations for-->
-        <v-row no-gutters align="center" style="padding-bottom: 30px">
+        <v-row no-gutters style="padding-bottom: 10px">
           <v-col cols="12">
+            <v-btn icon class="primary">
+              <v-icon>mdi-map-marker</v-icon>
+            </v-btn>
             <v-subheader class="ml-4">Ubicación</v-subheader>
           </v-col>
         </v-row>
@@ -69,16 +101,20 @@
             <v-row no-gutters>
                 <v-col cols="auto" style="padding-top: 10px">
 
-                  <v-btn :disabled="!isOn" :color="isOn ? (switchValue ? 'primary' : 'offcolor') : 'offcolor'" dark 
-                    :block="true" @click.stop="toggleVacuum" class="secondary text-right small-button-vacuum"
+                  <v-btn :color="vacuumMode === 0 ? 'primary' : 'offcolor'" 
+                  @click.stop="vacuumMode = 0" 
+                  class="secondary text-right small-button-vacuum"
+                  :disabled="!isOn" 
                     >Vacuum
                   </v-btn>
                 
                 </v-col>
                 <v-col cols="auto" style="padding-top: 10px">
 
-                  <v-btn :color="isOn ? (switchValue ? 'offcolor' : 'primary') : 'offcolor'" dark 
-                    :block="true" @click.stop="toggleMop" class="text-right small-button-mop"
+                  <v-btn 
+                    :color="vacuumMode ? 'primary' : 'offcolor'"
+                    @click.stop="vacuumMode = 1" 
+                    class="text-right small-button-mop"
                     :disabled="!isOn"
                     >Mop
                   </v-btn>
@@ -88,11 +124,129 @@
           </v-col>
 
         </v-row>
+
+    <v-dialog v-model="isDialogOpen" width="1024" persistent>
+      <v-card class="toggle-card-popup">
+
+        <v-card-title class="font-weight-bold text-h5 card-title">Vacuum Settings</v-card-title>
+        <v-card-text>
+          
+          <v-row >
+            <v-text-field
+              style="padding-top: 50px;"  
+              label="Device Name"
+              v-model.string="tempDeviceName"
+              type="string"
+              :rules="[rules.maxLength, rules.minLength]"
+            ></v-text-field>
+            
+          </v-row>
+          <v-row>
+            <v-text-field
+              style="padding-top: 50px;"  
+              label="Charging Base Location"
+              v-model.string="tempChargingBaseLocation"
+              type="string"
+              :rules="[rules.maxLength, rules.minLength]"
+            ></v-text-field>
+          </v-row>
+          <v-row>
+            <v-text-field
+              style="padding-top: 50px;"  
+              label="Returning to Base"
+              v-model.string="tempReturningToBase"
+              type="string"
+              :rules="[rules.maxLength, rules.minLength]"
+            ></v-text-field>
+          </v-row>
+          <v-row>
+            <v-text-field
+              style="padding-top: 50px;"  
+              label="Charging Vacuum Location"
+              v-model.string="tempChargingBaseLocation"
+              type="string"
+              :rules="[rules.maxLength, rules.minLength]"
+            ></v-text-field>
+            <v-col>
+              <v-row no-gutters>
+                  <v-card-text class="text--white font-weight-bold text-h4 mb-0 slider-value" >
+                        <v-text> Cleaning Mode </v-text>
+                  </v-card-text>
+                  <v-col cols="auto" >
+
+                    <v-btn :color="tempVacuumMode === 0 ? 'primary' : 'offcolor'" 
+                    @click.stop="tempVacuumMode = 0" 
+                    class="secondary text-right temp-small-button-vacuum"
+                      >Vacuum
+                    </v-btn>
+                  
+
+                    <v-btn :color="tempVacuumMode === 1 ? 'primary' : 'offcolor'"
+                      @click.stop="tempVacuumMode = 1" 
+                      class="text-right temp-small-button-mop"
+                      >Mop
+                    </v-btn>
+
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+
+          <v-row no-gutters class="button-row">
+            <v-col cols="auto" class="ml-auto " >
+              
+            </v-col>
+          </v-row>
+
+        </v-card-text>
+        
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="cancelSettings">Cancel</v-btn>
+          <v-btn class="small-button-save" color="secondary" @click="saveSettings">Save</v-btn>
+        </v-card-actions>
+
+      </v-card>
+    </v-dialog>
+
   </v-card>
 </template>
 
 
 <style scoped>
+.slider-value {
+  color: #1C4035; /* Change the color to your desired value */
+}
+.toggle-card-popup {
+  padding: 30px;
+  border-radius: 30px;
+  background-color: #EECC66;
+}
+
+.toggle-card-popup::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("./DeviceAssets/del-vacuum.png");
+  background-size: 30%;
+  background-position: calc(100% - 0px) top;
+  background-repeat: no-repeat;
+  opacity: 0.05;
+}
+
+.temp-small-button-vacuum {
+  width: 200px;
+  height: 40px;
+  border-radius: 10px 0px 0px 10px;
+}
+.temp-small-button-mop {
+  width: 200px;
+  height: 40px;
+  border-radius: 0px 10px 10px 0px;
+}
 .toggle-card {
   cursor: pointer;
   padding: 16px;  
@@ -101,6 +255,10 @@
   transition: all .2s ease-in-out;
   height: 200px;
   width: 400px;
+}
+.toggle-card:hover {
+  transition: transform 0.3s ease-out;
+  transform: scale(1.01);
 }
 .toggle-card::before {
     content: "";
@@ -119,7 +277,9 @@
 .toggle-card:hover {
   box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
 }
-
+.v-btn:hover .card-title {
+    color: #19642d;
+  }
 .rounded-toolbar {
   border-radius: 20px;
   background-color: transparent;
@@ -135,22 +295,15 @@
 }
 
 .small-button-vacuum {
+  border-radius: 10px 0px 0px 10px;
   font-size: 12px;
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
-  border-top-left-radius: 30px;
-  border-bottom-left-radius: 30px;
-
 }
 
 
 .small-button-mop {
   padding: 5px 8px;
   font-size: 12px;
-  border-top-right-radius: 30px;
-  border-bottom-right-radius: 30px;
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
+  border-radius: 0px 10px 10px 0px;
 
 }
 
@@ -162,9 +315,25 @@
 
 }
 
-.v-btn:hover .card-title {
-  color: #19642d;
+.small-button-save {
+  width: 240px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: #1C4035;
 }
 
+.on-button:active {
+  color: #631414;
+}
+.off-button:active {
+  color: #1f8a3c;
+}
+.on-button{
+  color: #1f8a3c;
+
+}
+.on-button:hover{
+  color: #631414;
+}
 
 </style>
