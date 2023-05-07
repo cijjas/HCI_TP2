@@ -10,6 +10,12 @@ import { DevicesApi } from '@/API/devices';
 import { RoomApi } from '@/API/room.js';
 import { RoutinesApi } from '@/API/routines';
 
+import VacuumBox from '../components/DeviceComponents/VacuumBox.vue';
+import CurtainBox from '@/components/DeviceComponents/CurtainBox.vue';
+import TapBox from '@/components/DeviceComponents/TapBox.vue';
+import FridgeBox from '@/components/DeviceComponents/FridgeBox.vue';
+import OvenBox from '@/components/DeviceComponents/OvenBox.vue';
+
 /*
 
 
@@ -22,6 +28,7 @@ export const useAppStore = defineStore('app', {
     rooms : [],
     routines : [],
     devices : [],
+    components : [],
     // vacuum cleaner, oven, fridge, curtain, tap/sprinkler
     supportedDevices : [{
       id: "eu0v2xgprrhhg41g",
@@ -175,6 +182,25 @@ export const useAppStore = defineStore('app', {
         room.meta.devices.push(result.id);
         // remoto
         this.updateARoom(room.id, room.name);
+
+        if(type == "Vacuum"){
+          this.components.push(VacuumBox);
+        }else if(type == "Curtain"){
+          this.components.push(CurtainBox);
+        }else if(type == "Faucet"){
+          this.components.push(TapBox);
+        }else if(type == "Refrigerator"){
+          this.components.push(FridgeBox);
+        }else if(type == "Oven"){
+          this.components.push(OvenBox);
+        }else if(type == "Blinds"){
+          this.components.push(CurtainBox);
+        }
+
+        console.log("creo componente");
+
+        console.log(this.devices.length);
+
         return result;
       } catch (error) {
         console.error(error);
@@ -227,6 +253,12 @@ export const useAppStore = defineStore('app', {
         }
         // update remoto
         this.updateARoom(room.id, room.name);
+        //delete component
+        var device = this.getADevice(id);
+        var index = this.components.findIndex(component => component.name === device.type.name + "Box");
+        if (index !== -1) {
+          this.components.splice(index, 1);
+        } //chequear
         return result;
       } catch (error) {
         console.error(error);
@@ -239,6 +271,12 @@ export const useAppStore = defineStore('app', {
       } catch (error) {
         console.error(error);
       }
+    },
+    //getcomponents
+    getComponents(){
+      console.log(this.components.length);
+      console.log("uploadeo componentes");
+      return this.components;
     },
     /* -------------------------------------------------- ROOM - DEVICES -------------------------------------------------- */
 
