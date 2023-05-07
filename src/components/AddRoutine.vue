@@ -15,7 +15,7 @@ const isCreateDialogOpen = ref(false);
 const actions = ref([]);
 const defaultAction = ref([{
         device : {
-            id : "4551cd84667ff8e1"
+            id : "1230f46474ee97f1"
         },
         actionName : "turnOff",
         params : [],

@@ -2,12 +2,14 @@
 import { onMounted } from '@vue/runtime-core';
 import { useAppStore } from '@/store/app';
 import { RoomApi } from '@/API/room.js';
+import { getIdByName } from '@/Lib/lib'
 import { ref, computed, defineProps, defineEmits, reactive } from 'vue'
 const store = useAppStore();
 
 
 const loading = ref(true);
 
+<<<<<<< Updated upstream
 const selectedDeviceName = ref("");
 const selectedDeviceName2 = ref("");
 const selectedDeviceRoom = ref("");
@@ -30,11 +32,35 @@ function clearVar(){
     selectedDeviceName.value = "";
     selectedDeviceType.value = "";
     selectedDeviceRoom.value = "";
+=======
+//selectedDeviceActions
+// variable para la eliminacion
+const deletionDeviceName = ref("");
+// variables para la creacion
+const creationDeviceRoom = ref("");
+const creationDeviceType = ref("");
+const creationDeviceName = ref("");
+// variables del update
+const confirmed = ref(false);
+const editDeviceObj = ref({});
+const editDeviceName = ref("");           // introducido por el usuario en el select
+const editDeviceID = ref("");
+
+
+const newDeviceName = ref("");//newDeviceName
+
+
+
+function clearVar(){
+    editDeviceName.value = "";
+>>>>>>> Stashed changes
 }
+
 
 onMounted(async () => {             // cuando se monta la pagina pido los datos
     try {
     // pido el update de los dato
+    await store.getDeviceActionsAPI();
     await store.getAllRoomsAPI();
     await store.getAllDevicesAPI();
     loading.value = false;          // una vez updateados los uso
@@ -87,6 +113,8 @@ const submitAddDevice = () =>{
                     </v-list>
                     </v-card>
                         <v-card-text>{{ store.devices }}</v-card-text>
+                        <v-card-text>{{ store.deviceActions }}</v-card-text>
+
                 </v-card>
 
                 <!-- CREATE A DEVICE -->
@@ -94,6 +122,7 @@ const submitAddDevice = () =>{
                     <v-card-title>
                         <v-card-text class="text-h5 font-weight-bold ">Create a Device </v-card-text>
                     </v-card-title>
+<<<<<<< Updated upstream
                     <v-form @submit.prevent="submitAddDevice">
                         <v-select
                             variant="outlined"
@@ -137,6 +166,22 @@ const submitAddDevice = () =>{
                             </v-dialog>
     
                     </v-form>
+=======
+                    <v-select
+                    class="pl-8 pt-8 pr-8"
+                    label="Select the Device's Room"
+                    :items="store.getRoomNames"
+                    v-model="creationDeviceRoom"
+                    ></v-select>
+                    <v-select
+                    class="pl-8 pt-8 pr-8"
+                    label="Select the Device Type"
+                    :items="store.getSupportedDevicesNames"
+                    v-model="creationDeviceType"
+                    ></v-select>
+                    <v-text-field class="pa-8" label="Device Name" v-model="creationDeviceName"></v-text-field>
+                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8" @click="store.createADevice(creationDeviceRoom, creationDeviceName, creationDeviceType)"> CONFIRM </v-btn>
+>>>>>>> Stashed changes
                 </v-card>
 
                 <!-- UPDATE A DEVICE -->
@@ -145,12 +190,17 @@ const submitAddDevice = () =>{
                         <v-card-text class="text-h5 font-weight-bold">Update a Device :</v-card-text>
                     </v-card-title>
                     <v-select
+<<<<<<< Updated upstream
                     variant="outlined"
+=======
+
+>>>>>>> Stashed changes
                     class="pl-8 pt-8 pr-8"
                     label="Select the Device"
                     :items="store.getDevicesNames"
-                    v-model="selectedDeviceName"
+                    v-model="editDeviceName"
                     ></v-select>
+<<<<<<< Updated upstream
                     <v-text-field
                         clearable 
                         :rules="[rules.maxLength, rules.minLength]" 
@@ -159,6 +209,17 @@ const submitAddDevice = () =>{
                         label="New Name" 
                         v-model="newDeviceName"></v-text-field>
                     <v-btn elevation="0" color="secondary" class="ml-8 mb-8"  @click="() => { store.updateADeviceByName(selectedDeviceName, newDeviceName); clearVar(); }" > CONFIRM </v-btn>
+=======
+
+
+                        <v-text-field class="pa-8" label="New Name" v-model="newDeviceName"></v-text-field>
+
+
+
+                        <v-btn elevation="0" color="secondary" class="ml-8 mb-8"  @click="() => { store.updateADeviceByName(editDeviceName, newDeviceName); clearVar(); }" > CONFIRM </v-btn>
+
+
+>>>>>>> Stashed changes
                 </v-card>
 
                 <!-- DELETE A DEVICE -->
@@ -171,9 +232,9 @@ const submitAddDevice = () =>{
                     class="pl-8 pt-8 pr-8"
                     label="Select the Device"
                     :items="store.getDevicesNames"
-                    v-model="selectedDeviceName2"
+                    v-model="deletionDeviceName"
                     ></v-select>
-                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8"  @click="() => { store.deleteADeviceByName(selectedDeviceName2); clearVar(); }" > CONFIRM </v-btn>
+                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8"  @click="() => { store.deleteADeviceByName(deletionDeviceName); clearVar(); }" > CONFIRM </v-btn>
                 </v-card>
 
             </v-card>
