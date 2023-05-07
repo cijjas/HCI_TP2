@@ -7,7 +7,7 @@
     <!-- <cComponent> -->
     <main>
         <div class="canvas">
-            <v-card class="vcard">
+            <v-card class="vcard elevation-0" color="transparent">
                 <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Settings</v-card-title>
                 <v-divider color="gris"></v-divider>
                 
@@ -29,9 +29,9 @@
 
 .canvas {
   width: 95%;
-  margin-top: 3%;
   height: 2632px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%), rgba(233, 247, 242, 0.03);
+  background: primary;
+  /* background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%), rgba(233, 247, 242, 0.03); */
   border-radius: 38px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -41,7 +41,7 @@
 
 .vcard {
     border-radius: 8px;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%), rgba(233, 247, 242, 0.03);
+    /* background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%), rgba(233, 247, 242, 0.03); */
 }
 
 </style>

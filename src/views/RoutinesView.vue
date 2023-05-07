@@ -20,7 +20,7 @@
 <template>
     <main>
         <div class="canvas">
-            <v-card class="vcard">
+            <v-card class="vcard elevation-0" color="transparent">
                 <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Routines</v-card-title>
                 <v-divider color="gris"></v-divider>
                 
@@ -50,7 +50,7 @@
 
 .vcard {
     border-radius: 8px;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%), rgba(233, 247, 242, 0.03);
+    /* background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%), rgba(233, 247, 242, 0.03); */
 }
 
 </style>
