@@ -39,7 +39,6 @@ const rules = {
 }; 
 const submitAddDevice = () =>{
     if(selectedDeviceName.value  && selectedDeviceRoom.value  && selectedDeviceType.value ){
-
         store.createADevice(selectedDeviceRoom.value, selectedDeviceName.value, selectedDeviceType.value);
         clearVar();
     }

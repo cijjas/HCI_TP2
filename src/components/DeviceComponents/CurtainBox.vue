@@ -119,7 +119,7 @@
     </v-row>
 
 
-    <v-dialog v-model="isDialogOpen" width="1024" persistent>
+    <v-dialog v-model="isDialogOpen" width="1024"  @click:outside="cancelSettings">
       <v-card class="toggle-card-popup">
 
         <v-card-title class="font-weight-bold text-h5 card-title">Blinds Settings</v-card-title>
@@ -136,9 +136,10 @@
           ></v-text-field>
 
         <v-card-actions>
+          <v-btn class="delete-button" color="white" @click="deleteDevice"> Delete {{ deviceName }}</v-btn>
           <v-spacer></v-spacer>
           <v-btn color="primary" @click="cancelSettings">Cancel</v-btn>
-          <v-btn class="small-button-save" color="secondary" @click="saveSettings">Save</v-btn>
+          <v-btn class="small-button-save" color="white" @click="saveSettings">Save</v-btn>
         </v-card-actions>
 
       </v-card>
@@ -151,7 +152,13 @@
 
 
 <style scoped>
-
+.delete-button {
+  width: 200px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: #ff2a00;
+  box-shadow: 0 2px 4px rgba(24, 15, 15, 0.589);
+}
 .card-title{
   color: #1C4035; /* Change the color to your desired value */
   white-space: nowrap;
@@ -172,7 +179,7 @@
   width: 100%;
   height: 100%;
   background-image: url("./DeviceAssets/del-curtain.png");
-  background-size: 70%;
+  background-size: 50%;
   background-position: calc(100% - 0px) top;
   background-repeat: no-repeat;
   opacity: 0.05;
@@ -188,7 +195,7 @@
   padding: 16px;
   border-radius: 10px;
   background-color: #EECC66;
-  transition: all .2s ease-in-out;
+  transition: all .5s ease-in-out;
   height: 200px;
   width: 400px;
 }

@@ -14,8 +14,10 @@
     <main>
         <div class="canvas">
             <v-card class="vcard elevation-0" color="transparent">
-                <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">About Us</v-card-title>
-                <v-divider color="gris"></v-divider>
+                <v-row style="margin-top: 20px;">
+                  <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">About Us</v-card-title>
+                  <v-divider color="gris"></v-divider>
+                </v-row>
                 <div class="text-center">
                 <v-card-title class="text-h1 text-md-h1 text-lg-h3 font-weight-bold text-secondary mt-10 mb-10">Welcome to HomeHive,</v-card-title>
                 
@@ -48,16 +50,7 @@
 
 
 <style scoped>
-.canvas {
-  width: 95%;
-  height: 2632px;
-  background: primary;
-  border-radius: 38px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-gap:  2%;
-  padding: 2.5%;
-}
+
 
 .vcard {
     border-radius: 8px;

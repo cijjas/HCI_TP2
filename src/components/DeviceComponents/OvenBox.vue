@@ -43,7 +43,7 @@
     () => isOn.value,
     (newValue) => {
       if (newValue) {
-        temperatureValue.value = 91;
+        temperatureValue.value = 90;
 
       } else {
         tempTemperatureValue.value = 90;
@@ -152,7 +152,7 @@
     <!-- Aca empieza el popup -->
 
 
-    <v-dialog v-model="isDialogOpen" width="1024" persistent>
+    <v-dialog v-model="isDialogOpen" width="1024" @click:outside="cancelSettings">
       <v-card class="toggle-card-popup">
 
         <v-card-title class="font-weight-bold text-h5 card-title">Oven Settings</v-card-title>
@@ -306,9 +306,10 @@
         </v-card-text>
         
         <v-card-actions>
+          <v-btn class="delete-button" color="white" @click="deleteDevice"> Delete {{ deviceName }}</v-btn>
           <v-spacer></v-spacer>
           <v-btn   @click="cancelSettings">Cancel</v-btn>
-          <v-btn class="small-button-save" color="secondary" @click="saveSettings">
+          <v-btn class="small-button-save" color="white" @click="saveSettings">
             {{ isOn ? 'Save' : 'Save And Start' }}
           </v-btn>
         </v-card-actions>
@@ -321,6 +322,13 @@
 
 
 <style scoped>
+.delete-button {
+  width: 200px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: #ff2a00;
+  box-shadow: 0 2px 4px rgba(24, 15, 15, 0.589);
+}
 .toggle-card {
   cursor: pointer;
   padding: 16px;

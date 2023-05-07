@@ -21,35 +21,24 @@
 
 <template>
     <main>
-        <div class="canvas">
-            <v-card class="vcard elevation-0" color="transparent">
+        <v-card class="vcard elevation-0" color="transparent">
+            <v-row style="margin-top: 20px;">
                 <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Rooms</v-card-title>
                 <v-divider color="gris"></v-divider>
-                
-                <v-row justify-end>
+            </v-row>
+            <v-row justify-end>
 
-                    <v-col cols="5" v-for="room in store.getAllRooms()" :key="room">
-                        <RoomsBox class="grid-item" :roomName="room.name" :roomId="room.id"></RoomsBox>
-                    </v-col>
+                <v-col cols="5" v-for="room in store.getAllRooms()" :key="room">
+                    <RoomsBox class="grid-item" :roomName="room.name" :roomId="room.id"></RoomsBox>
+                </v-col>
 
-                </v-row>  
-            </v-card>
-        </div>
+            </v-row>  
+        </v-card>
     </main>
 </template>
 
 <style scoped>
 
-.canvas {
-  width: 95%;
-  height: 2632px;
-  background: primary;
-  border-radius: 38px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-gap:  2%;
-  padding: 2.5%;
-}
 
 .vcard {
     border-radius: 8px;

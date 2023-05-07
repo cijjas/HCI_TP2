@@ -14,31 +14,26 @@ export default {
 <template>
   <nav>
     <v-app-bar app clipped-left color="primary" height="100">
+      <v-row justify="space-between">
+        <v-col cols="6">
+          <v-btn to="/" size="x-large" text color="transparent" style="padding-left: 40px;">
+            <h1 class="font-weight-bold text-h4 nav-title">HomeHive</h1>
+          </v-btn>
+  
+  
+          <v-btn to="/Rooms" variant="text" class="nav-btn">Rooms</v-btn>
+          <v-btn to="/Routines" variant="text" class="nav-btn">Routines</v-btn>
+          <v-btn to="/About" variant="text" class="nav-btn">About</v-btn>
+          <!-- Aca falta un for que recorra las habitaciones vivas -->
 
+        </v-col>
+        <v-col cols="4">
+          <v-btn to="/AddRoom" class="nav-btn">Add Room</v-btn>
+          <v-btn to="/AddRoutine" class="nav-btn">Add Routine</v-btn>
+          <v-btn to="/AddDevice" class="nav-btn">Add Device</v-btn>
 
-      <v-btn to="/" size="x-large" text color="transparent" style="padding-left: 40px;">
-        <h1 class="font-weight-bold text-h4 nav-title">HomeHive</h1>
-      </v-btn>
-
-
-      <v-btn to="/Rooms" variant="text" class="nav-btn">Rooms</v-btn>
-      <v-btn to="/Routines" variant="text" class="nav-btn">Routines</v-btn>
-      <v-btn to="/About" variant="text" class="nav-btn">About</v-btn>
-      <!-- Aca falta un for que recorra las habitaciones vivas -->
-
-      <v-spacer></v-spacer>
-      <v-spacer></v-spacer>
-      <v-spacer></v-spacer>
-      <v-spacer></v-spacer>
-      <v-spacer></v-spacer>
-      <v-spacer></v-spacer>
-      <v-spacer></v-spacer>
-      <v-spacer></v-spacer>
-      <v-spacer></v-spacer>
-      <v-btn to="/AddRoom">Add Room</v-btn>
-      <v-btn to="/AddRoutine">Add Routine</v-btn>
-      <v-btn to="/AddDevice">Add Device</v-btn>
-
+        </v-col>
+      </v-row>
 
     </v-app-bar>
 

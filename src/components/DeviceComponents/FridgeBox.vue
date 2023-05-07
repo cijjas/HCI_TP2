@@ -127,7 +127,7 @@
 
         </v-row>
 
-        <v-dialog v-model="isDialogOpen" width="1024" persistent>
+        <v-dialog v-model="isDialogOpen" width="1024" @click:outside="cancelSettings">
           <v-card class="toggle-card-popup">
         <v-card-title class="font-weight-bold text-h5 card-title">Fridge Settings</v-card-title>
         <v-card-text>
@@ -192,8 +192,8 @@
                 <v-row>
                   <v-col cols="2">
                     <v-btn
-                      size="small"
-                      variant="text"
+                      size="x-large"
+                      density="compact"
                       icon="mdi-minus"
                       color="primary"
                       @click="if(tempFridgeTemperature > 2) {
@@ -213,8 +213,8 @@
                   </v-col>
                   <v-col cols="2">
                     <v-btn
-                    size="small"
-                      variant="text"
+                      size="x-large"
+                      density="compact"
                       icon="mdi-plus"
                       color="primary"
                       @click="if(tempFridgeTemperature <8 ) {
@@ -243,11 +243,11 @@
               <v-row>
                 <v-col cols="2">
                   <v-btn
-                    size="small"
-                    variant="text"
-                    icon="mdi-minus"
-                    color="primary"
-                    @click="if(tempFreezerTemperature > -20) {
+                      size="x-large"
+                      density="compact"
+                      icon="mdi-minus"
+                      color="primary"
+                      @click="if(tempFreezerTemperature > -20) {
                               tempFreezerTemperature-=0.5
                             };
                             "
@@ -264,8 +264,8 @@
                 </v-col>
                 <v-col cols="2">
                   <v-btn
-                    size="small"
-                    variant="text"
+                    size="x-large"
+                    density="compact"
                     icon="mdi-plus"
                     color="primary"
                     @click="if(tempFreezerTemperature <-8 ) {
@@ -280,9 +280,10 @@
           </v-row>
         </v-card-text>      
         <v-card-actions style="padding-top: 30px;">
+          <v-btn class="delete-button" color="white" @click="deleteDevice"> Delete {{ deviceName }}</v-btn>
           <v-spacer></v-spacer>
           <v-btn color="primary" @click="cancelSettings">Cancel</v-btn>
-          <v-btn class="small-button-save" color="secondary" @click="saveSettings">Save</v-btn>
+          <v-btn class="small-button-save" color="white" @click="saveSettings">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -292,7 +293,13 @@
 
 
 <style scoped>
-
+.delete-button {
+  width: 200px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: #ff2a00;
+  box-shadow: 0 2px 4px rgba(24, 15, 15, 0.589);
+}
 .temperature-box-small {
   font-size: 20px;
   margin: 10px;
@@ -302,7 +309,7 @@
                0 -1px 3px rgba(240, 222, 162, 0.5);
   background-color: transparent;
   border-radius: 10px;
-  background-color:  #eecc66f9;
+  background-color:  #ffffff36;
 
   box-sizing: border-box;
   overflow: hidden;

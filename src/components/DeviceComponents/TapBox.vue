@@ -48,6 +48,8 @@
     deviceName.value = tempDeviceName.value;
     isDialogOpen.value = false;
   };
+
+
 </script>
 
 
@@ -57,7 +59,7 @@
     class="toggle-card"
     @click="toggleCard">
 
-      <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
+      <v-toolbar :rounded="true" class="rounded-toolbar" @click:outside="cancelSettings">
         <v-btn @click="openTapDialog" text color="transparent">
           <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">{{deviceName}}</v-toolbar-title>
           <v-tooltip
@@ -92,7 +94,8 @@
                   label="Amount" 
                   variant="solo" 
                   :disabled="!isOn" 
-                  :min="0"  
+                  :min="0"
+                  :max="100"  
                   class="rounded-input green-text" 
                   bg-color='transparent' flat/>
           </v-col>
@@ -134,9 +137,10 @@
           ></v-text-field>
 
         <v-card-actions>
+          <v-btn class="delete-button" color="white" @click="deleteDevice"> Delete {{ deviceName }}</v-btn>
           <v-spacer></v-spacer>
           <v-btn color="primary" @click="cancelSettings">Cancel</v-btn>
-          <v-btn class="small-button-save" color="secondary" @click="saveSettings">Save</v-btn>
+          <v-btn class="small-button-save" color="white" @click="saveSettings">Save</v-btn>
         </v-card-actions>
 
       </v-card>
@@ -146,6 +150,13 @@
 </template>
 
 <style scoped>
+.delete-button {
+  width: 200px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: #ff2a00;
+  box-shadow: 0 2px 4px rgba(24, 15, 15, 0.589);
+}
 .card-title{
   color: #1C4035; /* Change the color to your desired value */
   white-space: nowrap;

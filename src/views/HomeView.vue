@@ -1,11 +1,6 @@
 // HomeView
 
 <script setup>
-import VacuumBox from '../components/DeviceComponents/VacuumBox.vue';
-import CurtainBox from '@/components/DeviceComponents/CurtainBox.vue';
-import TapBox from '@/components/DeviceComponents/TapBox.vue';
-import FridgeBox from '@/components/DeviceComponents/FridgeBox.vue';
-import OvenBox from '@/components/DeviceComponents/OvenBox.vue';
 
 import { onMounted } from '@vue/runtime-core';
 
@@ -18,10 +13,10 @@ const store = useAppStore();
 onMounted(async () => {             // cuando se monta la pagina pido los datos
     try {
     // pido el update de los datos
-    await store.getAllRoomsAPI();
-    await store.getAllDevicesAPI();
+      await store.getAllRoomsAPI();
+      await store.getAllDevicesAPI();
     } catch (error) {
-    console.error(error);
+      console.error(error);
     }
 });
 
@@ -31,16 +26,20 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
   <main>
     <div class="canvas">
         <v-card class="vcard elevation-0" color="transparent">
-
-        <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Home</v-card-title>
-        <v-divider color="gris"></v-divider>
-        <v-layout justify-start>
-          <v-flex v-for="c in store.getComponents()" :key="c.id" xs12 sm6 md4 lg3>
-            <v-card class="grid-item">
-              <component :is="c"></component>
-            </v-card>
-          </v-flex>
-        </v-layout>
+        <v-row style="margin-top: 20px;">
+          <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Home</v-card-title>
+          <v-divider color="gris"></v-divider>
+        </v-row>
+        
+        <v-row justify-end>
+          <v-layout justify-start>
+            <v-flex v-for="c in store.getComponents()" :key="c.id" xs12 sm6 md4 lg3>
+              <v-card class="grid-item">
+                <component :is="c"></component>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-row>
 
         </v-card>
 
@@ -57,16 +56,7 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
   transition: box-shadow 0.2s ease;
   background-color: transparent;
 }
-.canvas {
-  width: 95%;
-  height: 2632px;
-  background: primary;
-  border-radius: 38px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-gap:  2%;
-  padding: 2.5%;
-}
+
 
 .grid-item:hover {
   transition: transform 0.3s ease-out;
