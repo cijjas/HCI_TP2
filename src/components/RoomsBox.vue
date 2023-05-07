@@ -46,16 +46,25 @@
           <v-card-title class="headline">Are you sure you want to delete {{ nameRoom }}?</v-card-title>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" variant="plain" @click="deleteRoom" >Delete</v-btn>
+            <v-btn color="primary" variant="plain" @click="deleteRoom();" >Delete</v-btn>
             <v-btn color="primary" @click="openDeleteDialog">Cancel</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
 
+      <v-dialog v-model="isConfirmationDialogOpen" width="500" color="gris" persistent>
+                <v-card class="toggle-card-popup">
+                  <div class="text-center">
+                    <v-icon icon="mdi-check-circle-outline" class="check-icon"></v-icon>
+                    <v-card-title prepend-icon="mdi-check-circle-outline" class="font-weight-bold text-h5 card-title">Room Deleted</v-card-title>
+                    <v-card-text>Room '{{ creationDeviceName }}' successfully deleted</v-card-text>
+                  </div>
+                </v-card>
+        </v-dialog>
     </v-card>
   </template>
   
-  <script setup>
+<script setup>
 import { ref, defineProps } from 'vue'
 import { useAppStore } from '@/store/app';
 const store = useAppStore();
@@ -77,6 +86,14 @@ const props = defineProps({
   const isDialogOpen = ref(false);
   const isDeleteDialogOpen = ref(false);
   const toggleValue = ref(true);
+  const isConfirmationDialogOpen = ref(false);
+
+  const openCreateDialog = () => {
+    isConfirmationDialogOpen.value = true;
+    setTimeout(() => {
+      isConfirmationDialogOpen.value = false;
+    }, 2000);
+  };
   
   const saveName = () => {
     if (tempRoomName.value !== '') {
@@ -97,8 +114,9 @@ const props = defineProps({
   const deleteRoom = () => {
     // BORRAR EL CUARTO
     store.deleteARoom(roomId.value);
-    isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
-    isDialogOpen.value = !isDialogOpen.value;
+    openDeleteDialog();
+    openEditDialog();
+    
   };
 
   </script>
@@ -106,11 +124,25 @@ const props = defineProps({
 
   <style scoped>
 
+.ok-button {
+    width: 80px;
+    color: #60d75a;
+}
+.check-icon {
+  font-size: 3rem;
+  color: #60d75a;
+}
+.card-title{
+  color: primary; /* Change the color to your desired value */
+  white-space: nowrap;
+  overflow: hidden;
+  margin-left: -10px;
+}
 .toggle-card-popup {
   cursor: pointer;
   padding: 16px;
-  border-radius: 10px;
-  background-color: #FFFFFF;
+  border-radius: 15px;
+  background-color: whitesmoke;
   transition: all .2s ease-in-out;
 
 }

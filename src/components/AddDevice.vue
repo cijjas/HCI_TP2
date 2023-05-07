@@ -13,7 +13,14 @@ const selectedDeviceName2 = ref("");
 const selectedDeviceRoom = ref("");
 const selectedDeviceType = ref("");
 const newDeviceName = ref("");
+const isCreateDialogOpen = ref(false);
 
+const openCreateDialog = () => {
+  isCreateDialogOpen.value = true;
+  setTimeout(() => {
+    isCreateDialogOpen.value = false;
+  }, 2000);
+};
 
 function clearVar(){
     selectedDeviceName.value = "";
@@ -160,6 +167,26 @@ const submitAddDevice = () =>{
 
 
 <style scoped>
+.ok-button {
+    width: 80px;
+    color: #60d75a;
+}
+.check-icon {
+  font-size: 3rem;
+  color: #60d75a;
+}
+.card-title{
+  color: primary; /* Change the color to your desired value */
+  white-space: nowrap;
+  overflow: hidden;
+  margin-left: -10px;
+}
+.toggle-card-popup {
+  padding: 20px;
+  border-radius: 15px !important;
+  background: whitesmoke;
+  backdrop-filter: blur(7px);
+}
 main{
     padding: 5%;
 }
