@@ -14,12 +14,16 @@ const selectedDeviceRoom = ref("");
 const selectedDeviceType = ref("");
 const newDeviceName = ref("");
 const isCreateDialogOpen = ref(false);
+const tempName = ref("");
 
 const openCreateDialog = () => {
+    console.log(selectedDeviceName.value);
   isCreateDialogOpen.value = true;
+  console.log(selectedDeviceName.value);
   setTimeout(() => {
     isCreateDialogOpen.value = false;
   }, 2000);
+  clearVar();
 };
 
 function clearVar(){
@@ -48,7 +52,8 @@ const submitAddDevice = () =>{
     if(selectedDeviceName.value  && selectedDeviceRoom.value  && selectedDeviceType.value ){
 
         store.createADevice(selectedDeviceRoom.value, selectedDeviceName.value, selectedDeviceType.value);
-        clearVar();
+        openCreateDialog();
+        
     }
     else{
     }
@@ -120,6 +125,17 @@ const submitAddDevice = () =>{
                             color="secondary" 
                             class="ml-8 mb-8" 
                             > CONFIRM </v-btn>
+
+                            <v-dialog v-model="isCreateDialogOpen" width="500" color="gris" persistent>
+                                <v-card class="toggle-card-popup">
+                                    <div class="text-center">
+                                        <v-icon icon="mdi-check-circle-outline" class="check-icon"></v-icon>
+                                        <v-card-title prepend-icon="mdi-check-circle-outline" class="font-weight-bold text-h5 card-title">Device Created</v-card-title>
+                                        <v-card-text>Device successfully created</v-card-text>
+                                    </div>
+                                </v-card>
+                            </v-dialog>
+    
                     </v-form>
                 </v-card>
 
