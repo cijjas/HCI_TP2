@@ -19,34 +19,25 @@
 
 <template>
     <main>
-        <div class="canvas">
-            <v-card class="vcard elevation-0" color="transparent">
+        <v-card class="vcard elevation-0" color="transparent">
+            <v-row style="margin-top: 20px;">
                 <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Routines</v-card-title>
                 <v-divider color="gris"></v-divider>
-                
-                <v-row justify-end>
-                    <!-- <RoutinesBox class="grid-item" :routineName="routine.name" :actionsCount="routine.actions.length"></RoutinesBox> -->
-                        <v-col cols="5" v-for="routine in store.getAllRoutines()">
-                            <RoutinesBox class="grid-item" :routineName="routine.name" :routineId="routine.id"></RoutinesBox>
-                        </v-col>
-                </v-row>  
-            </v-card>
-        </div>
+            </v-row>
+            
+            <v-row justify-end>
+                <!-- <RoutinesBox class="grid-item" :routineName="routine.name" :actionsCount="routine.actions.length"></RoutinesBox> -->
+                    <v-col cols="5" v-for="routine in store.getAllRoutines()">
+                        <RoutinesBox class="grid-item" :routineName="routine.name" :routineId="routine.id"></RoutinesBox>
+                    </v-col>
+            </v-row>  
+        </v-card>
     </main>
 </template>
 
 
 <style scoped>
-.canvas {
-  width: 95%;
-  height: 2632px;
-  background: primary;
-  border-radius: 38px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-gap:  2%;
-  padding: 2.5%;
-}
+
 
 .vcard {
     border-radius: 8px;
