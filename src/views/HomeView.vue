@@ -28,18 +28,21 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
 
 <template>
   <main>
-    <div >
-      <v-container>
-        
+    <div class="canvas">
+        <v-card class="vcard elevation-0" color="transparent">
+
+        <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Home</v-card-title>
+        <v-divider color="gris"></v-divider>
         <v-layout justify-center>
           <v-flex v-for="c in store.getComponents()" :key="c.id" xs12 sm6 md3>
-            <v-card class="grid-item" width="400" height="200">
+            <v-card class="grid-item" width="400" height="200" >
               <component :is="c"></component>
             </v-card>
           </v-flex>
         </v-layout>
 
-      </v-container>
+        </v-card>
+
     </div>
   </main>
 </template>
@@ -53,9 +56,16 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
   transition: box-shadow 0.2s ease;
   background-color: transparent;
 }
-
-
-
+.canvas {
+  width: 95%;
+  height: 2632px;
+  background: primary;
+  border-radius: 38px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap:  2%;
+  padding: 2.5%;
+}
 
 .grid-item:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);

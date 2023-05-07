@@ -21,9 +21,9 @@ export default {
       </v-btn>
 
 
-      <v-btn to="/Routines" variant="text">Routines</v-btn>
-      <v-btn to="/Rooms" variant="text">Rooms</v-btn>
-      <v-btn to="/About" variant="text">About</v-btn>
+      <v-btn to="/Rooms" variant="text" class="nav-btn">Rooms</v-btn>
+      <v-btn to="/Routines" variant="text" class="nav-btn">Routines</v-btn>
+      <v-btn to="/About" variant="text" class="nav-btn">About</v-btn>
       <!-- Aca falta un for que recorra las habitaciones vivas -->
 
       <v-spacer></v-spacer>
@@ -45,7 +45,7 @@ export default {
 
     <v-navigation-drawer 
       v-model="drawer" 
-      app class="gradient-background" 
+      app class="normal" 
       expand-on-hover
         rail 
       image="https://i.imgur.com/Sa2BNdR.png"
@@ -59,13 +59,48 @@ export default {
           ></v-list-item>
         </v-list>
         <v-list nav color="primary">
-              <v-list-item to="/"         prepend-icon="mdi-home"                       title="Home"       class='secondary'></v-list-item>
-              <v-list-item to="/Rooms"    prepend-icon="mdi-sofa"                       title="Rooms"      ></v-list-item>
-              <v-list-item to="/Routines" prepend-icon="mdi-list-box-outline"           title="Routines"   ></v-list-item>
-              <v-list-item to="/Settings" prepend-icon="mdi-cog"                        title="Settings"   ></v-list-item>
-              <v-list-item to="/Contact"  prepend-icon="mdi-account-box-outline"        title="Contact"    ></v-list-item>
-              <v-list-item to="/About"    prepend-icon="mdi-help-circle-outline"        title="About"      ></v-list-item>
-              <v-list-item to="/Test"     prepend-icon="mdi-account-cowboy-hat-outline" title="Test"       ></v-list-item>
+              <v-list-item to="/" class="side-btn">
+                <template v-slot:prepend>
+                  <v-icon class="green-text" size="24">mdi-home</v-icon>
+                </template>
+                <span>Home</span>
+              </v-list-item>
+              <v-list-item to="/Rooms" class="side-btn">
+                <template v-slot:prepend>
+                  <v-icon class="green-text" size="24">mdi-sofa</v-icon>
+                </template>
+                <span>Rooms</span>
+              </v-list-item>
+              <v-list-item to="/Routines" class="side-btn">
+                <template v-slot:prepend>
+                  <v-icon class="green-text" size="24">mdi-list-box-outline</v-icon>
+                </template>
+                <span>Routines</span>
+              </v-list-item>
+              <v-list-item to="/Settings" class="side-btn">
+                <template v-slot:prepend>
+                  <v-icon class="green-text" size="24">mdi-cog</v-icon>
+                </template>
+                <span>Settings</span>
+              </v-list-item>
+              <v-list-item to="/Contact" class="side-btn">
+                <template v-slot:prepend>
+                  <v-icon class="green-text" size="24">mdi-account-box-outline</v-icon>
+                </template>
+                <span>Contact</span>
+              </v-list-item>
+              <v-list-item to="/About" class="side-btn">
+                <template v-slot:prepend>
+                  <v-icon class="green-text" size="24">mdi-help-circle-outline</v-icon>
+                </template>
+                <span>About</span>
+              </v-list-item>
+              <v-list-item to="/Test" class="side-btn">
+                <template v-slot:prepend>
+                  <v-icon class="green-text" size="24">mdi-account-cowboy-hat-outline</v-icon>
+                </template>
+                <span>Test</span>
+              </v-list-item>
         </v-list>
       
       </v-navigation-drawer>
@@ -75,21 +110,51 @@ export default {
 </template>
 
 <style >
-.blur-image {
-    filter: blur(20px); /* Change the value as needed */
-  }
+.nav-btn {
+  margin: 10px;
+  transition: all .2s ease-in-out;
+
+}
+.nav-btn:hover {
+  transition: transform 0.3s ease-out;
+  transform: scale(1.1);
+  color: #EECC66;
+}
+
+.nav-btn:focus {
+  transition: transform 0.3s ease-out;
+  transform: scale(1.1);
+  color: #EECC66 !important;
+  background-color: transparent;
+  outline: none;
+}
+
+.side-btn {
+  text-decoration: none;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  transition: all .2s ease-in-out;
+  color: black; /* default color */
+}
+
+.side-btn:hover {
+  transition: transform 0.3s ease-out;
+  transform: scale(1.01);
+  color: #054619; /* new color on hover */
+}
+.side-btn:focus {
+  transition: transform 0.3s ease-out;
+  transform: scale(1.1);
+  color: #054619; /* new color on hover */
+  background-color: transparent;
+  outline: none;
+}
 .yellow-text {
   color: #EECC66;
 }
-.gradient-background {
-  backdrop-filter: blur(80px);
-  background: radial-gradient(at 20% 50%, rgb(16, 222, 123, 0.1), rgba(237, 217, 140, 0.1)),
-    radial-gradient(at 80% 50%, rgba(25, 217, 130, 0.4), rgba(249, 201, 11, 0.1)),
-    linear-gradient(to bottom, rgba(252, 235, 47, 0.2), rgba(26, 235, 214, 0.098));
-  
-  background-blend-mode: screen;
+.green-text {
+  color: #054619;
 }
-
 
 .nav-title {
   font-family: 'Montserrat', sans-serif;
@@ -104,8 +169,5 @@ nav a {
   border-radius: 0.25rem;
 }
 
-/* New class for the v-app-bar element */
-.app-bar-background {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
-}
+
 </style>
