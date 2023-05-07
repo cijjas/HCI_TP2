@@ -137,6 +137,9 @@
           
           <v-row >
             <v-text-field
+              variant="outlined"
+              clearable
+              :clear-icon="!tempDeviceName ? '' : 'mdi-close-circle-outline'"
               style="padding-top: 50px;"  
               label="Device Name"
               v-model.string="tempDeviceName"
@@ -147,6 +150,9 @@
           </v-row>
           <v-row>
             <v-text-field
+              variant="outlined"
+              clearable
+              :clear-icon="!tempChargingBaseLocation ? '' : 'mdi-close-circle-outline'"
               style="padding-top: 50px;"  
               label="Charging Base Location"
               v-model.string="tempChargingBaseLocation"
@@ -156,6 +162,9 @@
           </v-row>
           <v-row>
             <v-text-field
+              variant="outlined"
+              clearable
+              :clear-icon="!tempReturningToBase ? '' : 'mdi-close-circle-outline'"
               style="padding-top: 50px;"  
               label="Returning to Base"
               v-model.string="tempReturningToBase"
@@ -165,6 +174,9 @@
           </v-row>
           <v-row>
             <v-text-field
+              variant="outlined"
+              clearable
+              :clear-icon="!tempChargingBaseLocation ? '' : 'mdi-close-circle-outline'"
               style="padding-top: 50px;"  
               label="Charging Vacuum Location"
               v-model.string="tempChargingBaseLocation"
@@ -229,10 +241,7 @@
   width: 400px;
   
 }
-.toggle-card:hover {
-  transition: transform 0.3s ease-out;
-  transform: scale(1.01);
-}
+
 .toggle-card::before {
     content: "";
     position: absolute;
@@ -254,8 +263,8 @@
 }
 .toggle-card-popup {
   padding: 30px;
-  border-radius: 30px;
-  background: radial-gradient(at 80% 50%, rgba(131, 213, 98, 0.5), rgba(238, 204, 102, 0.99));
+  border-radius: 15px !important;
+  background: radial-gradient(at 80% 50%, rgba(243, 230, 111, 0.843), rgba(238, 204, 102, 0.99));
   backdrop-filter: blur(7px);
 }
 .toggle-card-popup::before {

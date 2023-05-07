@@ -195,6 +195,35 @@ export const useAppStore = defineStore('app', {
       try {
         // UPDATE DE DEVICES
         // remoto
+        const vacuumFunction = () => {
+          this.components.push(VacuumBox);
+        };
+        const curtainFunction = () => {
+          this.components.push(CurtainBox);
+        };
+        const faucetFunction = () => {
+          this.components.push(TapBox);
+        };
+        const fridgeFunction = () => {
+          this.components.push(FridgeBox);
+        };
+        const ovenFunction = () => {
+          this.components.push(OvenBox);
+        };
+        const blindsFunction = () => {
+          this.components.push(CurtainBox);
+        };
+        
+        const deviceMap = {
+          "Vacuum": vacuumFunction,
+          "Curtain": curtainFunction,
+          "Faucet": faucetFunction,
+          "Refrigerator": fridgeFunction,
+          "Oven": ovenFunction,
+          "Blinds": blindsFunction
+        };
+
+
         var typeId = getIdByName(this.supportedDevices, type);
         var deviceObj = {
           type : {
@@ -211,20 +240,8 @@ export const useAppStore = defineStore('app', {
         room.meta.devices.push(result.id);
         // remoto
         this.updateARoom(room.id, room.name);
-
-        // if(type == "Vacuum"){
-        //   this.components.push(VacuumBox);
-        // }else if(type == "Curtain"){
-        //   this.components.push(CurtainBox);
-        // }else if(type == "Faucet"){
-        //   this.components.push(TapBox);
-        // }else if(type == "Refrigerator"){
-        //   this.components.push(FridgeBox);
-        // }else if(type == "Oven"){
-        //   this.components.push(OvenBox);
-        // }else if(type == "Blinds"){
-        //   this.components.push(CurtainBox);
-        // }
+        deviceMap[type]();
+        
 
         console.log("creo componente");
 

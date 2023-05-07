@@ -123,6 +123,9 @@
         <v-card-title class="font-weight-bold text-h5 card-title">Faucet Settings</v-card-title>
         
               <v-text-field
+                variant="outlined"
+                clearable
+                :clear-icon="!tempDeviceName ? '' : 'mdi-close-circle-outline'"
                 style="padding-top: 50px;"  
                 label="Device Name"
                 v-model.string="tempDeviceName"
@@ -151,8 +154,9 @@
 }
 .toggle-card-popup {
   padding: 30px;
-  border-radius: 30px;
-  background: radial-gradient(at 80% 50%, rgba(129, 213, 98, 0.767), rgba(238, 204, 102, 0.9));
+  border-radius: 15px !important;
+
+  background: radial-gradient(at 80% 50%, rgba(210, 213, 123, 0.861), rgb(238, 204, 102));
   backdrop-filter: blur(7px);
 }
 .toggle-card-popup::before {
@@ -206,10 +210,6 @@
   height: 200px;
   width: 400px;
 
-}
-.toggle-card:hover {
-  transition: transform 0.3s ease-out;
-  transform: scale(1.01);
 }
 .toggle-card::before {
     content: "";

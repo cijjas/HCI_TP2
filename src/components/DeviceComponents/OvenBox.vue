@@ -35,7 +35,7 @@
   });
   
   const rules = {
-    minLength: value => value.length >= 1 || 'Min 1 characters',
+    minLength: value => value.length >= 3 || 'Min 1 characters',
     maxLength: value => value.length <= 15 || 'Max 15 characters',
   };
   
@@ -61,7 +61,7 @@
   };
 
   const saveSettings = () => {
-    if(tempDeviceName.value.length < 1 || tempDeviceName.value.length > 15) {
+    if(tempDeviceName.value.length < 3 || tempDeviceName.value.length > 15) {
       return;
     }
     isDialogOpen.value = false;
@@ -160,9 +160,11 @@
           
           <v-row >
             <v-text-field
+              variant="outlined"
+              clearable
+              :clear-icon="!tempDeviceName ? '' : 'mdi-close-circle-outline'"
               label="Device Name"
               v-model.string="tempDeviceName"
-              type="string"
               :rules="[rules.maxLength, rules.minLength]"
             ></v-text-field>
 
@@ -329,10 +331,7 @@
   width: 400px;
   
 }
-.toggle-card:hover {
-  transition: transform 0.3s ease-out;
-  transform: scale(1.01);
-}
+
 .temperature-box-small {
   font-size: 20px;
   margin: 10px;
@@ -382,8 +381,8 @@
 
 .toggle-card-popup {
   padding: 30px;
-  border-radius: 30px;
-  background: radial-gradient(at 80% 50%, rgba(131, 213, 98, 0.5), rgba(238, 204, 102, 0.99));
+  border-radius: 15px !important;
+  background: radial-gradient(at 80% 50%, rgba(240, 147, 65, 0.739), rgba(238, 204, 102, 0.99));
   backdrop-filter: blur(7px);
 }
 

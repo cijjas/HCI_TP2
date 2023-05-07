@@ -13,12 +13,12 @@ const selectedDeviceName2 = ref("");
 const selectedDeviceRoom = ref("");
 const selectedDeviceType = ref("");
 const newDeviceName = ref("");
-const creationDeviceName = ref("");
 
 
 function clearVar(){
     selectedDeviceName.value = "";
     selectedDeviceType.value = "";
+    selectedDeviceRoom.value = "";
 }
 
 onMounted(async () => {             // cuando se monta la pagina pido los datos
@@ -31,6 +31,21 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
     console.error(error);
     }
 });
+
+const rules = {
+    minLength: value => value.length >= 3 || 'Min 3 characters',
+    maxLength: value => value.length <= 15 || 'Max 15 characters',
+    required: value => !!value || 'Required.',
+}; 
+const submitAddDevice = () =>{
+    if(selectedDeviceName.value  && selectedDeviceRoom.value  && selectedDeviceType.value ){
+
+        store.createADevice(selectedDeviceRoom.value, selectedDeviceName.value, selectedDeviceType.value);
+        clearVar();
+    }
+    else{
+    }
+}
 
 </script>
 
@@ -67,20 +82,38 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
                     <v-card-title>
                         <v-card-text class="text-h5 font-weight-bold ">Create a Device </v-card-text>
                     </v-card-title>
-                    <v-select
-                    class="pl-8 pt-8 pr-8"
-                    label="Select the Device's Room"
-                    :items="store.getRoomNames"
-                    v-model="selectedDeviceRoom"
-                    ></v-select>
-                    <v-select
-                    class="pl-8 pt-8 pr-8"
-                    label="Select the Device Type"
-                    :items="store.getSupportedDevicesNames"
-                    v-model="selectedDeviceType"
-                    ></v-select>
-                    <v-text-field class="pa-8" label="Device Name" v-model="creationDeviceName"></v-text-field>
-                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8" @click="store.createADevice(selectedDeviceRoom, creationDeviceName, selectedDeviceType)"> CONFIRM </v-btn>
+                    <v-form @submit.prevent="submitAddDevice">
+                        <v-select
+                            variant="outlined"
+                            class="pl-8 pt-8 pr-8"
+                            label="Select the Device's Room"
+                            :items="store.getRoomNames"
+                            v-model="selectedDeviceRoom"
+                            :rules="[rules.required]"
+                        ></v-select>
+                        <v-select
+                            variant="outlined"
+                            class="pl-8 pt-8 pr-8"
+                            label="Select the Device Type"
+                            :items="store.getSupportedDevicesNames"
+                            v-model="selectedDeviceType"
+                            :rules="[rules.required]"
+                            ></v-select>
+                        <v-text-field 
+                            clearable
+                            :rules="[rules.required,rules.maxLength, rules.minLength]" 
+                            variant="outlined" 
+                            class="pa-8" 
+                            label="Device Name" 
+                            v-model="selectedDeviceName"></v-text-field>
+                            
+                        <v-btn 
+                            type="submit" 
+                            block  
+                            color="secondary" 
+                            class="ml-8 mb-8" 
+                            > CONFIRM </v-btn>
+                    </v-form>
                 </v-card>
 
                 <!-- UPDATE A DEVICE -->
@@ -89,12 +122,19 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
                         <v-card-text class="text-h5 font-weight-bold">Update a Device :</v-card-text>
                     </v-card-title>
                     <v-select
+                    variant="outlined"
                     class="pl-8 pt-8 pr-8"
                     label="Select the Device"
                     :items="store.getDevicesNames"
                     v-model="selectedDeviceName"
                     ></v-select>
-                    <v-text-field class="pa-8" label="New Name" v-model="newDeviceName"></v-text-field>
+                    <v-text-field
+                        clearable 
+                        :rules="[rules.maxLength, rules.minLength]" 
+                        variant="outlined" 
+                        class="pa-8" 
+                        label="New Name" 
+                        v-model="newDeviceName"></v-text-field>
                     <v-btn elevation="0" color="secondary" class="ml-8 mb-8"  @click="() => { store.updateADeviceByName(selectedDeviceName, newDeviceName); clearVar(); }" > CONFIRM </v-btn>
                 </v-card>
 
@@ -104,6 +144,7 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
                         <v-card-text class="text-h5 font-weight-bold">Delete a Device :</v-card-text>
                     </v-card-title>
                     <v-select
+                    variant="outlined"
                     class="pl-8 pt-8 pr-8"
                     label="Select the Device"
                     :items="store.getDevicesNames"

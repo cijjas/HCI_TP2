@@ -122,9 +122,12 @@
     <v-dialog v-model="isDialogOpen" width="1024" persistent>
       <v-card class="toggle-card-popup">
 
-        <v-card-title class="font-weight-bold text-h5 card-title">Faucet Settings</v-card-title>
+        <v-card-title class="font-weight-bold text-h5 card-title">Blinds Settings</v-card-title>
         
               <v-text-field
+                variant="outlined"
+                clearable
+                :clear-icon="!tempDeviceName ? '' : 'mdi-close-circle-outline'"
                 style="padding-top: 50px;"  
                 label="Device Name"
                 v-model.string="tempDeviceName"
@@ -157,8 +160,8 @@
 }
 .toggle-card-popup {
   padding: 30px;
-  border-radius: 30px;
-  background: radial-gradient(at 80% 50%, rgba(129, 213, 98, 0.767), rgba(238, 204, 102, 0.9));
+  border-radius: 15px !important;
+  background: radial-gradient(at 80% 50%, rgba(227, 216, 110, 0.838), rgba(238, 204, 102, 0.9));
   backdrop-filter: blur(7px);
 }
 .toggle-card-popup::before {
@@ -168,7 +171,7 @@
   left: -400px;
   width: 100%;
   height: 100%;
-  background-image: url("./DeviceAssets/del-tap.png");
+  background-image: url("./DeviceAssets/del-curtain.png");
   background-size: 70%;
   background-position: calc(100% - 0px) top;
   background-repeat: no-repeat;
@@ -189,10 +192,7 @@
   height: 200px;
   width: 400px;
 }
-.toggle-card:hover {
-  transition: transform 0.3s ease-out;
-  transform: scale(1.01);
-}
+
 .toggle-card::before {
     content: "";
     position: absolute;

@@ -133,6 +133,9 @@
         <v-card-text>
           <v-row >
             <v-text-field 
+              variant="outlined"
+              clearable
+              :clear-icon="!tempDeviceName ? '' : 'mdi-close-circle-outline'"
               solo
               label="Device Name"
               v-model.string="tempDeviceName"
@@ -313,7 +316,6 @@
   padding: 30px;
   box-shadow: inset 0px -5px 7px rgba(0, 0, 0, 0.2), 
               inset 0px -1px 3px rgba(9, 8, 4, 0.5);
-  background-color: #2e93d25b;
   /* transparent */
   border-radius: 30px;
 }
@@ -339,10 +341,10 @@
 }
 
 .icier-text {
-  color: #3fbbf0d5;
+  color: #0e9bd7;
 }
 .ice-text{
-  color: #036baca6;
+  color: #04629dfb;
 }
 .green-text {
   color: #1C4035; 
@@ -352,10 +354,9 @@
 }
 .toggle-card-popup {
   padding: 30px;
-  border-radius: 30px;
+  border-radius: 15px !important;
   background-color: #EECC66;
-  background: radial-gradient(at 20% 50%, rgba(39, 239, 233, 0.5), rgba(248, 223, 126, 0.8)),
-    radial-gradient(at 80% 50%, rgba(42, 229, 214, 0.4), rgba(250, 205, 26, 0.496));
+  background: radial-gradient(at 80% 50%, rgb(235, 211, 103), rgba(130, 193, 176, 0.766));
   backdrop-filter: blur(7px);
 }
 
@@ -397,13 +398,10 @@
   transition: all .2s ease-in-out;
   height: 200px;
   width: 400px;
-  background: radial-gradient(at 20% 50%, rgb(16, 222, 123, 0.5), rgba(248, 223, 126, 0.72)),
-    radial-gradient(at 80% 50%, rgba(25, 242, 224, 0.2), rgba(249, 201, 11, 0.5));
+  background: radial-gradient(at 80% 50%, rgba(127, 212, 233, 0.881), rgb(245, 213, 86));
+
 }
-.toggle-card:hover {
-  transition: transform 0.3s ease-out;
-  transform: scale(1.01);
-}
+
 .toggle-card::before {
     content: "";
     position: absolute;
