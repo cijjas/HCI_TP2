@@ -11,6 +11,7 @@ const loading = ref(true);
 const selectedRoomName = ref("");
 const newRoomName = ref("");
 const creationRoomName = ref("");
+const isCreateDialogOpen = ref(false);
 
 
 function clearVar(){
@@ -26,6 +27,13 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
     console.error(error);
     }
 });
+
+const openCreateDialog = () => {
+  isCreateDialogOpen.value = true;
+  setTimeout(() => {
+    isCreateDialogOpen.value = false;
+  }, 2000);
+};
 
 </script>
 
@@ -44,7 +52,7 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
                 <!-- ROOMS -->
                 <v-card class="mb-4 pr-8" color="lightersecondary"  elevation="0">
                     <v-card-title>
-                        <v-card-text class="text-h4 font-weight-bold text-uppercase ">Rooms </v-card-text>
+                        <v-card-text class="text-h4 font-weight-bold ">Existing Rooms </v-card-text>
                     </v-card-title>
                     <v-card class="ml-10" v-if="store.rooms.length !=0" flat>
                     <v-list rounded  bg-color="secondary" >
@@ -63,7 +71,24 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
                         <v-card-text class="text-h5 font-weight-bold ">Create a Room </v-card-text>
                     </v-card-title>
                     <v-text-field class="pa-8" label="Room Name" v-model="creationRoomName"></v-text-field>
-                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8" @click="store.createARoom(creationRoomName)"> CONFIRM </v-btn>
+                    <!-- <v-btn elevation="0" color="secondary" class="ml-8 mb-8" @click="store.createARoom(creationRoomName)"> CONFIRM </v-btn> -->
+                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8" @click="store.createARoom(creationRoomName); openCreateDialog()"> CONFIRM </v-btn>
+
+                    <v-dialog v-model="isCreateDialogOpen" width="500" color="gris" persistent>
+                        <v-card class="toggle-card-popup">
+                            <div class="text-center">
+                                <v-icon icon="mdi-check-circle-outline" class="check-icon"></v-icon>
+                                <v-card-title prepend-icon="mdi-check-circle-outline" class="font-weight-bold text-h5 card-title">Room Created</v-card-title>
+                                <v-card-text>Room '{{ creationRoomName }}' successfully created</v-card-text>
+                                
+                            </div>
+                            <!-- <v-row justify="center">
+                                <v-card-actions>
+                                    <v-btn class="ok-button" color="primary" style="background-color: #60d75a; width: 150px;" variant="tonal" @click="openCreateDialog">OK</v-btn>
+                                </v-card-actions>
+                            </v-row> -->
+                        </v-card>
+                    </v-dialog>
                 </v-card>
 
                 <!-- UPDATE A ROOM -->
@@ -102,6 +127,26 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
 
 
 <style scoped>
+.ok-button {
+    width: 80px;
+    color: #60d75a;
+}
+.check-icon {
+  font-size: 3rem;
+  color: #60d75a;
+}
+.card-title{
+  color: primary; /* Change the color to your desired value */
+  white-space: nowrap;
+  overflow: hidden;
+  margin-left: -10px;
+}
+.toggle-card-popup {
+  padding: 20px;
+  border-radius: 15px !important;
+  background: whitesmoke;
+  backdrop-filter: blur(7px);
+}
 main{
     padding: 5%;
 }

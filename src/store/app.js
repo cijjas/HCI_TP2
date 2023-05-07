@@ -29,7 +29,13 @@ export const useAppStore = defineStore('app', {
     routines : [],
     devices : [],
     components : [],
+    deviceActionsRaw : [],
+    deviceActions : [],
+
     // vacuum cleaner, oven, fridge, curtain, tap/sprinkler
+
+    // STATIC API DATA
+
     supportedDevices : [{
       id: "eu0v2xgprrhhg41g",
       name: "Blinds"
@@ -45,9 +51,9 @@ export const useAppStore = defineStore('app', {
       },{
       id: "dbrlsh7o5sn8ur4i",
       name: "Faucet"
-    }]
+    }],
+    supportedDevicesNames : [ "blinds","oven" ,"vacuum" , "refrigerator", "faucet"]
   }),
-
 
 
   actions :{
@@ -57,7 +63,7 @@ export const useAppStore = defineStore('app', {
     },
     async getAllRoomsAPI() {
       try {
-        const result = await RoomApi.getAll();
+        var result = await RoomApi.getAll();
         this.rooms = result;
         return result;
       } catch (error) {
@@ -145,14 +151,14 @@ export const useAppStore = defineStore('app', {
     },
     async getAllDevicesAPI() {
       try {
-        const result = await DevicesApi.getAll();
+        var result = await DevicesApi.getAll();
         this.devices = result;
-  
+
         //empty components
         this.components = [];
 
 
-        for ( let i = 0; i < this.devices.length; i++ ){  
+        for ( let i = 0; i < this.devices.length; i++ ){
           console.log(this.devices[i].type.name);
           if(this.devices[i].type.name == "vacuum"){
             this.components.push(VacuumBox);
@@ -213,7 +219,7 @@ export const useAppStore = defineStore('app', {
         const blindsFunction = () => {
           this.components.push(CurtainBox);
         };
-        
+
         const deviceMap = {
           "Vacuum": vacuumFunction,
           "Curtain": curtainFunction,
@@ -241,7 +247,7 @@ export const useAppStore = defineStore('app', {
         // remoto
         this.updateARoom(room.id, room.name);
         deviceMap[type]();
-        
+
 
         console.log("creo componente");
 
@@ -255,7 +261,7 @@ export const useAppStore = defineStore('app', {
 
 
 
-    async updateADevice(id, newname){
+    async updateADevice(id, newname ){
       try {
         // UPDATE DE DEVICES
         // remoto
@@ -280,6 +286,16 @@ export const useAppStore = defineStore('app', {
         console.error(error);
       }
     },
+    async updateADeviceState(id, action, paramsArr ){
+      // se ejecuta accion y se cambia el estado del device en la API
+      try{
+        var result = DevicesApi.executeAction(id, action, paramsArr)
+        return result;
+      }catch(error){
+        console.log(error);
+      }
+    },
+
 
 
 
@@ -292,7 +308,7 @@ export const useAppStore = defineStore('app', {
         removeItemFromArray(this.devices, id);
         // UPDATE DE ROOMS
         // update local
-        var room = this.getARoomByName(this.searchDevicesRoom(id));                        // room es el cuarto que tiene el dispositivo con id
+        var room = this.getARoomByName(this.getDevicesRoom(id));                        // room es el cuarto que tiene el dispositivo con id
         var index = room.meta.devices.findIndex(dId => dId === id);   // el index del dispositivo dentro de room que tiene el id que busco
         if (index !== -1) {
           room.meta.devices.splice(index, 1);                         // lo extraigo
@@ -353,7 +369,7 @@ export const useAppStore = defineStore('app', {
     },
     async getAllRoutinesAPI() {
       try {
-        const result = await RoutinesApi.getAll();
+        var result = await RoutinesApi.getAll();
         this.routines = result;
         return result;
       } catch (error) {
@@ -437,7 +453,139 @@ export const useAppStore = defineStore('app', {
     },
 
 
+
+    /* -------------------------------------------------- ACTIONS -------------------------------------------------- */
+    async getDeviceActionsAPI(){
+      try{
+        var result = await DevicesApi.getActions();
+        this.deviceActionsRaw = result;
+        this.deviceActions = await this.digestActions(this.deviceActionsRaw);
+      } catch(error){
+        console.log(error);
+      }
+    },
+
+
+
+    // params es un array de parametros que puede recibir el actionName
+    createAction(deviceId, actionName, params){
+      var deviceType = this.getADevice(deviceId).type;
+      console.log(deviceType);
+      var action = {
+        device : {
+          id : deviceId,
+        },
+        actionName : actionName,
+        params : params,
+        meta :{}
+      }
+      return action;
+    },
+
+
+
+
+    /* -------------------------------------------------- GETTERS CON PARAMETROS -------------------------------------------------- */
+
+
+      getDevicesRoom(id){
+        for ( let i = 0; i < this.rooms.length; i++ ){
+          for ( let j = 0; j < this.rooms[i].meta.devices.length; j++){
+            if ( this.rooms[i].meta.devices[j] == id ){
+              return this.rooms[i].name;
+            }
+          }
+        }
+        return null;
+      },
+      getRoomDevices(idRoom){
+        var arr = [];
+        var room = this.getARoomByName(idRoom);
+        for ( let i = 0; i < room.meta.devices ; i++ ){
+          arr.push(this.getADevice(room.meta.devices));
+        }
+        return arr;
+      },
+
+      getDeviceState(deviceId){
+        for ( let i = 0; i < this.devices.length; i++ ){
+          if ( this.devices[i].id == deviceId ){
+            return this.devices[i].state;
+          }
+        }
+        return "No device Found?";
+      },
+      getDeviceStateByName(deviceId){
+        return this.getDeviceState(getADevice(deviceId).id);
+      },
+
+
+      getDeviceActions(deviceId){
+        var deviceType;
+        for ( let i = 0; i < this.devices.length; i++)
+          if ( this.devices[i].id == deviceId)
+            deviceType = this.devices[i].type.name
+        for ( let j = 0; j < this.deviceActions.length; j++)
+          if( this.deviceActions[j].name == deviceType )
+            return this.deviceActions[j].actions;
+      },
+      getDeviceActionsNames(deviceId){
+        var actionsArr = this.getDeviceActions(deviceId);
+        var returnArr = [];
+        for ( let i = 0; i < actionsArr.length; i++)
+          returnArr.push(actionsArr[i].name);
+        return returnArr;
+      },
+      getDeviceActionsNamesByName(deviceName){
+        return this.getDeviceActionsNames(this.getADeviceByName(deviceName).id)
+      },
+      getDeviceActionsByType(deviceType){
+        for ( let i = 0; i < this.deviceActions.length; i++)
+          if( this.deviceActions[i].name == deviceType )
+            return this.deviceActions[i].actions;
+        return null;
+      },
+      getActionParameters(deviceId, actionName){
+        var actionsArr = this.getDeviceActions(deviceId);
+        for ( let i = 0; i < actionsArr.length; i++)
+          if ( actionsArr.name == actionName )
+            return actionsArr.params;
+      },
+
+
+
+
+      // esta funcion reduce el grueso de los dispositivos y sus acciones a algo mas simple basado en los dispositivos que soportamos
+      digestActions( deviceActionsRaw){
+        var returnArr = []
+        for ( let i = 0; i  < deviceActionsRaw.length; i++){  // los 10 dispositivos
+          if (this.supportedDevicesNames.includes(deviceActionsRaw[i].name)){
+            var deviceActionsObj ={
+              name : deviceActionsRaw[i].name,
+              id : deviceActionsRaw[i].id,
+              actions : []
+            } ;
+            for ( let j = 0; j < deviceActionsRaw[i].actions.length; j++ ){ // las acciones de cada dispositivo
+              var actionParams = {
+                name : deviceActionsRaw[i].actions[j].name,
+                params : [],
+              }
+              for ( let k = 0; k < deviceActionsRaw[i].actions[j].params.length; k++){ // los parametros de cada accion de cada dispositivo
+                actionParams.params.push(deviceActionsRaw[i].actions[j].params[k].name);
+              }
+              deviceActionsObj.actions.push(actionParams);
+            }
+            returnArr.push(deviceActionsObj);
+          }
+        }
+        return returnArr;
+      }
+
+
+
   },
+      /* -------------------------------------------------- GETTERS SIN PARAMETROS -------------------------------------------------- */
+
   getters :{
     getRoomNames(){
       var arr = [];
@@ -467,29 +615,8 @@ export const useAppStore = defineStore('app', {
       }
       return arr;
     },
+
   }
 })
 
 
-
-
-/* startDummy(){
-      this.addRoom('Kitchen');
-      this.addDevice('Main Tap','Sprinkler/Tap','Kitchen');
-      this.addDevice('Super Oven','Oven','Kitchen');
-      this.addDevice('Super Fridge','Fridge','Kitchen');
-      this.addDevice('Aspiradora 3000','Vacuum Cleaner','Kitchen');
-      this.addDevice('Large Curtain','Curtain','Kitchen');
-
-      this.addRoom('Bedroom');
-      this.addDevice('Bedside Tap','Sprinkler/Tap','Bedroom');
-      this.addDevice('Bedside Oven','Oven','Bedroom');
-      this.addDevice('MiniBar','Fridge','Bedroom');
-      this.addDevice('Roomba','Vacuum Cleaner','Bedroom');
-      this.addDevice('Small Curtain','Curtain','Bedroom');
-
-      this.addRoutine('Waking up!');
-      this.addRoutine('Cooking!');
-      this.addRoutine('Relaxing!');
-
-    }, */

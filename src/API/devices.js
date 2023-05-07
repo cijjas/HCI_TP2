@@ -20,6 +20,13 @@ class DevicesApi{
     static getAll(){
         return Api.get(DevicesApi.getUrl());
     }
+    static getActions(){
+        return Api.get(`${Api.baseUrl}/devicetypes`);
+    }
+    static executeAction(device,action, data){
+        console.log(`${Api.baseUrl}/devices/${device}/${action}`);
+        return Api.put(`${Api.baseUrl}/devices/${device}/${action}`,data)
+    }
 }
 
 

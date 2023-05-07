@@ -11,10 +11,11 @@ const loading = ref(true);
 const selectedRoutineName = ref("");
 const newRoutineName = ref("");
 const creationRoutineName = ref("");
+const isCreateDialogOpen = ref(false);
 const actions = ref([]);
 const defaultAction = ref([{
         device : {
-            id : "4551cd84667ff8e1"
+            id : "1230f46474ee97f1"
         },
         actionName : "turnOff",
         params : [],
@@ -35,6 +36,13 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
     console.error(error);
     }
 });
+
+const openCreateDialog = () => {
+  isCreateDialogOpen.value = true;
+  setTimeout(() => {
+    isCreateDialogOpen.value = false;
+  }, 2000);
+};
 
 </script>
 
@@ -72,7 +80,23 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
                         <v-card-text class="text-h5 font-weight-bold ">Create a Routine </v-card-text>
                     </v-card-title>
                     <v-text-field class="pa-8" label="Routine Name" v-model="creationRoutineName"></v-text-field>
-                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8" @click="store.createARoutine(creationRoutineName, defaultAction)"> CONFIRM </v-btn>
+                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8" @click="store.createARoutine(creationRoutineName, defaultAction); openCreateDialog()"> CONFIRM </v-btn>
+
+                    <v-dialog v-model="isCreateDialogOpen" width="500" color="gris" persistent>
+                    <v-card class="toggle-card-popup">
+                        <div class="text-center">
+                        <v-icon icon="mdi-check-circle-outline" class="check-icon"></v-icon>
+                        <v-card-title prepend-icon="mdi-check-circle-outline" class="font-weight-bold text-h5 card-title">Routine Created</v-card-title>
+                        <v-card-text>Routine '{{ creationRoutineName }}' successfully created</v-card-text>
+                        </div>
+                        <!-- <v-row justify="center">
+                        <v-card-actions>
+                            <v-btn class="ok-button" color="primary" style="background-color: #60d75a; width: 150px;" variant="tonal" @click="openCreateDialog">OK</v-btn>
+                        </v-card-actions>
+                        </v-row> -->
+                    </v-card>
+                    </v-dialog>
+
                 </v-card>
 
                 <!-- UPDATE A ROUTINES -->
@@ -111,6 +135,26 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
 
 
 <style scoped>
+.ok-button {
+    width: 80px;
+    color: #60d75a;
+}
+.check-icon {
+  font-size: 3rem;
+  color: #60d75a;
+}
+.card-title{
+  color: primary; /* Change the color to your desired value */
+  white-space: nowrap;
+  overflow: hidden;
+  margin-left: -10px;
+}
+.toggle-card-popup {
+  padding: 20px;
+  border-radius: 15px !important;
+  background: whitesmoke;
+  backdrop-filter: blur(7px);
+}
 main{
     padding: 5%;
 }

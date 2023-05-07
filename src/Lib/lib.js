@@ -5,10 +5,13 @@ export function removeItemFromArray(array, itemId) {
     }
 }
 export function getIdByName(array, name) {
+    /* console.log(array[0].name)
+    console.log(name) */
+
     for (let i = 0; i < array.length; i++) {
         if (array[i].name === name) {
         return array[i].id;
         }
     }
-    return null; // room not found
+    return "Room With that Name not FOund"; // room not found
 }
