@@ -26,6 +26,13 @@
     const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
     return `inset -5px 40px 90px rgba(${color.join(',')},1), inset -10px -40px 40px rgba(${color.join(',')}, 1)`;
   });
+  const computedShadow2 = computed(() => {
+    const color1 =  [140, 120, 58] ; // RGB values for #EECC66 and #8C783A
+    const color2 = [236, 94, 63]; // RGB values for #EC5E3F
+    const ratio = (tempTemperatureValue.value-90) / 100;
+    const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
+    return `inset 0px 2px 30px rgba(${color.join(',')},1), inset 0px 3px 2px rgba(${color.join(',')}, 1)`;
+  });
   
   const rules = {
     minLength: value => value.length >= 1 || 'Min 1 characters',
@@ -35,8 +42,12 @@
   watch(
     () => isOn.value,
     (newValue) => {
+      if (newValue) {
+        temperatureValue.value = 91;
+
+      } else {
         tempTemperatureValue.value = 90;
-        temperatureValue.value = 90;
+      }
     }
   );
     
@@ -96,6 +107,10 @@
             <v-toolbar-title class="font-weight-bold text-h4 card-title"
               >{{deviceName}}</v-toolbar-title
             >
+            <v-tooltip
+                activator="parent"
+                location="right"
+              >Edit</v-tooltip>
           </v-btn>
         </v-col>
 
@@ -135,6 +150,8 @@
       ></v-slider>
     </v-row>
     <!-- Aca empieza el popup -->
+
+
     <v-dialog v-model="isDialogOpen" width="1024" persistent>
       <v-card class="toggle-card-popup">
 
@@ -153,7 +170,7 @@
           </v-row>
           <v-col>
             <v-col cols="12" >
-              <v-col cols="12" class="temperature-box" :style="{ boxShadow: computedShadow}" >
+              <v-col cols="12" class="temperature-box" :style="{ boxShadow: computedShadow2}" >
                 <v-row>
                   <v-card-text class="text--white font-weight-bold text-h5 mb-0 green-text" >
                     <v-row>
@@ -163,14 +180,14 @@
                     </v-row>  
                   </v-card-text>
                   <v-col cols="auto" class="temperature-box-small">
-                    <v-text  class="text--white font-weight-bold text-h6 mb-0 red-text"> {{ tempTemperatureValue}} °C </v-text>
+                    <v-text  class="text--white font-weight-bold text-h6 mb-0 green-text"> {{ tempTemperatureValue}} °C </v-text>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col cols="2">
                     <v-btn
-                      size="small"
-                      variant="text"
+                      size="x-large"
+                      density="compact"
                       icon="mdi-minus"
                       color="primary"
                       @click="if(tempTemperatureValue > 90) {
@@ -179,8 +196,9 @@
                               "
                     ></v-btn>
                   </v-col> 
-                  <v-col cols="8">
+                  <v-col cols="8" style="margin-left: -70px;">
                     <v-slider
+                      color="primary"
                       v-model="tempTemperatureValue"
                       :max="230"
                       :min="90"
@@ -189,11 +207,11 @@
                   </v-col>
                   <v-col cols="2">
                     <v-btn
-                      size="small"
-                      variant="text"
+                      size="x-large"
+                      density="compact"
                       icon="mdi-plus"
                       color="primary"
-                      @click="if(tempTemperatureValue <230 ) {
+                      @click="if(tempTemperatureValue < 230 ) {
                                 tempTemperatureValue+=1
                               };"
                     ></v-btn>
@@ -202,6 +220,7 @@
               </v-col>
             </v-col>
           </v-col>
+          <!-- mode buttons -->
           <v-row no-gutters class="button-row">
             <v-col cols="auto" class="ml-auto " >
               <v-row no-gutters>
@@ -287,7 +306,9 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn   @click="cancelSettings">Cancel</v-btn>
-          <v-btn class="small-button-save" color="secondary" @click="saveSettings">Save</v-btn>
+          <v-btn class="small-button-save" color="secondary" @click="saveSettings">
+            {{ isOn ? 'Save' : 'Save And Start' }}
+          </v-btn>
         </v-card-actions>
 
       </v-card>
@@ -306,6 +327,7 @@
   transition: all .2s ease-in-out;
   height: 200px;
   width: 400px;
+  
 }
 .toggle-card:hover {
   transition: transform 0.3s ease-out;
@@ -361,7 +383,8 @@
 .toggle-card-popup {
   padding: 30px;
   border-radius: 30px;
-  background-color: #EECC66;
+  background: radial-gradient(at 80% 50%, rgba(131, 213, 98, 0.5), rgba(238, 204, 102, 0.99));
+  backdrop-filter: blur(7px);
 }
 
 .toggle-card-popup::before {

@@ -1,52 +1,66 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
+  import { ref, computed, watch } from 'vue';
 
-const isOn = ref(false);
-const sliderValue = ref(10);
+  const isOn = ref(false);
+  const sliderValue = ref(10);
+  const isDialogOpen = ref(false);
+  const deviceName = ref('Blinds');
 
-const sliderPercentage = computed(() => Math.round(sliderValue.value));
+  const tempDeviceName = ref(deviceName.value);
+  const rules = {
+    minLength: value => value.length >= 1 || 'Min 1 characters',
+    maxLength: value => value.length <= 15 || 'Max 15 characters',
+  };
 
-const computedBackgroundColor = computed(() => {
-  const color1 = [140, 120, 58]; // RGB values for #8C783A
-  const color2 = [238, 204, 102]; // RGB values for #EECC66
-  const ratio = sliderValue.value / 100;
-  const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
-  return `rgb(${color.join(',')})`;
-});
 
-watch(
-  () => sliderValue.value,
-  (newValue) => {
-    if (newValue <= 0) {
-      isOn.value = false;
-    } else {
-      isOn.value = true;
+  const computedBackgroundColor = computed(() => {
+    const color1 = [140, 120, 58]; // RGB values for #8C783A
+    const color2 = [238, 204, 102]; // RGB values for #EECC66
+    const ratio = sliderValue.value / 100;
+    const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
+    return `rgb(${color.join(',')})`;
+  });
+
+  watch(
+    () => sliderValue.value,
+    (newValue) => {
+      if (newValue <= 0) {
+        isOn.value = false;
+      } else {
+        isOn.value = true;
+      }
     }
-  }
-);
+  );
 
-const toggleOnOff = () => {
-  isOn.value = !isOn.value;
-};
-
-watch(
-  () => isOn.value,
-  (newValue) => {
-    if (newValue) {
-      sliderValue.value = 100;
-    } else {
-      sliderValue.value = 0;
+  watch(
+    () => isOn.value,
+    (newValue) => {
+      if (newValue) {
+        sliderValue.value = 100;
+      } else {
+        sliderValue.value = 0;
+      }
     }
-  }
-);
+  );
 
-const toggleCard = () => {
-  /* IR A ASPIRADORA */
-};
+  const toggleCard = () => {
+    /* IR A ASPIRADORA */
+  };
 
-const openCurtainPopUp = () => {
-  /* Abrir ventana emergente de cortina */
-};
+  const openCurtainPopUp = () => {
+    isDialogOpen.value = true;
+  };
+  const cancelSettings = () => {
+    isDialogOpen.value = false;
+    tempDeviceName.value = deviceName.value;
+  };
+  const saveSettings = () => {
+    if(tempDeviceName.value.length < 1 || tempDeviceName.value.length > 15) {
+        return;
+    }
+    deviceName.value = tempDeviceName.value;
+    isDialogOpen.value = false;
+  };
 </script>
 
 <template>
@@ -57,20 +71,20 @@ const openCurtainPopUp = () => {
     @click="toggleCard"
   >
     <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
-      <v-row align="center">
+      <v-row>
         <v-col>
           <v-btn @click="openCurtainPopUp" text color="transparent">
             <v-toolbar-title class="font-weight-bold text-h4 card-title"
-              >Curtain</v-toolbar-title
+              >{{ deviceName }}</v-toolbar-title
             >
+            <v-tooltip
+                activator="parent"
+                location="right"
+              >Edit</v-tooltip>
           </v-btn>
         </v-col>
 
-        <v-col>
-          <v-card-text class="text--white font-weight-bold text-h4 mb-0 slider-value">
-            {{ sliderValue }}
-          </v-card-text>
-        </v-col>
+       
       </v-row>
 
       <v-spacer></v-spacer>
@@ -82,13 +96,18 @@ const openCurtainPopUp = () => {
     </v-toolbar>
 
     <!-- locations for-->
-    <v-row no-gutters align="center" style="padding-bottom: 40px">
-      <v-col cols="12">
+    <v-row style="margin-bottom: 20px">
+      <v-col cols="8">
         <v-subheader class="ml-1">Ubicación</v-subheader>
+      </v-col>
+      <v-col cols="4">
+        <v-card-text class="text--white font-weight-bold text-h4 mb-0 slider-value">
+          {{ sliderValue }}
+        </v-card-text>
       </v-col>
     </v-row>
 
-    <v-row no-gutters class="button-row">
+    <v-row no-gutters class="button-row" style="margin-top: -20px">
       <v-slider
         color="primary"
         v-model="sliderValue"
@@ -96,15 +115,71 @@ const openCurtainPopUp = () => {
         :max="100"
         :min="0"
         :step="1"
-        thumb-label
       ></v-slider>
     </v-row>
+
+
+    <v-dialog v-model="isDialogOpen" width="1024" persistent>
+      <v-card class="toggle-card-popup">
+
+        <v-card-title class="font-weight-bold text-h5 card-title">Faucet Settings</v-card-title>
+        
+              <v-text-field
+                style="padding-top: 50px;"  
+                label="Device Name"
+                v-model.string="tempDeviceName"
+                type="string"
+                :rules="[rules.maxLength, rules.minLength]"
+          ></v-text-field>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="cancelSettings">Cancel</v-btn>
+          <v-btn class="small-button-save" color="secondary" @click="saveSettings">Save</v-btn>
+        </v-card-actions>
+
+      </v-card>
+    </v-dialog>
+
   </v-card>
+
 </template>
 
 
 
 <style scoped>
+
+.card-title{
+  color: #1C4035; /* Change the color to your desired value */
+  white-space: nowrap;
+  overflow: hidden;
+  margin-left: -10px;
+}
+.toggle-card-popup {
+  padding: 30px;
+  border-radius: 30px;
+  background: radial-gradient(at 80% 50%, rgba(129, 213, 98, 0.767), rgba(238, 204, 102, 0.9));
+  backdrop-filter: blur(7px);
+}
+.toggle-card-popup::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: -400px;
+  width: 100%;
+  height: 100%;
+  background-image: url("./DeviceAssets/del-tap.png");
+  background-size: 70%;
+  background-position: calc(100% - 0px) top;
+  background-repeat: no-repeat;
+  opacity: 0.05;
+}
+.small-button-save {
+  width: 240px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: #1C4035;
+}
 .toggle-card {
   cursor: pointer;
   padding: 16px;

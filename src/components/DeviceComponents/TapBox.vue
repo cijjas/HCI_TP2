@@ -6,7 +6,7 @@
   const isDialogOpen = ref(false);
   const disabledFields = ref(false);
 
-  const deviceName = ref('Tap');
+  const deviceName = ref('Faucet');
   const amountValue = ref(0);
   const selectedUnit = ref(null);
   const unit = ref(['litres', 'gallons', 'mililitres', 'ounces']);
@@ -14,7 +14,10 @@
   const tempDeviceName = ref(deviceName.value);
   const tempAmountValue = ref(amountValue.value);
   const tempSelectedUnit = ref(selectedUnit.value);
-    
+  const rules = {
+    minLength: value => value.length >= 1 || 'Min 1 characters',
+    maxLength: value => value.length <= 15 || 'Max 15 characters',
+  };
 
   const toggleCard = () => {
     disabledFields.value = !disabledFields.value;
@@ -36,6 +39,14 @@
   };
   const cancelSettings = () => {
     isDialogOpen.value = false;
+    tempDeviceName.value = deviceName.value;
+  };
+  const saveSettings = () => {
+    if(tempDeviceName.value.length < 1 || tempDeviceName.value.length > 15) {
+      return;
+    }
+    deviceName.value = tempDeviceName.value;
+    isDialogOpen.value = false;
   };
 </script>
 
@@ -48,7 +59,11 @@
 
       <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
         <v-btn @click="openTapDialog" text color="transparent">
-          <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">Tap</v-toolbar-title>
+          <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">{{deviceName}}</v-toolbar-title>
+          <v-tooltip
+                activator="parent"
+                location="right"
+              >Edit</v-tooltip>
         </v-btn>
         
         <v-spacer></v-spacer>
@@ -101,10 +116,65 @@
           </v-col>
         </v-row>
       </v-card-text>
+
+      <v-dialog v-model="isDialogOpen" width="1024" persistent>
+      <v-card class="toggle-card-popup">
+
+        <v-card-title class="font-weight-bold text-h5 card-title">Faucet Settings</v-card-title>
+        
+              <v-text-field
+                style="padding-top: 50px;"  
+                label="Device Name"
+                v-model.string="tempDeviceName"
+                type="string"
+                :rules="[rules.maxLength, rules.minLength]"
+          ></v-text-field>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" @click="cancelSettings">Cancel</v-btn>
+          <v-btn class="small-button-save" color="secondary" @click="saveSettings">Save</v-btn>
+        </v-card-actions>
+
+      </v-card>
+    </v-dialog>
+
   </v-card>
 </template>
 
 <style scoped>
+.card-title{
+  color: #1C4035; /* Change the color to your desired value */
+  white-space: nowrap;
+  overflow: hidden;
+  margin-left: -10px;
+}
+.toggle-card-popup {
+  padding: 30px;
+  border-radius: 30px;
+  background: radial-gradient(at 80% 50%, rgba(129, 213, 98, 0.767), rgba(238, 204, 102, 0.9));
+  backdrop-filter: blur(7px);
+}
+.toggle-card-popup::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: -400px;
+  width: 100%;
+  height: 100%;
+  background-image: url("./DeviceAssets/del-tap.png");
+  background-size: 70%;
+  background-position: calc(100% - 0px) top;
+  background-repeat: no-repeat;
+  opacity: 0.05;
+}
+.small-button-save {
+  width: 240px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: #1C4035;
+}
+
 .rounded-input {
   border-radius: 10px;
   box-shadow: inset 3px 1px 2px rgba(0, 0, 0, 0.2), 
@@ -135,6 +205,7 @@
   transition: all .2s ease-in-out;
   height: 200px;
   width: 400px;
+
 }
 .toggle-card:hover {
   transition: transform 0.3s ease-out;

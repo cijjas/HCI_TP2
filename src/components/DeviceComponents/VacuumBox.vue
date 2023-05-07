@@ -49,7 +49,7 @@
   };
 
   const toggleCard = () => {
-    
+
   };
 
   const returnToBase = () => {
@@ -67,6 +67,10 @@
           
           <v-btn @click="openVacuumDialog" text color="transparent">
             <v-toolbar-title class="font-weight-bold text-h4 card-title">{{deviceName}}</v-toolbar-title>
+            <v-tooltip
+                activator="parent"
+                location="right"
+              >Edit</v-tooltip>
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn 
@@ -214,39 +218,7 @@
 
 
 <style scoped>
-.slider-value {
-  color: #1C4035; /* Change the color to your desired value */
-}
-.toggle-card-popup {
-  padding: 30px;
-  border-radius: 30px;
-  background-color: #EECC66;
-}
 
-.toggle-card-popup::before {
-  content: "";
-  position: absolute;
-  top: 0px;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("./DeviceAssets/del-vacuum.png");
-  background-size: 30%;
-  background-position: calc(100% - 0px) top;
-  background-repeat: no-repeat;
-  opacity: 0.05;
-}
-
-.temp-small-button-vacuum {
-  width: 200px;
-  height: 40px;
-  border-radius: 10px 0px 0px 10px;
-}
-.temp-small-button-mop {
-  width: 200px;
-  height: 40px;
-  border-radius: 0px 10px 10px 0px;
-}
 .toggle-card {
   cursor: pointer;
   padding: 16px;  
@@ -255,6 +227,7 @@
   transition: all .2s ease-in-out;
   height: 200px;
   width: 400px;
+  
 }
 .toggle-card:hover {
   transition: transform 0.3s ease-out;
@@ -274,6 +247,42 @@
     background-repeat: no-repeat;
     opacity: 0.05;
 }
+
+
+.slider-value {
+  color: #1C4035; /* Change the color to your desired value */
+}
+.toggle-card-popup {
+  padding: 30px;
+  border-radius: 30px;
+  background: radial-gradient(at 80% 50%, rgba(131, 213, 98, 0.5), rgba(238, 204, 102, 0.99));
+  backdrop-filter: blur(7px);
+}
+.toggle-card-popup::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: -400px;
+  width: 100%;
+  height: 100%;
+  background-image: url("./DeviceAssets/del-vacuum.png");
+  background-size: 70%;
+  background-position: calc(100% - 0px) top;
+  background-repeat: no-repeat;
+  opacity: 0.05;
+}
+
+.temp-small-button-vacuum {
+  width: 200px;
+  height: 40px;
+  border-radius: 10px 0px 0px 10px;
+}
+.temp-small-button-mop {
+  width: 200px;
+  height: 40px;
+  border-radius: 0px 10px 10px 0px;
+}
+
 .toggle-card:hover {
   box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
 }
@@ -312,7 +321,6 @@
   white-space: nowrap;
   overflow: hidden;
   margin-left: -10px;
-
 }
 
 .small-button-save {

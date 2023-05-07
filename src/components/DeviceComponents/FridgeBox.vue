@@ -70,6 +70,10 @@
             
             <v-btn @click="openFridgeDialog" text color="transparent">
               <v-toolbar-title class="font-weight-bold text-h4 card-title">{{deviceName}}</v-toolbar-title>
+              <v-tooltip
+                activator="parent"
+                location="right"
+              >Edit</v-tooltip>
             </v-btn>
             <v-spacer></v-spacer>
             
@@ -82,13 +86,13 @@
           </v-row>
         </v-col>
 
-        <v-col cols="6" style="padding-top: 20px">
-                <!-- <v-text class="my-text mr-2" style="text-transform: capitalize;">Fridge</v-text> -->
-
+        <v-col cols="6" style="padding-top: 40px; padding-left: 40px;">
+              <v-row>
                 <v-text  class=" font-weight-bold text-h6 mb-0 icier-text"> {{ tempFreezerTemperature }}°C </v-text>
-                <!-- <v-text class="my-text mr-2" style="text-transform: capitalize;">Freezer</v-text> -->
+              </v-row>
+              <v-row>
                 <v-text  class="font-weight-bold text-h3 mb-0 ice-text" >{{ tempFridgeTemperature }}°C </v-text>
-
+              </v-row>
         </v-col>
       </v-row>
       <!-- locations for-->
@@ -299,11 +303,13 @@
 
   box-sizing: border-box;
   overflow: hidden;
+  
 }
 
 
 
 .temperature-box {
+  
   padding: 30px;
   box-shadow: inset 0px -5px 7px rgba(0, 0, 0, 0.2), 
               inset 0px -1px 3px rgba(9, 8, 4, 0.5);
@@ -348,6 +354,9 @@
   padding: 30px;
   border-radius: 30px;
   background-color: #EECC66;
+  background: radial-gradient(at 20% 50%, rgba(39, 239, 233, 0.5), rgba(248, 223, 126, 0.8)),
+    radial-gradient(at 80% 50%, rgba(42, 229, 214, 0.4), rgba(250, 205, 26, 0.496));
+  backdrop-filter: blur(7px);
 }
 
 .toggle-card-popup::before {
@@ -388,6 +397,8 @@
   transition: all .2s ease-in-out;
   height: 200px;
   width: 400px;
+  background: radial-gradient(at 20% 50%, rgb(16, 222, 123, 0.5), rgba(248, 223, 126, 0.72)),
+    radial-gradient(at 80% 50%, rgba(25, 242, 224, 0.2), rgba(249, 201, 11, 0.5));
 }
 .toggle-card:hover {
   transition: transform 0.3s ease-out;
