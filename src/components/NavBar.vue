@@ -59,13 +59,13 @@ export default {
           ></v-list-item>
         </v-list>
         <v-list nav color="primary">
-              <v-list-item to="/" prepend-icon="mdi-home" title="Home" value="myfiles" class='secondary'></v-list-item>
-              <v-list-item to="/Rooms" prepend-icon="mdi-sofa" title="Rooms" value="shared"></v-list-item>
-              <v-list-item to="/Routines" prepend-icon="mdi-list-box-outline" title="Routines" value="starred"></v-list-item>
-              <v-list-item to="/Settings" prepend-icon="mdi-cog" title="Settings" value="starred"></v-list-item>
-              <v-list-item to="/Contact" prepend-icon="mdi-account-box-outline" title="Contact" value="starred"></v-list-item>
-              <v-list-item to="/About" prepend-icon="mdi-help-circle-outline" title="About" value="starred"></v-list-item>
-              <v-list-item to="/Test" prepend-icon="mdi-account-cowboy-hat-outline" title="Test" value="test"></v-list-item>
+              <v-list-item to="/"         prepend-icon="mdi-home"                       title="Home"       class='secondary'></v-list-item>
+              <v-list-item to="/Rooms"    prepend-icon="mdi-sofa"                       title="Rooms"      ></v-list-item>
+              <v-list-item to="/Routines" prepend-icon="mdi-list-box-outline"           title="Routines"   ></v-list-item>
+              <v-list-item to="/Settings" prepend-icon="mdi-cog"                        title="Settings"   ></v-list-item>
+              <v-list-item to="/Contact"  prepend-icon="mdi-account-box-outline"        title="Contact"    ></v-list-item>
+              <v-list-item to="/About"    prepend-icon="mdi-help-circle-outline"        title="About"      ></v-list-item>
+              <v-list-item to="/Test"     prepend-icon="mdi-account-cowboy-hat-outline" title="Test"       ></v-list-item>
         </v-list>
       
       </v-navigation-drawer>
