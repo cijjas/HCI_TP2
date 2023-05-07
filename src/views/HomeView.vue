@@ -19,6 +19,7 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
     try {
     // pido el update de los datos
     await store.getAllRoomsAPI();
+    await store.getAllDevicesAPI();
     } catch (error) {
     console.error(error);
     }
@@ -33,9 +34,9 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
 
         <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Home</v-card-title>
         <v-divider color="gris"></v-divider>
-        <v-layout justify-center>
-          <v-flex v-for="c in store.getComponents()" :key="c.id" xs12 sm6 md3>
-            <v-card class="grid-item" width="400" height="200" >
+        <v-layout justify-start>
+          <v-flex v-for="c in store.getComponents()" :key="c.id" xs12 sm6 md4 lg3>
+            <v-card class="grid-item">
               <component :is="c"></component>
             </v-card>
           </v-flex>
@@ -68,7 +69,8 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
 }
 
 .grid-item:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-out;
+  transform: scale(1.01);
 }
 
 .v-layout {

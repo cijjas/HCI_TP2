@@ -147,6 +147,35 @@ export const useAppStore = defineStore('app', {
       try {
         const result = await DevicesApi.getAll();
         this.devices = result;
+  
+        //empty components
+        this.components = [];
+
+
+        for ( let i = 0; i < this.devices.length; i++ ){  
+          console.log(this.devices[i].type.name);
+          if(this.devices[i].type.name == "vacuum"){
+            this.components.push(VacuumBox);
+            console.log("vacuum");
+          }else if(this.devices[i].type.name == "faucet"){
+            this.components.push(TapBox);
+            console.log("tap");
+          }else if(this.devices[i].type.name == "refrigerator"){
+            this.components.push(FridgeBox);
+            console.log("fridge");
+          }else if(this.devices[i].type.name == "oven"){
+            this.components.push(OvenBox);
+            console.log("oven");
+          }else if(this.devices[i].type.name == "blinds"){
+            this.components.push(CurtainBox);
+            console.log("curtain");
+          }
+        }
+        console.log("uploadeo devices api");
+        console.log("devices")
+        console.log(this.devices.length);
+        console.log("components")
+        console.log(this.components.length);
         return result;
       } catch (error) {
         console.error(error);
@@ -183,19 +212,19 @@ export const useAppStore = defineStore('app', {
         // remoto
         this.updateARoom(room.id, room.name);
 
-        if(type == "Vacuum"){
-          this.components.push(VacuumBox);
-        }else if(type == "Curtain"){
-          this.components.push(CurtainBox);
-        }else if(type == "Faucet"){
-          this.components.push(TapBox);
-        }else if(type == "Refrigerator"){
-          this.components.push(FridgeBox);
-        }else if(type == "Oven"){
-          this.components.push(OvenBox);
-        }else if(type == "Blinds"){
-          this.components.push(CurtainBox);
-        }
+        // if(type == "Vacuum"){
+        //   this.components.push(VacuumBox);
+        // }else if(type == "Curtain"){
+        //   this.components.push(CurtainBox);
+        // }else if(type == "Faucet"){
+        //   this.components.push(TapBox);
+        // }else if(type == "Refrigerator"){
+        //   this.components.push(FridgeBox);
+        // }else if(type == "Oven"){
+        //   this.components.push(OvenBox);
+        // }else if(type == "Blinds"){
+        //   this.components.push(CurtainBox);
+        // }
 
         console.log("creo componente");
 
@@ -254,11 +283,11 @@ export const useAppStore = defineStore('app', {
         // update remoto
         this.updateARoom(room.id, room.name);
         //delete component
-        var device = this.getADevice(id);
-        var index = this.components.findIndex(component => component.name === device.type.name + "Box");
-        if (index !== -1) {
-          this.components.splice(index, 1);
-        } //chequear
+        // var device = this.getADevice(id);
+        // var index = this.components.findIndex(component => component.name === device.type.name + "Box");
+        // if (index !== -1) {
+        //   this.components.splice(index, 1);
+        //} //chequear
         return result;
       } catch (error) {
         console.error(error);
