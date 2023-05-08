@@ -564,48 +564,24 @@ export const useAppStore = defineStore('app', {
       }
     },
 
-/* {
-  "name": "good night",
-  "actions": [
-    {
-      "device": {
-        "id": "7a355fdb5b954ff5"
-      },
-      "actionName": "close",
-      "params": [],
-      "meta": {}
-    }],
-  "meta" :{}
-} */
-
     async updateARoutineName(id, newname ){
-      console.log("UPDATING A ROUTINE BY NAME")
-      /* var actionsArr = []
-      var routine = this.getARoutine(id);
-      for ( let i = 0; i < routine.actions.length; i++ ){  // tomo cada accion dentro de la rutina
-        var actionObj = {
-          device : {
-            id : routine.actions[i].
-          }
-        }
-      } */
-
-
       var routineObj = {
         id : id,
         name : newname,
         actions : this.getARoutine(id).actions
       }
-      console.log(routineObj)
-      console.log(this.getARoutine(id))
-
-      // remoto
       var result = await RoutinesApi.modify(routineObj);
-      // local
+
       for ( let i = 0; i < this.routines.length; i++ )
-        if ( this.routines[i].id = id )
+        if ( this.routines[i].id == id )
           this.routines[i].name = newname
 
+
+      // remoto
+      // local
+
+
+      console.log(this.routines);
     },
 
     async updateARoutine(id, newname, actions){
