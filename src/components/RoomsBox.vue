@@ -33,7 +33,8 @@
             <v-text-field label="New Room Name" v-model="tempRoomName" :placeholder="nameRoom"></v-text-field>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary" @click="openDeleteDialog" variant="outlined">Delete Room</v-btn>
+            <v-btn class="delete-button" color="white" @click="openDeleteDialog"> Delete Room</v-btn>
+            <!-- <v-btn color="primary" @click="openDeleteDialog" variant="outlined">Delete Room</v-btn> -->
             <v-spacer></v-spacer>
             <v-btn color="primary" @click="openEditDialog">Cancel</v-btn>
             <v-btn color="primary" variant="flat" @click="saveName">Save</v-btn>
@@ -100,7 +101,9 @@ const props = defineProps({
         nameRoom.value = tempRoomName.value; // Update the roomName variable with the new value
         store.updateARoom(roomId.value, nameRoom.value);
     }
-    isDialogOpen.value = !isDialogOpen.value;
+    openEditDialog();
+    // isDialogOpen.value = !isDialogOpen.value;
+    clearVar();
   };
 
   const openEditDialog = () => {
@@ -116,13 +119,23 @@ const props = defineProps({
     store.deleteARoom(roomId.value);
     openDeleteDialog();
     openEditDialog();
-    
   };
+
+  function clearVar(){
+    tempRoomName.value = "";
+}
 
   </script>
 
 
   <style scoped>
+  .delete-button {
+  width: 150px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: #d82602;
+  box-shadow: 0 2px 4px rgba(24, 15, 15, 0.589);
+}
 
 .ok-button {
     width: 80px;

@@ -11,19 +11,15 @@
     import { useAppStore } from '@/store/app';
 
     const store = useAppStore();
-
-    const devices = ref(`store.${{roomName}}.devices`)
-
     const props = defineProps({
-    roomName: {
+    roomId: {
       type: String,
       required: true,
-    },
-    devicesArray: {
-        type: Array,
-        required: true,
     }
   });
+
+    const roomId = ref(props.roomId);
+    const devices = store.getRoomDevices(roomId.value);
     
 </script>
 
@@ -37,9 +33,9 @@
                 
                 <v-row justify-end>
                         <!-- iterar sobre array de devices de un cuarto -->
-                        <v-col cols="5" v-for="room in store.getRooms">
+                        <v-col cols="5" v-for="device in devices">
                             <!-- display componente generico de un device -->
-                            <RoomsBox class="grid-item" :roomName="room.name" :devicesCount="room.devices.length"></RoomsBox>
+                            <!-- <RoomsBox class="grid-item" :roomName="room.name" :devicesCount="room.devices.length"></RoomsBox> -->
                         </v-col>
 
                 </v-row>  
