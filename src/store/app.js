@@ -159,44 +159,23 @@ export const useAppStore = defineStore('app', {
 
 
         for ( let i = 0; i < this.devices.length; i++ ){
-          console.log(this.devices[i].type.name);
           if(this.devices[i].type.name == "vacuum"){
+            this.components.push(VacuumBox);
             this.components.push({
               component: VacuumBox,
               id: this.devices[i].type.id,
               name: this.devices[i].name
             });
           }else if(this.devices[i].type.name == "faucet"){
-            this.components.push({
-              component: TapBox,
-              id: this.devices[i].type.id,
-              name: this.devices[i].name
-            });
+            this.components.push(TapBox);
           }else if(this.devices[i].type.name == "refrigerator"){
-            this.components.push({
-              component: FridgeBox,
-              id: this.devices[i].type.id,
-              name: this.devices[i].name
-            });
+            this.components.push(FridgeBox);
           }else if(this.devices[i].type.name == "oven"){
-            this.components.push({
-              component: OvenBox,
-              id: this.devices[i].type.id,
-              name: this.devices[i].name
-            });
+            this.components.push(OvenBox);
           }else if(this.devices[i].type.name == "blinds"){
-            this.components.push({
-              component: CurtainBox,
-              id: this.devices[i].type.id,
-              name: this.devices[i].name
-            });
+            this.components.push(CurtainBox);
           }
         }
-        console.log("uploadeo devices api");
-        console.log("devices")
-        console.log(this.devices.length);
-        console.log("components")
-        console.log(this.components.length);
         return result;
       } catch (error) {
         console.error(error);
@@ -397,11 +376,12 @@ export const useAppStore = defineStore('app', {
 
     // se deberia reempazar la defaultAction por actions, que tiene
     // que ser un array de objetos
-    async createARoutine(routineName, actions){
+    async createARoutine(routineName, actionsArr){
       try {
+        console.log("Im here");
         var routineObj = {
           name : routineName,
-          actions : actions,
+          actions : actionsArr,
           meta : {}
         }
         var result = await RoutinesApi.add(routineObj);
@@ -414,15 +394,15 @@ export const useAppStore = defineStore('app', {
 
 
 
-    // De nuevo el problema con Actions[]
+    // De nuevo el problema con Actions[] !!! NO ESTA ADAPTADO A CAMBIOS EN ACCIONES
     async updateARoutine(id, newname, actions){
       try {
         var routineObj = {
           id : id,
           actions : {
-            id : "4551cd84667ff8e1"
+            id : id
           },
-          actionName : "turnOff",
+          actionName : "open",
           params : [],
           meta : {}
         }
@@ -469,18 +449,15 @@ export const useAppStore = defineStore('app', {
       try{
         var result = await DevicesApi.getActions();
         this.deviceActionsRaw = result;
-        this.deviceActions = await this.digestActions(this.deviceActionsRaw);
+        this.deviceActions = this.digestActions(this.deviceActionsRaw);
       } catch(error){
         console.log(error);
       }
     },
 
 
-
-    // params es un array de parametros que puede recibir el actionName
+    // genera el objeto de una accion, uno genera varias acciones/eventos los mete en un array y llama a create Routine
     createAction(deviceId, actionName, params){
-      var deviceType = this.getADevice(deviceId).type;
-      console.log(deviceType);
       var action = {
         device : {
           id : deviceId,
@@ -528,8 +505,20 @@ export const useAppStore = defineStore('app', {
       getDeviceStateByName(deviceId){
         return this.getDeviceState(getADevice(deviceId).id);
       },
-
-
+      // esta tiene mas sentido  en el flujo del formulario
+      getTypeActions(deviceType){
+        for ( let j = 0; j < this.deviceActions.length; j++)
+          if( this.deviceActions[j].name == deviceType )
+            return this.deviceActions[j].actions
+      },
+      getTypeActionsNames(deviceType){
+        var actionsNameArr = this.getTypeActions(deviceType);
+        var returnArr = [];
+        for ( let i = 0; i < actionsNameArr.length; i++)
+          returnArr.push(actionsNameArr[i].name);
+        return returnArr;
+      },
+      // mas general
       getDeviceActions(deviceId){
         var deviceType;
         for ( let i = 0; i < this.devices.length; i++)
@@ -537,12 +526,14 @@ export const useAppStore = defineStore('app', {
             deviceType = this.devices[i].type.name
         for ( let j = 0; j < this.deviceActions.length; j++)
           if( this.deviceActions[j].name == deviceType )
-            return this.deviceActions[j].actions;
+            return this.deviceActions[j].actions
       },
       getDeviceActionsNames(deviceId){
-        var actionsArr = this.getDeviceActions(deviceId);
+        if ( deviceId == '' )
+          return '';
+        var actionsNameArr = this.getDeviceActions(deviceId);
         var returnArr = [];
-        for ( let i = 0; i < actionsArr.length; i++)
+        for ( let i = 0; i < actionsNameArr.length; i++)
           returnArr.push(actionsArr[i].name);
         return returnArr;
       },
@@ -555,11 +546,12 @@ export const useAppStore = defineStore('app', {
             return this.deviceActions[i].actions;
         return null;
       },
-      getActionParameters(deviceId, actionName){
-        var actionsArr = this.getDeviceActions(deviceId);
+      getActionParameters(deviceType, actionName){
+        var actionsArr = this.getDeviceActionsByType(deviceType);
         for ( let i = 0; i < actionsArr.length; i++)
-          if ( actionsArr.name == actionName )
-            return actionsArr.params;
+          if ( actionsArr[i].name == actionName ){
+            return actionsArr[i].params;
+          }
       },
 
 
@@ -581,7 +573,7 @@ export const useAppStore = defineStore('app', {
                 params : [],
               }
               for ( let k = 0; k < deviceActionsRaw[i].actions[j].params.length; k++){ // los parametros de cada accion de cada dispositivo
-                actionParams.params.push(deviceActionsRaw[i].actions[j].params[k].name);
+                actionParams.params.push(deviceActionsRaw[i].actions[j].params[k]);
               }
               deviceActionsObj.actions.push(actionParams);
             }

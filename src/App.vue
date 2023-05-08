@@ -8,7 +8,7 @@ import NavBar from './components/NavBar.vue';
 <!-- O.o -->
 <template>
   <v-app class="app elevation-0">
-  
+
 
   <NavBar></NavBar>
   <RouterView />
