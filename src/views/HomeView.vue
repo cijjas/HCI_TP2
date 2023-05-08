@@ -20,15 +20,10 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
     }
 });
 
-function logger(){
-  console.log(store.components)
-  ;}
-
 </script>
 
 <template>
   <main>
-    <v-btn @click="logger">printer</v-btn>
 
     <div class="canvas">
         <v-card class="vcard elevation-0" color="transparent">
