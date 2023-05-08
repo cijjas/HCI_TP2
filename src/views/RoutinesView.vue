@@ -10,7 +10,7 @@
     onMounted(async () => {             // cuando se monta la pagina pido los datos
     try {
     // pido el update de los datos
-    await store.getAllRoomsAPI();
+    await store.getAllRoutinesAPI();
     } catch (error) {
     console.error(error);
     }
@@ -26,9 +26,8 @@
             </v-row>
             
             <v-row justify-end>
-                <!-- <RoutinesBox class="grid-item" :routineName="routine.name" :actionsCount="routine.actions.length"></RoutinesBox> -->
-                    <v-col cols="5" v-for="routine in store.getAllRoutines()">
-                        <RoutinesBox class="grid-item" :routineName="routine.name" :routineId="routine.id"></RoutinesBox>
+                    <v-col cols="5" v-for="routine in store.getAllRoutines()" :key="room">
+                        <RoutinesBox class="grid-item" :routineName="routine.name" :routineId="routine.id" :actionsCount="routine.actions.length"></RoutinesBox>
                     </v-col>
             </v-row>  
         </v-card>

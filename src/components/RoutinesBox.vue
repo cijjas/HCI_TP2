@@ -13,13 +13,16 @@
         <v-row align="center">
           <v-col>
             <v-subheader class="ml-1">Actions in Routine: </v-subheader>
-            <span class="font-weight-bold text-body mb-0">9</span>
+            <span class="font-weight-bold text-body mb-0"> {{ actionsCount }}</span>
             <!-- <span class="font-weight-bold text-body mb-0">{{ actionsCount }}</span> -->
           </v-col>
         </v-row>
         <v-row class="justify-center">
           <v-btn variant="text" color="primary" class="mr-10 pl-6 pr-6" @click="openEditDialog">Edit Routine</v-btn>
           <v-btn variant="text" color="primary" class="pl-6 pr-6">Add Action</v-btn>
+          <router-link :to="{ name: 'routine', params: { routineName: nameRoutine } }">
+            <v-btn color="primary" class="mr-5 pl-5 pr-5 mt-3">View Actions</v-btn>
+          </router-link>
         </v-row>
       </v-card-text>
 
@@ -27,10 +30,10 @@
         <v-card class="toggle-card-popup">
           <v-card-title class="headline">Edit '{{ nameRoutine }}''</v-card-title>
           <v-card-text>
-            <v-text-field label="New Room Name" v-model="tempRoomName" :placeholder="nameRoom"></v-text-field>
+            <v-text-field label="New Routine Name" v-model="tempRoutineName" :placeholder="nameRoutine"></v-text-field>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary" @click="openDeleteDialog" variant="outlined">Delete Room</v-btn>
+            <v-btn class="delete-button" color="white" @click="openDeleteDialog"> Delete Routine</v-btn>
             <v-spacer></v-spacer>
             <v-btn color="primary" @click="openEditDialog">Cancel</v-btn>
             <v-btn color="primary" variant="flat" @click="saveName">Save</v-btn>
@@ -55,20 +58,27 @@
   
   <script setup>
   import { ref, defineProps } from 'vue';
+  import { useAppStore } from '@/store/app';
+  const store = useAppStore();
   
-  const props = defineProps(['routineName', 'routineId']);
+  const props = defineProps(['routineName', 'routineId', 'actionsCount']);
   
   const routineId = ref(props.routineId);
-  const tempRoomName = ref('');
+  const actionsCount = ref(props.actionCount);
+  const actions = store.getARoutine(routineId.value).actions;
+
+  const tempRoutineName = ref('');
   const nameRoutine = ref(props.routineName);
   const isDialogOpen = ref(false);
   const isDeleteDialogOpen = ref(false);
   
   const saveName = () => {
-    if (tempRoomName.value !== '') {
-        nameRoutine.value = tempRoomName.value; // Update the roomName variable with the new value
+    if (tempRoutineName.value !== '') {
+        nameRoutine.value = tempRoutineName.value; // Update the routineName variable with the new value
+        store.updateARoutine(routineId.value, nameRoutine.value, actions.value);
     }
     isDialogOpen.value = !isDialogOpen.value;
+    clearVar();
   };
   const openEditDialog = () => {
     isDialogOpen.value = !isDialogOpen.value;
@@ -83,9 +93,20 @@
     isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
     isDialogOpen.value = !isDialogOpen.value;
   };
+
+  function clearVar(){
+    tempRoutineName.value = "";
+}
   </script>
   
   <style scoped>
+  .delete-button {
+  width: 150px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: #d82602;
+  box-shadow: 0 2px 4px rgba(24, 15, 15, 0.589);
+}
 .toggle-card {
   cursor: pointer;
   padding: 16px;
@@ -95,7 +116,7 @@
   border-radius: 10px;
   background-color: #EECC66;
   transition: all .2s ease-in-out;
-  max-height: 200px;
+  max-height: 400px;
   max-width: 450px;
 }
 

@@ -20,6 +20,10 @@ class RoutinesApi{
     static getAll(){
         return Api.get(RoutinesApi.getUrl());
     }
+    static execute(id){
+        console.log(RoutinesApi.getUrl(id+'/execute'));
+        return Api.post(RoutinesApi.getUrl(id+'/execute'));
+    }
 }
 
 /*

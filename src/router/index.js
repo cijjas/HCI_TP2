@@ -25,6 +25,13 @@ const router = createRouter({
       name: 'routines',
       component: () => import('../views/RoutinesView.vue')
     },
+    /* Para acceder a rutinas en particular y ver las acciones dentro de esa misma*/
+    {
+      path: '/routines/:routineName',
+      name: 'routine',
+      params: ':routineId',
+      component: () => import('../views/RoutineActionsView.vue')
+    },
     {
       path: '/scenes',
       name: 'scenes',
@@ -80,7 +87,7 @@ const router = createRouter({
     {
       path: '/rooms/:roomName',
       name: 'room',
-      params: ':roomName',
+      params: ':roomId',
       component: () => import('../views/RoomDevicesView.vue')
     },
 

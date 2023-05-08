@@ -1,10 +1,24 @@
 <script setup>
-  import { ref } from 'vue'
+  import { ref, computed, watch, defineProps } from 'vue';
+  import { useAppStore } from '@/store/app';
+  const store = useAppStore();
 
+const props = defineProps({
+  componentName: {
+    type: String,
+    required: true
+  },
+  componentId: {
+    type: String,
+    required: true
+  }
+})
+  // const props = defineProps(['roomName', 'devicesCount']);
+  const componentId = ref(props.componentId);
   const isOn = ref(false);
   const isDialogOpen = ref(false);
   //real values
-  const deviceName = ref('Vacuum');
+  const deviceName = ref(props.componentName);
   const vacuumMode = ref(0);
   const chargingBaseLocation = ref(0);
   const returningToBase = ref(false);

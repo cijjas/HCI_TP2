@@ -24,6 +24,7 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
 
 <template>
   <main>
+
     <div class="canvas">
         <v-card class="vcard elevation-0" color="transparent">
         <v-row style="margin-top: 20px;">
@@ -35,7 +36,7 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
           <v-layout justify-start>
             <v-flex v-for="c in store.getComponents()" :key="c.id" xs12 sm6 md4 lg3>
               <v-card class="grid-item">
-                <component :is="c"></component>
+                <component :is="c.component" :componentName="c.name" :componentId="c.id"></component>
               </v-card>
             </v-flex>
           </v-layout>

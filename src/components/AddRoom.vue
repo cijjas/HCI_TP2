@@ -11,11 +11,13 @@ const loading = ref(true);
 const selectedRoomName = ref("");
 const newRoomName = ref("");
 const creationRoomName = ref("");
+const deletionDeviceName = ref("");
 const isCreateDialogOpen = ref(false);
-
+deletionDeviceName
 
 function clearVar(){
     selectedRoomName.value = "";
+    deletionDeviceName.value = "";
 }
 
 onMounted(async () => {             // cuando se monta la pagina pido los datos
@@ -29,10 +31,10 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
 });
 
 const openCreateDialog = () => {
-  isCreateDialogOpen.value = true;
-  setTimeout(() => {
-    isCreateDialogOpen.value = false;
-  }, 2000);
+    isCreateDialogOpen.value = true;
+    setTimeout(() => {
+        isCreateDialogOpen.value = false;
+    }, 2000);
 };
 
 </script>
@@ -50,6 +52,7 @@ const openCreateDialog = () => {
             <v-card v-else flat>
 
                 <!-- ROOMS -->
+                <v-card-text class="text-h4 font-weight-bold ">{{ store.routines}} </v-card-text>
                 <v-card class="mb-4 pr-8" color="lightersecondary"  elevation="0">
                     <v-card-title>
                         <v-card-text class="text-h4 font-weight-bold ">Existing Rooms </v-card-text>
@@ -80,7 +83,7 @@ const openCreateDialog = () => {
                                 <v-icon icon="mdi-check-circle-outline" class="check-icon"></v-icon>
                                 <v-card-title prepend-icon="mdi-check-circle-outline" class="font-weight-bold text-h5 card-title">Room Created</v-card-title>
                                 <v-card-text>Room '{{ creationRoomName }}' successfully created</v-card-text>
-                                
+
                             </div>
                             <!-- <v-row justify="center">
                                 <v-card-actions>
@@ -115,9 +118,9 @@ const openCreateDialog = () => {
                     class="pl-8 pt-8 pr-8"
                     label="Select the Room"
                     :items="store.getRoomNames"
-                    v-model="selectedRoomName"
+                    v-model="deletionDeviceName"
                     ></v-select>
-                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8"  @click="() => { store.deleteARoomByName(selectedRoomName); clearVar(); }" > CONFIRM </v-btn>
+                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8"  @click="() => { store.deleteARoomByName(deletionDeviceName); clearVar(); }" > CONFIRM </v-btn>
                 </v-card>
 
             </v-card>
@@ -132,20 +135,20 @@ const openCreateDialog = () => {
     color: #60d75a;
 }
 .check-icon {
-  font-size: 3rem;
-  color: #60d75a;
+    font-size: 3rem;
+    color: #60d75a;
 }
 .card-title{
-  color: primary; /* Change the color to your desired value */
-  white-space: nowrap;
-  overflow: hidden;
-  margin-left: -10px;
+    color: primary;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-left: -10px;
 }
 .toggle-card-popup {
-  padding: 20px;
-  border-radius: 15px !important;
-  background: whitesmoke;
-  backdrop-filter: blur(7px);
+    padding: 20px;
+    border-radius: 15px !important;
+    background: whitesmoke;
+    backdrop-filter: blur(7px);
 }
 main{
     padding: 5%;
