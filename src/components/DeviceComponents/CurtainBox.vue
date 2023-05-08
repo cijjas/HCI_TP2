@@ -30,7 +30,7 @@ const props = defineProps({
 
   const computedBackgroundColor = computed(() => {
     const color1 = [140, 120, 58]; // RGB values for #8C783A
-    const color2 = [238, 204, 102]; // RGB values for #EECC66
+    const color2 = [244, 207, 109]; // RGB values for #EECC66
     const ratio = sliderValue.value / 100;
     const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
     return `rgb(${color.join(',')})`;
@@ -183,7 +183,7 @@ const props = defineProps({
 .toggle-card-popup {
   padding: 30px;
   border-radius: 15px !important;
-  background: radial-gradient(at 80% 50%, rgba(227, 216, 110, 0.838), rgba(238, 204, 102, 0.9));
+  background: radial-gradient(at 80% 50%, rgba(227, 216, 110, 0.838), rgba(244, 207, 109, 0.9));
   backdrop-filter: blur(7px);
 }
 .toggle-card-popup::before {
@@ -209,7 +209,7 @@ const props = defineProps({
   cursor: pointer;
   padding: 16px;
   border-radius: 10px;
-  background-color: #EECC66;
+  background-color: #F4CF6D;
   transition: all .5s ease-in-out;
   height: 200px;
   width: 400px;
@@ -239,7 +239,7 @@ const props = defineProps({
 }
 
 .bg-on {
-  background-color: #EECC66;
+  background-color: #F4CF6D;
 }
 
 /* background color when turned off */

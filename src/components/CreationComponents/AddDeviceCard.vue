@@ -96,7 +96,6 @@ const submitAddDevice = () =>{
                     label="Device Name" 
                     base-color="primary"
                     color="verdatim"
-                    validate-on="submit"
                     clear-icon="mdi-close-circle-outline"  
                     v-model="selectedDeviceName"></v-text-field>
                     
@@ -115,7 +114,7 @@ const submitAddDevice = () =>{
                         <div class="text-center">
                             <v-icon icon="mdi-check-circle-outline" class="check-icon"></v-icon>
                             <v-card-title prepend-icon="mdi-check-circle-outline" class="font-weight-bold text-h5 card-title">Device Created</v-card-title>
-                            <v-card-text>Device successfully created</v-card-text>
+                            <v-card-text>Routine successfully created</v-card-text>
                         </div>
                     </v-card>
                 </v-dialog>
@@ -148,18 +147,19 @@ const submitAddDevice = () =>{
   .small-button-add {
     width: 100px;
     height: 40px;
-    border-radius: 10px;
-    background-color: #1C4035;
+    background-color:  #D69923;
   }
   .actions-style {
-    background-color: #98B891;
+    background-color:  #F4CF6D;
   }
   .title-style {
     color:#1C4035;
   }
   .card-style {
     border-radius: 30px;
-    background-color: #DBD0AF;
+    background-image: url('https://i.imgur.com/TN3egpF.png');
+    background-size: cover;
+    background-position: 0px -70px
   }
   .v-card__title {
     padding: 0;

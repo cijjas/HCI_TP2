@@ -372,12 +372,12 @@ const props = defineProps({
   color: #1C4035; 
 }
 .yellow-text {
-  color: #EECC66;
+  color: #F4CF6D;
 }
 .toggle-card-popup {
   padding: 30px;
   border-radius: 15px !important;
-  background-color: #EECC66;
+  background-color: #F4CF6D;
   background: radial-gradient(at 80% 50%, rgb(235, 211, 103), rgba(130, 193, 176, 0.766));
   backdrop-filter: blur(7px);
 }
@@ -416,7 +416,7 @@ const props = defineProps({
   cursor: pointer;
   padding: 16px;  
   border-radius: 10px;
-  background-color: #EECC66;
+  background-color: #F4CF6D;
   transition: all .2s ease-in-out;
   height: 200px;
   width: 400px;
@@ -450,7 +450,7 @@ const props = defineProps({
 
 }
 .bg-on {
-  background-color: #EECC66;
+  background-color: #F4CF6D;
 }
 
 .card-title{

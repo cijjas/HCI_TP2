@@ -120,13 +120,13 @@ export default {
 .nav-btn:hover {
   transition: transform 0.3s ease-out;
   transform: scale(1.1);
-  color: #EECC66;
+  color: #F4CF6D;
 }
 
 .nav-btn:focus {
   transition: transform 0.3s ease-out;
   transform: scale(1.1);
-  color: #EECC66 !important;
+  color: #F4CF6D !important;
   background-color: transparent;
   outline: none;
 }
@@ -152,7 +152,7 @@ export default {
   outline: none;
 }
 .yellow-text {
-  color: #EECC66;
+  color: #F4CF6D;
 }
 .green-text {
   color: #054619;
@@ -161,7 +161,7 @@ export default {
 .nav-title {
   font-family: 'Montserrat', sans-serif;
   font-weight: bold;
-  color: #EECC66;
+  color: #F4CF6D;
 }
 
 nav a {

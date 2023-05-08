@@ -4,52 +4,41 @@ import { useAppStore } from '@/store/app';
 import { ref } from 'vue';
 const store = useAppStore();
 
+const selectedRoomName = ref("");
+const isCreateDialogOpen= ref(false)
 
-const isCreateDialogOpen = ref(false);
-
-const selectedDeviceRoom = ref("");
-const selectedDeviceType = ref("");
-const selectedDeviceName = ref("");
-
-const openCreateDialog = () => {
-  isCreateDialogOpen.value = true;
-  setTimeout(() => {
-    isCreateDialogOpen.value = false;
-  }, 2000);
-  clearVar();
-};
 const rules = {
     minLength: value => value.length >= 3 || 'Min 3 characters',
-    maxLength: value => value.length <= 15 || 'Max 15 characters',
+    maxLength: value => value.length <= 20 || 'Max 20 characters',
     required: value => !!value || 'Required.',
 }; 
 function clearVar(){
-    selectedDeviceName.value = "";
-    selectedDeviceType.value = "";
-    selectedDeviceRoom.value = "";
+    selectedRoomName.value = "";
 }
-
-
 onMounted(async () => {             // cuando se monta la pagina pido los datos
     try {
-    // pido el update de los dato
-    await store.getDeviceActionsAPI();
-    await store.getAllRoomsAPI();
-    await store.getAllDevicesAPI();
-    loading.value = false;          // una vez updateados los uso
+      await store.getAllRoomsAPI();
     } catch (error) {
-    console.error(error);
+      console.error(error);
     }
 });
-
-const submitAddDevice = () =>{
-    if(selectedDeviceName.value  && selectedDeviceRoom.value  && selectedDeviceType.value ){
-        store.createADevice(selectedDeviceRoom.value, selectedDeviceName.value, selectedDeviceType.value);
+const submitAddRoom = () =>{
+    if(selectedRoomName.value){
+        store.createARoom(selectedRoomName.value);
         openCreateDialog();
+        clearVar();
     }
     else{
     }
 }
+
+const openCreateDialog = () => {
+    isCreateDialogOpen.value = true;
+    setTimeout(() => {
+        isCreateDialogOpen.value = false;
+    }, 2000);
+};
+
 </script>
 
 <template>
@@ -57,51 +46,26 @@ const submitAddDevice = () =>{
       <v-toolbar color="transparent" dense dark style="height: 120px;">
         <v-col cols="12" >
             <v-row >
-                <v-toolbar-title class="font-weight-bold text-h4 title-style mt-16 ml-8">Add Device</v-toolbar-title>
+                <v-toolbar-title class="font-weight-bold text-h4 title-style mt-16 ml-8">Add Room</v-toolbar-title>
             </v-row>
         </v-col>
       </v-toolbar>
 
-        <v-form @submit.prevent="submitAddDevice">
-                <v-select
-                    variant="outlined"
-                    class="pl-8 pt-8 pr-8"
-                    label="Select the Device's Room"
-                    :items="store.getRoomNames"
-                    v-model="selectedDeviceRoom"
-
-                    base-color="primary"
-                    color="verdatim"
-                    validate-on="submit"
-
-
-                    :rules="[rules.required]"
-                ></v-select>
-                <v-select
-                    variant="outlined"
-                    class="pl-8 pt-8 pr-8"
-                    label="Select the Device Type"
-                    :items="store.getSupportedDevicesNames"
-                    v-model="selectedDeviceType"
-                    :rules="[rules.required]"
-                    base-color="primary"
-                    color="verdatim"
-                    validate-on="submit"
-                    ></v-select>
+        <v-form @submit.prevent="submitAddRoom">
+                
                 <v-text-field 
-                    clearable="true"
-                    :rules="[rules.required,rules.maxLength, rules.minLength]" 
-                    variant="outlined" 
-                    class="pa-8" 
-                    label="Device Name" 
-                    base-color="primary"
-                    color="verdatim"
-                    validate-on="submit"
-                    clear-icon="mdi-close-circle-outline"  
-                    v-model="selectedDeviceName"></v-text-field>
-                    
-                <v-card-actions class="actions-style" style="height: 100px; ">
-                  <v-spacer></v-spacer>
+                label="Room Name" 
+                variant="outlined" 
+                :rules="[rules.required ,rules.maxLength, rules.minLength]" 
+                clearable="true"
+                clear-icon="mdi-close-circle-outline"  
+                class="pa-8" 
+                color="verdatim"
+                base-color="primary"
+                v-model="selectedRoomName"></v-text-field>
+                 
+                <v-card-actions class="actions-style" style="height: 100px;  "  >
+                    <v-spacer></v-spacer>
                   <v-btn 
                   class="small-button-add mr-12"
                   type="submit" 
@@ -115,11 +79,11 @@ const submitAddDevice = () =>{
                         <div class="text-center">
                             <v-icon icon="mdi-check-circle-outline" class="check-icon"></v-icon>
                             <v-card-title prepend-icon="mdi-check-circle-outline" class="font-weight-bold text-h5 card-title">Device Created</v-card-title>
-                            <v-card-text>Device successfully created</v-card-text>
+                            <v-card-text>Room successfully created</v-card-text>
                         </div>
                     </v-card>
                 </v-dialog>
-          </v-form>
+        </v-form>
                 
     </v-card>
   </template>
@@ -149,17 +113,23 @@ const submitAddDevice = () =>{
     width: 100px;
     height: 40px;
     border-radius: 10px;
-    background-color: #1C4035;
+    background-color: #1C4035 ;
   }
   .actions-style {
-    background-color: #98B891;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #98B891 ;
   }
   .title-style {
     color:#1C4035;
   }
   .card-style {
     border-radius: 30px;
-    background-color: #DBD0AF;
+    background-image: url('https://i.imgur.com/TN3egpF.png');
+    background-size: cover;
+    background-position: 0px -70px
   }
   .v-card__title {
     padding: 0;

@@ -176,7 +176,7 @@ const props = defineProps({
   margin-left: 30px;
   margin-right: 30px;
   border-radius: 10px;
-  background-color: #EECC66;
+  background-color: #F4CF6D;
   transition: all .2s ease-in-out;
   max-height: 400px;
   max-width: 400px;
@@ -192,7 +192,7 @@ const props = defineProps({
 }
 
 .bg-on {
-  background-color: #EECC66;
+  background-color: #F4CF6D;
 }
 
 .bg-off {

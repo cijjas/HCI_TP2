@@ -3,6 +3,7 @@
 <script setup>
 import AddDeviceCard from '@/components/CreationComponents/AddDeviceCard.vue';
 import AddRoomCard from '@/components/CreationComponents/AddRoomCard.vue';
+import AddRoutineCard from '@/components/CreationComponents/AddRoutineCard.vue';
 </script>
 
 <template>
@@ -15,6 +16,7 @@ import AddRoomCard from '@/components/CreationComponents/AddRoomCard.vue';
             <v-divider color="gris"></v-divider>
           </v-row>
           <v-row>
+            <AddRoutineCard></AddRoutineCard>
             <AddRoomCard></AddRoomCard>
             <AddDeviceCard></AddDeviceCard>
 

@@ -35,7 +35,7 @@ const props = defineProps({
   const tempTemperatureValue = ref(temperatureValue.value);
   
   const computedShadow = computed(() => {
-    const color1 = isOn.value ? [238, 204, 102] : [140, 120, 58] ; // RGB values for #EECC66 and #8C783A
+    const color1 = isOn.value ? [244, 207, 109] : [140, 120, 58] ; // RGB values for #EECC66 and #8C783A
     const color2 = [236, 94, 63]; // RGB values for #EC5E3F
     const ratio = (tempTemperatureValue.value-90) / 100;
     const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
@@ -348,7 +348,7 @@ const props = defineProps({
   cursor: pointer;
   padding: 16px;
   border-radius: 10px;
-  background-color: #EECC66;
+  background-color: #F4CF6D;
   transition: all .2s ease-in-out;
   height: 200px;
   width: 400px;
@@ -362,7 +362,7 @@ const props = defineProps({
   width: 120px;
   box-shadow: inset 0 1px 7px rgba(0, 0, 0, 0.2), 
               inset 0 -1px 3px rgba(240, 222, 162, 0.5);
-  background-color: #eecc66d8;
+  background-color: #F4CF6Dd8;
   border-radius: 10px;
   box-sizing: border-box;
   overflow: hidden;
@@ -405,7 +405,7 @@ const props = defineProps({
 .toggle-card-popup {
   padding: 30px;
   border-radius: 15px !important;
-  background: radial-gradient(at 80% 50%, rgba(240, 147, 65, 0.739), rgba(238, 204, 102, 0.99));
+  background: radial-gradient(at 80% 50%, rgba(240, 147, 65, 0.739), rgba(244, 207, 109, 0.99));
   backdrop-filter: blur(7px);
 }
 
@@ -446,7 +446,7 @@ const props = defineProps({
 }
 
 .bg-on {
-  background-color: #EECC66;
+  background-color: #F4CF6D;
 }
 
 /* background color when turned off */
