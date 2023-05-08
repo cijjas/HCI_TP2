@@ -475,8 +475,6 @@ export const useAppStore = defineStore('app', {
     },
     //getcomponents
     getComponents(){
-      console.log(this.components.length);
-      console.log("uploadeo componentes");
       return this.components;
     },
     /* -------------------------------------------------- ROOM - DEVICES -------------------------------------------------- */
