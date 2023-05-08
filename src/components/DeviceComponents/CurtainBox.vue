@@ -1,10 +1,25 @@
 <script setup>
-  import { ref, computed, watch } from 'vue';
+  import { ref, computed, watch, defineProps } from 'vue';
+  import { useAppStore } from '@/store/app';
+  const store = useAppStore();
+
+const props = defineProps({
+  componentName: {
+    type: String,
+    required: true
+  },
+  componentId: {
+    type: String,
+    required: true
+  }
+})
+  // const props = defineProps(['roomName', 'devicesCount']);
+  const componentId = ref(props.componentId);
 
   const isOn = ref(false);
   const sliderValue = ref(10);
   const isDialogOpen = ref(false);
-  const deviceName = ref('Blinds');
+  const deviceName = ref(props.componentName);
 
   const tempDeviceName = ref(deviceName.value);
   const rules = {

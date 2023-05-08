@@ -161,20 +161,35 @@ export const useAppStore = defineStore('app', {
         for ( let i = 0; i < this.devices.length; i++ ){
           console.log(this.devices[i].type.name);
           if(this.devices[i].type.name == "vacuum"){
-            this.components.push(VacuumBox);
-            console.log("vacuum");
+            this.components.push({
+              component: VacuumBox,
+              id: this.devices[i].type.id,
+              name: this.devices[i].name
+            });
           }else if(this.devices[i].type.name == "faucet"){
-            this.components.push(TapBox);
-            console.log("tap");
+            this.components.push({
+              component: TapBox,
+              id: this.devices[i].type.id,
+              name: this.devices[i].name
+            });
           }else if(this.devices[i].type.name == "refrigerator"){
-            this.components.push(FridgeBox);
-            console.log("fridge");
+            this.components.push({
+              component: FridgeBox,
+              id: this.devices[i].type.id,
+              name: this.devices[i].name
+            });
           }else if(this.devices[i].type.name == "oven"){
-            this.components.push(OvenBox);
-            console.log("oven");
+            this.components.push({
+              component: OvenBox,
+              id: this.devices[i].type.id,
+              name: this.devices[i].name
+            });
           }else if(this.devices[i].type.name == "blinds"){
-            this.components.push(CurtainBox);
-            console.log("curtain");
+            this.components.push({
+              component: CurtainBox,
+              id: this.devices[i].type.id,
+              name: this.devices[i].name
+            });
           }
         }
         console.log("uploadeo devices api");
@@ -201,33 +216,33 @@ export const useAppStore = defineStore('app', {
       try {
         // UPDATE DE DEVICES
         // remoto
-        const vacuumFunction = () => {
-          this.components.push(VacuumBox);
-        };
-        const curtainFunction = () => {
-          this.components.push(CurtainBox);
-        };
-        const faucetFunction = () => {
-          this.components.push(TapBox);
-        };
-        const fridgeFunction = () => {
-          this.components.push(FridgeBox);
-        };
-        const ovenFunction = () => {
-          this.components.push(OvenBox);
-        };
-        const blindsFunction = () => {
-          this.components.push(CurtainBox);
-        };
+        // const vacuumFunction = () => {
+        //   this.components.push(VacuumBox);
+        // };
+        // const curtainFunction = () => {
+        //   this.components.push(CurtainBox);
+        // };
+        // const faucetFunction = () => {
+        //   this.components.push(TapBox);
+        // };
+        // const fridgeFunction = () => {
+        //   this.components.push(FridgeBox);
+        // };
+        // const ovenFunction = () => {
+        //   this.components.push(OvenBox);
+        // };
+        // const blindsFunction = () => {
+        //   this.components.push(CurtainBox);
+        // };
 
-        const deviceMap = {
-          "Vacuum": vacuumFunction,
-          "Curtain": curtainFunction,
-          "Faucet": faucetFunction,
-          "Refrigerator": fridgeFunction,
-          "Oven": ovenFunction,
-          "Blinds": blindsFunction
-        };
+        // const deviceMap = {
+        //   "Vacuum": vacuumFunction,
+        //   "Curtain": curtainFunction,
+        //   "Faucet": faucetFunction,
+        //   "Refrigerator": fridgeFunction,
+        //   "Oven": ovenFunction,
+        //   "Blinds": blindsFunction
+        // };
 
 
         var typeId = getIdByName(this.supportedDevices, type);
@@ -247,11 +262,6 @@ export const useAppStore = defineStore('app', {
         // remoto
         this.updateARoom(room.id, room.name);
         deviceMap[type]();
-
-
-        console.log("creo componente");
-
-        console.log(this.devices.length);
 
         return result;
       } catch (error) {

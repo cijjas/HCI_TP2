@@ -1,10 +1,25 @@
 <script setup>
-  import { ref } from 'vue'
+  import { ref, computed, watch, defineProps } from 'vue';
+  import { useAppStore } from '@/store/app';
+  const store = useAppStore();
+
+const props = defineProps({
+  componentName: {
+    type: String,
+    required: true
+  },
+  componentId: {
+    type: String,
+    required: true
+  }
+})
+  // const props = defineProps(['roomName', 'devicesCount']);
+  const componentId = ref(props.componentId);
 
   const isDialogOpen = ref(false);
 
   //real values
-  const deviceName = ref('Fridge');
+  const deviceName = ref(props.componentName);
   const fridgeMode = ref(0);
   const location = ref(0);
   const fridgeTemperature = ref(2);
