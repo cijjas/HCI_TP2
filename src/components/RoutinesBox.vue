@@ -20,7 +20,7 @@
         <v-row class="justify-center">
           <v-btn variant="text" color="primary" class="mr-10 pl-6 pr-6" @click="openEditDialog">Edit Routine</v-btn>
           <v-btn variant="text" color="primary" class="pl-6 pr-6">Add Action</v-btn>
-          <router-link :to="{ name: 'routine', params: { routineName: nameRoutine } }">
+          <router-link :to="{ name: 'routineview', params: { routineName: nameRoutine } }">
             <v-btn color="primary" class="mr-5 pl-5 pr-5 mt-3">View Actions</v-btn>
           </router-link>
         </v-row>
@@ -58,6 +58,7 @@
   
   <script setup>
   import { ref, defineProps } from 'vue';
+  import { onMounted } from '@vue/runtime-core';
   import { useAppStore } from '@/store/app';
   const store = useAppStore();
   
@@ -71,11 +72,22 @@
   const nameRoutine = ref(props.routineName);
   const isDialogOpen = ref(false);
   const isDeleteDialogOpen = ref(false);
+
+  onMounted(async () => {             // cuando se monta la pagina pido los datos
+    try {
+    // pido el update de los datos
+    await store.getAllRoomsAPI();
+    await store.getAllDevicesAPI();
+    await store.getAllRoutinesAPI();
+    } catch (error) {
+    console.error(error);
+    }
+    }); 
   
   const saveName = () => {
     if (tempRoutineName.value !== '') {
         nameRoutine.value = tempRoutineName.value; // Update the routineName variable with the new value
-        store.updateARoutine(routineId.value, nameRoutine.value, actions.value);
+        store.updateARoutineName(routineId.value, nameRoutine.value);
     }
     isDialogOpen.value = !isDialogOpen.value;
     clearVar();
@@ -89,7 +101,7 @@
   };
   const deleteRoutine = () => {
     // BORRAR LA RUTINA
-    deleteARoutine(routineId);
+    store.deleteARoutine(routineId.value);
     isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
     isDialogOpen.value = !isDialogOpen.value;
   };
