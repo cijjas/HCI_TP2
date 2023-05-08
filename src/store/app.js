@@ -143,7 +143,7 @@ export const useAppStore = defineStore('app', {
       }
     },
 
-
+/*  */
 
     /* -------------------------------------------------- DEVICES -------------------------------------------------- */
     getAllDevices(){
@@ -159,23 +159,59 @@ export const useAppStore = defineStore('app', {
 
 
         for ( let i = 0; i < this.devices.length; i++ ){
+          var deviceType = this.devices[i].type.name;
+          switch(deviceType){
+            case 'vacuum':
+              this.components.push({
+                component: VacuumBox,
+                id: this.devices[i].type.id,
+                name: this.devices[i].name
+              });
+              break;
+            case 'faucet':
+              this.components.push({
+                component: TapBox,
+                id: this.devices[i].type.id,
+                name: this.devices[i].name
+              });
+              break;
+            case 'refrigerator':
+              this.components.push({
+                component: FridgeBox,
+                id: this.devices[i].type.id,
+                name: this.devices[i].name
+              });
+              break;
+            case 'oven':
+              this.components.push({
+                component: OvenBox,
+                id: this.devices[i].type.id,
+                name: this.devices[i].name
+              });
+              break;
+            case 'blinds':
+              this.components.push({
+                component: CurtainBox,
+                id: this.devices[i].type.id,
+                name: this.devices[i].name
+              });
+              break;
+            default :
+            console.log(`${deviceType} should be one of these : Blinds, Faucet, Refrigerator, Oven, Vacuum `);
+          }
           if(this.devices[i].type.name == "vacuum"){
-            this.components.push(VacuumBox);
-            this.components.push({
-              component: VacuumBox,
-              id: this.devices[i].type.id,
-              name: this.devices[i].name
-            });
+
           }else if(this.devices[i].type.name == "faucet"){
-            this.components.push(TapBox);
+
           }else if(this.devices[i].type.name == "refrigerator"){
-            this.components.push(FridgeBox);
+
           }else if(this.devices[i].type.name == "oven"){
-            this.components.push(OvenBox);
+
           }else if(this.devices[i].type.name == "blinds"){
-            this.components.push(CurtainBox);
+
           }
         }
+
         return result;
       } catch (error) {
         console.error(error);
@@ -193,35 +229,34 @@ export const useAppStore = defineStore('app', {
 
     async createADevice(roomName, deviceName, type){
       try {
-        // UPDATE DE DEVICES
-        // remoto
-        // const vacuumFunction = () => {
-        //   this.components.push(VacuumBox);
-        // };
-        // const curtainFunction = () => {
-        //   this.components.push(CurtainBox);
-        // };
-        // const faucetFunction = () => {
-        //   this.components.push(TapBox);
-        // };
-        // const fridgeFunction = () => {
-        //   this.components.push(FridgeBox);
-        // };
-        // const ovenFunction = () => {
-        //   this.components.push(OvenBox);
-        // };
-        // const blindsFunction = () => {
-        //   this.components.push(CurtainBox);
-        // };
+        console.log("IM CREATING A DEVICE")
+        /* const vacuumFunction = () => {
+          this.components.push(VacuumBox);
+        };
+        const curtainFunction = () => {
+          this.components.push(CurtainBox);
+        };
+        const faucetFunction = () => {
+          this.components.push(TapBox);
+        };
+        const fridgeFunction = () => {
+          this.components.push(FridgeBox);
+        };
+        const ovenFunction = () => {
+          this.components.push(OvenBox);
+        };
+        const blindsFunction = () => {
+          this.components.push(CurtainBox);
+        };
 
-        // const deviceMap = {
-        //   "Vacuum": vacuumFunction,
-        //   "Curtain": curtainFunction,
-        //   "Faucet": faucetFunction,
-        //   "Refrigerator": fridgeFunction,
-        //   "Oven": ovenFunction,
-        //   "Blinds": blindsFunction
-        // };
+        const deviceMap = {
+          "Vacuum": vacuumFunction,
+          "Curtain": curtainFunction,
+          "Faucet": faucetFunction,
+          "Refrigerator": fridgeFunction,
+          "Oven": ovenFunction,
+          "Blinds": blindsFunction
+        }; */
 
 
         var typeId = getIdByName(this.supportedDevices, type);
@@ -231,8 +266,10 @@ export const useAppStore = defineStore('app', {
           },
           name : deviceName
         }
+        //update remoto
         var result = await DevicesApi.add(deviceObj);
         // local
+        // independizar de la api la actualizacion
         this.devices.push(result);
         // UPDATE DE ROOMS
         // local
@@ -240,7 +277,7 @@ export const useAppStore = defineStore('app', {
         room.meta.devices.push(result.id);
         // remoto
         this.updateARoom(room.id, room.name);
-        deviceMap[type]();
+        /* deviceMap[type](); */
 
         return result;
       } catch (error) {
@@ -279,6 +316,7 @@ export const useAppStore = defineStore('app', {
       // se ejecuta accion y se cambia el estado del device en la API
       try{
         var result = DevicesApi.executeAction(id, action, paramsArr)
+        this.updateADeviceStateLocal(id, action, paramsArr);
         return result;
       }catch(error){
         console.log(error);
@@ -286,6 +324,117 @@ export const useAppStore = defineStore('app', {
     },
 
 
+    /* le vengo dando vueltas a la idea esta que me parece horrible, la base de dato
+    no coopera con la idea de que vos cambies el estado, pense que podria agegar la
+    metadata necesaria para que cada accion sepa que debe cambiar en el estado de un
+    componente pero mantener esa nueva estructura tambien requiere de un switch
+    y mucho anidamiento interno para hacerlo andar
+    la otra opcion es agregar "eventos" a esto, pero como no se realmente que hace
+    cada una de las funciones es medio ciego ese intento */
+    updateADeviceStateLocal(deviceId, action, paramsArr ){
+      var deviceType;
+        for ( let i = 0; i < this.devices.length; i++)
+          if ( this.devices[i].id == deviceId){
+            deviceType = this.devices[i].type.name
+            switch (deviceType) {
+              case 'blinds':
+                console.log("BLINDS LOCALLY UPDATED");
+                switch(action){
+                  case 'open':
+                    this.devices[i].state.status = 'opened';
+                    break;
+                  case 'close':
+                    this.devices[i].state.status = 'closed';
+                    break;
+                  case 'setLevel':
+                    this.devices[i].state.currentLevel = paramsArr[0];
+                    break;
+                  default:
+                    console.log(`${action} is not a valid action for ${deviceType} `)
+                }
+                break;
+              case 'faucet':
+                console.log("FAUCET LOCALLY UPDATED");
+                switch(action){
+                  case 'open':
+                    this.devices[i].state.status = 'opened';
+                    break;
+                  case 'close':
+                    this.devices[i].state.status = 'closed';
+                    break;
+                  case 'dipense':
+                    this.devices[i].state.status = 'opened';
+                    break;
+                  default:
+                    console.log(`${action} is not a valid action for ${deviceType} `)
+                }
+                break;
+              case 'refrigerator':
+                console.log("REFRIGERATOR LOCALLY UPDATED");
+                switch(action){
+                  case 'setFreezerTemperature':
+                    this.devices[i].state.freezerTemperature = paramsArr[0];
+                    break;
+                  case 'setTemperature':
+                    this.devices[i].state.temperature = paramsArr[0];
+                    break;
+                  case 'setMode':
+                    this.devices[i].state.mode = paramsArr[0];
+                    break;
+                  default:
+                    console.log(`${action} is not a valid action for ${deviceType} `)
+                }
+                break;
+              case 'oven':
+                console.log("OVEN LOCALLY UPDATED");
+                switch(action){
+                  case 'turnOn':
+                    this.devices[i].state.status = 'on';
+                    break;
+                  case 'turnOff':
+                    this.devices[i].state.status = 'off';
+                    break;
+                  case 'setTemperature':
+                    this.devices[i].state.temperature = paramsArr[0];
+                    break;
+                  case 'setHeat':
+                    this.devices[i].state.heat = paramsArr[0];
+                    break;
+                  case 'setGrill':
+                    this.devices[i].state.grill = paramsArr[0];
+                    break;
+                  default:
+                    console.log(`${action} is not a valid action for ${deviceType} `)
+                }
+                break;
+              case 'vacuum':
+                console.log("VACUUM LOCALLY UPDATED");
+                /* Estas funcionalidades son freestyle */
+                switch(action){
+                  case 'start':
+                    this.devices[i].state.status = 'on';
+                    break;
+                  case 'pause':
+                    this.devices[i].state.status = 'paused';
+                    break;
+                  case 'dock':
+                    this.devices[i].state.status = 'docked';
+                    break;
+                  case 'setMode':
+                    this.devices[i].state.mode = paramsArr[0];
+                    break;
+                  case 'setLocation':
+                    this.devices[i].state.location = paramsArr[0];
+                    break;
+                  default:
+                    console.log(`${action} is not a valid action for ${deviceType} `)
+                }
+                break;
+              default:
+                console.log(`${deviceType} should be one of these : Blinds, Faucet, Refrigerator, Oven, Vacuum `);
+            }
+          }
+    },
 
 
     async deleteADevice(id){
@@ -394,20 +543,20 @@ export const useAppStore = defineStore('app', {
 
 
 
-    // De nuevo el problema con Actions[] !!! NO ESTA ADAPTADO A CAMBIOS EN ACCIONES
     async updateARoutine(id, newname, actions){
       try {
         var routineObj = {
           id : id,
-          actions : {
-            id : id
-          },
-          actionName : "open",
-          params : [],
+          name : newname,
+          actions : actions,
           meta : {}
         }
         var result = await RoutinesApi.modify(routineObj);
-        this.routines.find( routine => routine.id == id).name = newname;
+        // update local
+        for ( let i = 0; i < this.routines.length; i++ ){
+          if ( this.routines[i].id = id )
+            this.routines[i] = result;
+        }
         return result;
       } catch (error) {
         console.error(error);
@@ -442,6 +591,25 @@ export const useAppStore = defineStore('app', {
       }
     },
 
+
+
+    async deleteARoutine(id){
+      try {
+        var result = await RoutinesApi.remove(id);
+        removeItemFromArray(this.routines, id);
+        return result;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async deleteARoutineByName(name){
+      try {
+        var routineId = getIdByName(this.routines, name);
+        return this.deleteARoutine(routineId);
+      } catch (error) {
+        console.error(error);
+      }
+    },
 
 
     /* -------------------------------------------------- ACTIONS -------------------------------------------------- */

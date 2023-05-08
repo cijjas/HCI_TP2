@@ -50,12 +50,12 @@ const rules = {
     minLength: value => value.length >= 3 || 'Min 3 characters',
     maxLength: value => value.length <= 15 || 'Max 15 characters',
     required: value => !!value || 'Required.',
-}; 
+};
 const submitAddDevice = () =>{
     if(selectedDeviceName.value  && selectedDeviceRoom.value  && selectedDeviceType.value ){
         store.createADevice(selectedDeviceRoom.value, selectedDeviceName.value, selectedDeviceType.value);
         openCreateDialog();
-        
+
     }
     else{
     }
@@ -115,19 +115,19 @@ const submitAddDevice = () =>{
                             v-model="selectedDeviceType"
                             :rules="[rules.required]"
                             ></v-select>
-                        <v-text-field 
+                        <v-text-field
                             clearable
-                            :rules="[rules.required,rules.maxLength, rules.minLength]" 
-                            variant="outlined" 
-                            class="pa-8" 
-                            label="Device Name" 
+                            :rules="[rules.required,rules.maxLength, rules.minLength]"
+                            variant="outlined"
+                            class="pa-8"
+                            label="Device Name"
                             v-model="selectedDeviceName"></v-text-field>
-                            
-                        <v-btn 
-                            type="submit" 
-                            block  
-                            color="secondary" 
-                            class="ml-8 mb-8" 
+
+                        <v-btn
+                            type="submit"
+                            block
+                            color="secondary"
+                            class="ml-8 mb-8"
                             > CONFIRM </v-btn>
 
                             <v-dialog v-model="isCreateDialogOpen" width="500" color="gris" persistent>
@@ -139,7 +139,7 @@ const submitAddDevice = () =>{
                                     </div>
                                 </v-card>
                             </v-dialog>
-    
+
                     </v-form>
                 </v-card>
 
@@ -156,11 +156,11 @@ const submitAddDevice = () =>{
                     v-model="editDeviceName"
                     ></v-select>
                     <v-text-field
-                        clearable 
-                        :rules="[rules.maxLength, rules.minLength]" 
-                        variant="outlined" 
-                        class="pa-8" 
-                        label="New Name" 
+                        clearable
+                        :rules="[rules.maxLength, rules.minLength]"
+                        variant="outlined"
+                        class="pa-8"
+                        label="New Name"
                         v-model="newDeviceName"></v-text-field>
                     <v-btn elevation="0" color="secondary" class="ml-8 mb-8"  @click="() => { store.updateADeviceByName(selectedDeviceName, newDeviceName); clearVar(); }" > CONFIRM </v-btn>
                 </v-card>
