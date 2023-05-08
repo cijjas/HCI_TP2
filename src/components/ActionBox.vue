@@ -205,7 +205,7 @@
     }
     
     .bg-on {
-      background-color: #EECC66;
+      background-color: #F4CF6D;
     }
     
     .bg-off {
