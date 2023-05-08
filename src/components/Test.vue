@@ -12,8 +12,11 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
     try {
     // pido el update de los datos
     await store.getAllDevicesAPI();
-    await store.getDeviceActionsAPI();
     await store.getAllRoomsAPI();
+    await store.getAllRoutinesAPI();
+    await store.getDeviceActionsAPI();
+
+
     loading.value = false;          // una vez updateados los uso
     } catch (error) {
     console.error(error);
@@ -107,21 +110,7 @@ function executioner2(){
 }
 // Crea una rutina totalmente hardcodeado
 function executioner(){
-    var firstAction = store.createAction("bb36033602e050c6","open",[]);
-    var secondAction = store.createAction("bb36033602e050c6","close",[]);
-    var thirdAction = store.createAction("bb36033602e050c6","dispense",["l","25"]);
-    console.log(firstAction);
-    console.log(secondAction);
-    console.log(thirdAction);
-
-    var actionArr = [];
-    actionArr.push(firstAction);
-    actionArr.push(secondAction);
-    actionArr.push(thirdAction);
-
-    console.log(actionArr);
-    store.createARoutine("My New Routine",actionArr); // no falta un .value aca?
-
+    console.log(store.getARoutine("4af2c75e7a1aa09e"));
 }
 
 
@@ -142,6 +131,10 @@ function executioner(){
             <v-text class="text-h3" > Device Actions </v-text>
             <br>
             <v-text>{{ store.deviceActions }}</v-text>
+            <br>
+            <v-text class="text-h3" > Routines </v-text>
+            <br>
+            <v-text>{{ store.routines }}</v-text>
             <br>
 
 
@@ -183,7 +176,7 @@ function executioner(){
             <br>
             <br>
             <br>
-            <v-btn @click="executioner">HARDCODED TRIAL</v-btn>
+            <v-btn @click="executioner">TEST ROUTINE</v-btn>
             <v-btn @click="executioner2">Print pls</v-btn>
 
             <br>

@@ -3,24 +3,15 @@ import { onMounted } from '@vue/runtime-core';
 import { useAppStore } from '@/store/app';
 import { RoomApi } from '@/API/room.js';
 import { ref, computed, defineProps, defineEmits, reactive } from 'vue'
+import { getIdByName } from '@/Lib/lib';
 const store = useAppStore();
 
 
 const loading = ref(true);
 
 const selectedRoutineName = ref("");
-const newRoutineName = ref("");
-const creationRoutineName = ref("");
+
 const isCreateDialogOpen = ref(false);
-const actions = ref([]);
-const defaultAction = ref([{
-        device : {
-            id : "1230f46474ee97f1"
-        },
-        actionName : "turnOff",
-        params : [],
-        meta : {},
-    }]);
 
 
 function clearVar(){
@@ -40,10 +31,10 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
 });
 
 const openCreateDialog = () => {
-  isCreateDialogOpen.value = true;
-  setTimeout(() => {
+    isCreateDialogOpen.value = true;
+    setTimeout(() => {
     isCreateDialogOpen.value = false;
-  }, 2000);
+    }, 2000);
 };
 
 /* ------------------- CREAR RUTINA ------------------ */
@@ -75,7 +66,6 @@ function updateParams(selection){
 function updateParamValue(selection, index){
     selectedParams.value[index] = selection
 }
-
 function addAction(){
     routineActions.value.push(store.createAction(deviceObj2.value.id, selectedAction.value, selectedParams.value))
     actionsArr.value = []
@@ -83,6 +73,17 @@ function addAction(){
     selectedDevice.value = ""
     selectedAction.value = ""
     selectedParams.value = []
+}
+
+
+/* ------------------- UPDATE RUTINA ------------------ */
+const newRoutineName = ref("");
+const oldRoutineId = ref("");           // no cambia en el update, seria el old y el new
+const oldRoutineName = ref("");
+
+function updateRoutineId( selection ){
+    oldRoutineName.value = selection;
+    oldRoutineId.value = getIdByName(store.routines, oldRoutineName.value)
 }
 
 </script>
@@ -191,13 +192,14 @@ function addAction(){
                         <v-card-text class="text-h5 font-weight-bold">Update a Routine :</v-card-text>
                     </v-card-title>
                     <v-select
+                    @update:modelValue = "updateRoutineId($event)"
                     class="pl-8 pt-8 pr-8"
                     label="Select the Routine"
-                    :items="store.getRoutineNames"
-                    v-model="selectedRoutineName"
+                    :items="store.getRoutinesNames"
                     ></v-select>
                     <v-text-field class="pa-8" label="New Name" v-model="newRoutineName"></v-text-field>
-                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8"  @click="() => { store.updateARoutineByName(selectedRoutineName, newRoutineName); clearVar(); }" > CONFIRM </v-btn>
+                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8"
+                    @click="() => { store.updateARoutineName(oldRoutineId, newRoutineName); clearVar(); }" > CONFIRM ESTE BOTON TE JURO</v-btn>
                 </v-card>
 
                 <!-- DELETE A ROUTINES -->
@@ -208,10 +210,11 @@ function addAction(){
                     <v-select
                     class="pl-8 pt-8 pr-8"
                     label="Select the Routine"
-                    :items="store.getRoutineNames"
+                    :items="store.getRoutinesNames"
                     v-model="selectedRoutineName"
                     ></v-select>
-                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8"  @click="() => { store.deleteARoutineByName(selectedRoutineName); clearVar(); }" > CONFIRM </v-btn>
+                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8"
+                    @click="() => { store.deleteARoutineByName(selectedRoutineName); clearVar(); }" > CONFIRM </v-btn>
                 </v-card>
 
             </v-card>

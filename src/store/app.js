@@ -15,6 +15,7 @@ import CurtainBox from '@/components/DeviceComponents/CurtainBox.vue';
 import TapBox from '@/components/DeviceComponents/TapBox.vue';
 import FridgeBox from '@/components/DeviceComponents/FridgeBox.vue';
 import OvenBox from '@/components/DeviceComponents/OvenBox.vue';
+import { Api } from '@/API/api';
 
 /*
 
@@ -508,14 +509,36 @@ export const useAppStore = defineStore('app', {
     async getAllRoutinesAPI() {
       try {
         var result = await RoutinesApi.getAll();
-        this.routines = result;
+        // hay que guardarla mejor localmente
+        var routinesArr = []
+        for ( let i = 0; i < result.length; i++ ){
+          var routine = {
+            id : result[i].id,
+            name : result[i].name,
+            actions : [],
+            meta : {}
+          }
+          for ( let j = 0; j < result[i].actions.length; j++ ){
+            var action = {
+              device : {
+                id : result[i].actions[j].device.id
+              },
+              actionName : result[i].actions[j].actionName,
+              params : result[i].actions[j].params,
+              meta : {}
+            }
+            routine.actions.push(action)
+          }
+          routinesArr.push(routine)
+        }
+        this.routines = routinesArr
         return result;
       } catch (error) {
         console.error(error);
       }
     },
     getARoutine(id){
-      return this.routines.find( routines => routines.id == id);
+      return this.routines.find( routines => routines.id == id) || "Routine not found";
     },
     getARoutineByName(name){
       var routineId = getIdByName(this.routines, name);
@@ -534,16 +557,59 @@ export const useAppStore = defineStore('app', {
           meta : {}
         }
         var result = await RoutinesApi.add(routineObj);
-        this.routines.push(result);
+        this.routines.push(routineObj);
         return result;
       } catch (error) {
         console.error(error);
       }
     },
 
+/* {
+  "name": "good night",
+  "actions": [
+    {
+      "device": {
+        "id": "7a355fdb5b954ff5"
+      },
+      "actionName": "close",
+      "params": [],
+      "meta": {}
+    }],
+  "meta" :{}
+} */
 
+    async updateARoutineName(id, newname ){
+      console.log("UPDATING A ROUTINE BY NAME")
+      /* var actionsArr = []
+      var routine = this.getARoutine(id);
+      for ( let i = 0; i < routine.actions.length; i++ ){  // tomo cada accion dentro de la rutina
+        var actionObj = {
+          device : {
+            id : routine.actions[i].
+          }
+        }
+      } */
+
+
+      var routineObj = {
+        id : id,
+        name : newname,
+        actions : this.getARoutine(id).actions
+      }
+      console.log(routineObj)
+      console.log(this.getARoutine(id))
+
+      // remoto
+      var result = await RoutinesApi.modify(routineObj);
+      // local
+      for ( let i = 0; i < this.routines.length; i++ )
+        if ( this.routines[i].id = id )
+          this.routines[i].name = newname
+
+    },
 
     async updateARoutine(id, newname, actions){
+      console.log("UPDATING A ROUTINE NOOOOOOT BY NAME")
       try {
         var routineObj = {
           id : id,
@@ -551,7 +617,10 @@ export const useAppStore = defineStore('app', {
           actions : actions,
           meta : {}
         }
+        console.log(routineObj)
         var result = await RoutinesApi.modify(routineObj);
+        console.log(result)
+
         // update local
         for ( let i = 0; i < this.routines.length; i++ ){
           if ( this.routines[i].id = id )
@@ -611,6 +680,10 @@ export const useAppStore = defineStore('app', {
       }
     },
 
+    async executeARoutine(routineId){
+      var result = RoutinesApi.execute(routineId);
+
+    },
 
     /* -------------------------------------------------- ACTIONS -------------------------------------------------- */
     async getDeviceActionsAPI(){
