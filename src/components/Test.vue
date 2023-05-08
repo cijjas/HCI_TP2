@@ -110,7 +110,7 @@ function executioner2(){
 }
 // Crea una rutina totalmente hardcodeado
 function executioner(){
-    console.log(store.getARoutine("4af2c75e7a1aa09e"));
+    console.log(store.executeARoutine("4af2c75e7a1aa09e"));
 }
 
 
@@ -176,7 +176,7 @@ function executioner(){
             <br>
             <br>
             <br>
-            <v-btn @click="executioner">TEST ROUTINE</v-btn>
+            <v-btn @click="executioner">execute ROUTINE HARDCODEADa</v-btn>
             <v-btn @click="executioner2">Print pls</v-btn>
 
             <br>
