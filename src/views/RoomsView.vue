@@ -5,7 +5,7 @@
     import { reactive } from 'vue';
     import { ref, computed, defineProps, defineEmits } from 'vue'
     import { useAppStore } from '@/store/app';
-
+    import AddRoomsCard from '@/components/CreationComponents/AddRoomCard.vue'
     const store = useAppStore();
 
     onMounted(async () => {             // cuando se monta la pagina pido los datos
@@ -26,8 +26,9 @@
                 <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Rooms</v-card-title>
                 <v-divider color="gris"></v-divider>
             </v-row>
-            <v-row justify-end>
 
+            <v-row justify-end>
+                <AddRoomsCard> </AddRoomsCard>
                 <v-col cols="5" v-for="room in store.getAllRooms()" :key="room">
                     <RoomsBox class="grid-item" :roomName="room.name" :roomId="room.id"></RoomsBox>
                 </v-col>

@@ -133,7 +133,8 @@ const openCreateDialog = () => {
     border-radius: 30px;
     background-image: url('https://i.imgur.com/TN3egpF.png');
     background-size: cover;
-    background-position: 0px -70px
+    background-position: 0px -70px;
+    height: 600px;
   }
   .v-card__title {
     padding: 0;

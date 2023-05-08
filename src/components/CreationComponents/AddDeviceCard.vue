@@ -150,6 +150,10 @@ const submitAddDevice = () =>{
     background-color:  #D69923;
   }
   .actions-style {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     background-color:  #F4CF6D;
   }
   .title-style {
@@ -159,7 +163,8 @@ const submitAddDevice = () =>{
     border-radius: 30px;
     background-image: url('https://i.imgur.com/TN3egpF.png');
     background-size: cover;
-    background-position: 0px -70px
+    background-position: 0px -70px;
+    height: 600px;
   }
   .v-card__title {
     padding: 0;

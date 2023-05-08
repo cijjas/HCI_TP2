@@ -192,7 +192,7 @@ const props = defineProps({
 }
 
 .bg-on {
-  background-color: #F4CF6D;
+  background-color: #98B891;
 }
 
 .bg-off {

@@ -88,26 +88,26 @@ const openCreateDialog = () => {
     </v-card>
   </template>
   
-  <style scoped>
+<style scoped>
   .ok-button {
     width: 80px;
     color: #60d75a;
-}
-.check-icon {
-  font-size: 3rem;
-  color: #60d75a;
-}
-.card-title{
-  color: primary; /* Change the color to your desired value */
-  white-space: nowrap;
-  overflow: hidden;
-  margin-left: -10px;
-}
-.toggle-card-popup {
-  padding: 20px;
-  border-radius: 15px !important;
-  background: whitesmoke;
-  backdrop-filter: blur(7px);
+  } 
+  .check-icon {
+    font-size: 3rem;
+    color: #60d75a;
+  }
+  .card-title{
+    color: primary; /* Change the color to your desired value */
+    white-space: nowrap;
+    overflow: hidden;
+    margin-left: -10px;
+  }
+  .toggle-card-popup {
+    padding: 20px;
+    border-radius: 15px !important;
+    background: whitesmoke;
+    backdrop-filter: blur(7px);
 }
   .small-button-add {
     width: 100px;
@@ -129,10 +129,11 @@ const openCreateDialog = () => {
     border-radius: 30px;
     background-image: url('https://i.imgur.com/TN3egpF.png');
     background-size: cover;
-    background-position: 0px -70px
+    background-position: 0px -70px;
+    height: 600px;
   }
   .v-card__title {
     padding: 0;
   }
-  </style>
+</style>
   
