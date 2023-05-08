@@ -55,7 +55,6 @@ const submitAddDevice = () =>{
     if(selectedDeviceName.value  && selectedDeviceRoom.value  && selectedDeviceType.value ){
         store.createADevice(selectedDeviceRoom.value, selectedDeviceName.value, selectedDeviceType.value);
         openCreateDialog();
-        
     }
     else{
     }
@@ -117,7 +116,7 @@ const submitAddDevice = () =>{
                             ></v-select>
                         <v-text-field 
                             clearable
-                            :rules="[rules.required,rules.maxLength, rules.minLength]" 
+                            :rules="[rules.required, rules.maxLength, rules.minLength]" 
                             variant="outlined" 
                             class="pa-8" 
                             label="Device Name" 

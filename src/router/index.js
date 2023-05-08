@@ -61,6 +61,11 @@ const router = createRouter({
       component: () => import('../views/AddDeviceView.vue')
     },
     {
+      path: '/CreationView', // pruebas
+      name: 'CreationView',
+      component: () => import('../views/CreationView.vue')
+    },
+    {
       path: '/test',
       name: 'test',
       component: () => import('../views/TestView.vue')

@@ -13,7 +13,7 @@ export default {
 
 <template>
   <nav>
-    <v-app-bar app clipped-left color="primary" height="100">
+    <v-app-bar app   height="100"  style="background-image: url('https://i.imgur.com/Q96xVwS.png'); background-size: cover; color: whitesmoke">
       <v-row justify="space-between">
         <v-col cols="6">
           <v-btn to="/" size="x-large" text color="transparent" style="padding-left: 40px;">
@@ -96,6 +96,12 @@ export default {
                 </template>
                 <span>Test</span>
               </v-list-item>
+              <v-list-item to="/CreationView" class="side-btn">
+                <template v-slot:prepend>
+                  <v-icon class="green-text" size="24">mdi-close</v-icon>
+                </template>
+                <span>Test</span>
+              </v-list-item>
         </v-list>
       
       </v-navigation-drawer>
@@ -105,6 +111,7 @@ export default {
 </template>
 
 <style >
+
 .nav-btn {
   margin: 10px;
   transition: all .2s ease-in-out;

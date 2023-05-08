@@ -7,11 +7,10 @@ import NavBar from './components/NavBar.vue';
 </script>
 <!-- O.o -->
 <template>
-  <v-app class="app elevation-0">
-  
+  <v-app class="app elevation-0" >
+    <NavBar></NavBar>
+    <RouterView />
 
-  <NavBar></NavBar>
-  <RouterView />
   </v-app>
 
 </template>
@@ -19,7 +18,8 @@ import NavBar from './components/NavBar.vue';
 <style scoped>
 .v-application {
   background-color: transparent !important;
-  margin-left: 70px;
+  margin-left: 50px;
+  width: 1780px;
 
 }
 
