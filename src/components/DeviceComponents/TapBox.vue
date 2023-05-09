@@ -134,7 +134,7 @@ const props = defineProps({
           </v-row>
         </v-card-text>
       </v-card-action>
-      <v-dialog v-model="isDialogOpen" width="1024" persistent>
+      <v-dialog v-model="isDialogOpen" width="700" persistent>
       <v-card class="toggle-card-popup">
 
         <v-card-title class="font-weight-bold text-h5 card-title">Faucet Settings</v-card-title>
@@ -174,8 +174,8 @@ const props = defineProps({
   cursor: pointer;
   padding: 16px;  
   border-radius: 10px;
-  background-color: #F4CF6D;
-  background-image: url('https://i.imgur.com/X5XbwP4.png');
+  background-color: #a3c1d6;
+  background-image: url('./DeviceAssets/tap-wave.png');
   background-size: cover;
   transition: all .2s ease-in-out;
   height: 300px;
@@ -185,8 +185,8 @@ const props = defineProps({
   cursor: pointer;
   padding: 16px;  
   border-radius: 10px;
-  background-color: #F4CF6D;
-  background-image: url('https://i.imgur.com/X5XbwP4.png');
+  background-color: #a3c1d6;
+  background-image: url('./DeviceAssets/tap-wave.png');
   background-size: cover;
   transition: all .2s ease-in-out;
   height: 300px;
@@ -218,23 +218,13 @@ const props = defineProps({
 .toggle-card-popup {
   padding: 30px;
   border-radius: 15px !important;
-
-  background: radial-gradient(at 80% 50%, rgba(210, 213, 123, 0.861), rgb(244, 207, 109));
+  background-color: #f4e8c6ae;
+  backdrop-filter: blur(7px);
+  background-image: url('./DeviceAssets/tap-wave.png');
+  background-size: cover;
   backdrop-filter: blur(7px);
 }
-.toggle-card-popup::before {
-  content: "";
-  position: absolute;
-  top: 0px;
-  left: -400px;
-  width: 100%;
-  height: 100%;
-  background-image: url("./DeviceAssets/del-tap.png");
-  background-size: 70%;
-  background-position: calc(100% - 0px) top;
-  background-repeat: no-repeat;
-  opacity: 0.05;
-}
+
 .small-button-save {
   width: 240px;
   height: 40px;

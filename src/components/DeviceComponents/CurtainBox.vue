@@ -80,8 +80,8 @@ const props = defineProps({
 
 <template>
   <v-card
-    :class="{'bg-on': isOn, 'bg-off': !isOn}"
-    :style="{ backgroundColor: computedBackgroundColor }"
+    :class="{'toggle-card-on': isOn, 'toggle-card-off': !isOn}"
+    :style="{ backgroundColor: computedBackgroundColor , backgroundPositionX: isOn ? '40%' : '100%'}"
     class="toggle-card"
     @click="toggleCard"
   >
@@ -137,7 +137,7 @@ const props = defineProps({
     </v-row>
 
 
-    <v-dialog v-model="isDialogOpen" width="1024"  @click:outside="cancelSettings">
+    <v-dialog v-model="isDialogOpen" width="700"  @click:outside="cancelSettings">
       <v-card class="toggle-card-popup">
 
         <v-card-title class="font-weight-bold text-h5 card-title">Blinds Settings</v-card-title>
@@ -164,21 +164,46 @@ const props = defineProps({
     </v-dialog>
 
   </v-card>
-
 </template>
 
 
 
 <style scoped>
-.toggle-card {
+.toggle-card-on {
   cursor: pointer;
   padding: 16px;
   border-radius: 10px;
   background-color: #F4CF6D;
+  background-image: url("./DeviceAssets/del-cur-frame.png");
+
+  background-size: cover;
   transition: all .5s ease-in-out;
   height: 300px;
   width: 400px;
 }
+
+
+.toggle-card-off{
+  position: relative;
+  padding: 16px;
+  border-radius: 10px;
+  
+  background-image: url('./DeviceAssets/del-cur-frame.png');
+  background-size: cover;
+  background-position: top;
+  height: 300px;
+  width: 400px;
+}
+.toggle-card-off::before {
+  content: "";
+  position: absolute;
+  background-image: url('./DeviceAssets/del-cur-frame.png');
+  background-size: cover;
+  background-position: top;
+  transition: background-position 0.5s ease-in-out;
+}
+
+
 
 .toggle-card::before {
     content: "";
@@ -188,7 +213,6 @@ const props = defineProps({
     bottom: 300;
     width: 100%;
     height: 100%;
-    background-image: url("./DeviceAssets/del-curtain.png");
     background-size: 80%;
     background-position: calc(100% - 0px) top;
     background-repeat: no-repeat;
@@ -210,21 +234,20 @@ const props = defineProps({
 .toggle-card-popup {
   padding: 30px;
   border-radius: 15px !important;
-  background: radial-gradient(at 80% 50%, rgba(227, 216, 110, 0.838), rgba(244, 207, 109, 0.9));
-  backdrop-filter: blur(7px);
+  background-color: #f4e8c6ae;
+  backdrop-filter: blur(8px);
 }
 .toggle-card-popup::before {
   content: "";
   position: absolute;
   top: 0px;
-  left: -400px;
+  left: 0px;
   width: 100%;
   height: 100%;
-  background-image: url("./DeviceAssets/del-curtain.png");
-  background-size: 50%;
-  background-position: calc(100% - 0px) top;
+  background-image: url('./DeviceAssets/del-cur-frame.png');
+  background-size: cover;
   background-repeat: no-repeat;
-  opacity: 0.05;
+  opacity: 1;
 }
 .small-button-save {
   width: 240px;
@@ -242,14 +265,6 @@ const props = defineProps({
   background-color: transparent;
 }
 
-.bg-on {
-  background-color: #F4CF6D;
-}
-
-/* background color when turned off */
-.bg-off {
-  background-color: #8C783A;
-}
 
 
 .slider-value {

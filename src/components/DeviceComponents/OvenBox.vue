@@ -35,18 +35,19 @@ const props = defineProps({
   const tempTemperatureValue = ref(temperatureValue.value);
   
   const computedShadow = computed(() => {
-  if (tempTemperatureValue.value ==90) { // if value is not defined
-    return 'inset -5px 40px 90px rgba(0, 0, 0, 0), inset -10px -40px 40px rgba(0, 0, 0, 0)'; // return transparent shadow
-  }
-  const color1 = isOn.value ? [244, 207, 109] : [140, 120, 58] ; // RGB values for #EECC66 and #8C783A
-  const color2 = [236, 94, 63]; // RGB values for #EC5E3F
-  const ratio = (tempTemperatureValue.value-90) / 100;
-  const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
-  return `inset -5px 40px 90px rgba(${color.join(',')},1), inset -10px -40px 40px rgba(${color.join(',')}, 1)`;
-});
-  const computedShadow2 = computed(() => {
-    const color1 =  [140, 120, 58] ; // RGB values for #EECC66 and #8C783A
+    if (tempTemperatureValue.value ==90) { // if value is not defined
+      return 'inset -5px 40px 90px rgba(0, 0, 0, 0), inset -10px -40px 40px rgba(0, 0, 0, 0)'; // return transparent shadow
+    }
+    const color1 = isOn.value ? [244, 172, 109] : [140, 120, 58] ; 
     const color2 = [236, 94, 63]; // RGB values for #EC5E3F
+    const ratio = (tempTemperatureValue.value-90) / 50; // multiply ratio by 2 for more rapid increase
+    const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
+    return `inset -5px 40px 90px rgba(${color.join(',')},1), inset -10px -40px 40px rgba(${color.join(',')}, 1)`;
+  });
+
+  const computedShadow2 = computed(() => {
+    const color1 =  [115, 110, 94] ; 
+    const color2 = [236, 94, 63]; 
     const ratio = (tempTemperatureValue.value-90) / 100;
     const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
     return `inset 0px 2px 30px rgba(${color.join(',')},1), inset 0px 3px 2px rgba(${color.join(',')}, 1)`;
@@ -351,8 +352,8 @@ const props = defineProps({
   cursor: pointer;
   padding: 16px;
   border-radius: 10px;
-  background-color: #F4CF6D;
-  background-image:url('https://i.imgur.com/0T37Y5i.png');
+  background-color: #f4ac6d;
+  background-image:url('./DeviceAssets/fuego.png');
   background-size: cover;
   transition: all .2s ease-in-out;
   height: 300px;
@@ -364,8 +365,8 @@ const props = defineProps({
   cursor: pointer;
   padding: 16px;
   border-radius: 10px;
-  background-color: #F4CF6D;
-  background-image: url('https://i.imgur.com/0T37Y5i.png');
+  background-color: #f4ac6d;
+  background-image: url('./DeviceAssets/fuego.png');
   background-size: cover;
   transition: all .2s ease-in-out;
   height: 300px;
@@ -442,23 +443,13 @@ const props = defineProps({
 .toggle-card-popup {
   padding: 30px;
   border-radius: 15px !important;
-  background: radial-gradient(at 80% 50%, rgba(240, 147, 65, 0.739), rgba(244, 207, 109, 0.99));
-  backdrop-filter: blur(7px);
+  background-image: url("./DeviceAssets/fuego.png");
+  background-color: #f4e8c6ae;
+  backdrop-filter: blur(8px);
+  background-size: cover;
+  background-color: radial-gradient(at 80% 50%, rgba(240, 147, 65, 0.739), rgba(244, 207, 109, 0.99));
 }
 
-.toggle-card-popup::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("./DeviceAssets/del-fire.png");
-  background-size: 70%;
-  background-position: calc(100% - 0px) top;
-  background-repeat: no-repeat;
-  opacity: 0.05;
-}
 
 
 .toggle-card::before {

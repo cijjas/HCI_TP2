@@ -322,11 +322,10 @@ const props = defineProps({
   cursor: pointer;
   padding: 16px;  
   border-radius: 20px;
-  background-color: #F4CF6D;
+  background-image: url("./DeviceAssets/de-ice.png");
   transition: all .2s ease-in-out;
   height: 300px;
   width: 400px;
-  background: radial-gradient(at 80% 60%, rgb(100, 202, 227), rgba(255, 248, 108, 0.846));
 
 }
 
@@ -338,7 +337,7 @@ const props = defineProps({
     bottom: 300;
     width: 100%;
     height: 100%;
-    background-image: url("./DeviceAssets/del-snow-flake.png");
+    background-image: url("./DeviceAssets/de-ice.png");
     background-size: 50%;
     background-position: calc(100% - 0px) top;
     background-repeat: no-repeat;
@@ -413,24 +412,11 @@ const props = defineProps({
 .toggle-card-popup {
   padding: 30px;
   border-radius: 15px !important;
-  background-color: #F4CF6D;
-  background: radial-gradient(at 80% 50%, rgb(235, 211, 103), rgba(130, 193, 176, 0.766));
-  backdrop-filter: blur(7px);
+  background-image: url("./DeviceAssets/de-ice.png");
+  backdrop-filter: blur(50px);
 }
 
-.toggle-card-popup::before {
-  content: "";
-  position: absolute;
-  top: 0px;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("./DeviceAssets/del-snow-flake.png");
-  background-size: 80%;
-  background-position: calc(100% - 0px) top;
-  background-repeat: no-repeat;
-  opacity: 0.03;
-}
+
 
 .temp-small-button-left {
   width: 200px;
