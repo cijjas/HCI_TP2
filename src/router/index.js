@@ -28,10 +28,9 @@ const router = createRouter({
     /* Para acceder a rutinas en particular y ver las acciones dentro de esa misma*/
     {
       path: '/routines/:routineName',
-      name: 'routine',
-      params: ':routineId',
+      name: 'routineview',
       component: () => import('../views/RoutineActionsView.vue')
-    },
+    },    
     {
       path: '/scenes',
       name: 'scenes',

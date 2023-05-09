@@ -40,7 +40,7 @@
     
         <v-dialog v-model="isDeleteDialogOpen" width="1024" persistent>
             <v-card class="toggle-card-popup">
-                <v-card-title class="headline">Are you sure you want to delete {{ deviceName }}?</v-card-title>
+                <v-card-title class="headline">Are you sure you want to delete {{ actionName }}?</v-card-title>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="primary" variant="plain" @click="deleteRoom();" >Delete</v-btn>
@@ -53,8 +53,8 @@
             <v-card class="toggle-card-popup">
                 <div class="text-center">
                     <v-icon icon="mdi-check-circle-outline" class="check-icon"></v-icon>
-                    <v-card-title prepend-icon="mdi-check-circle-outline" class="font-weight-bold text-h5 card-title">Room Deleted</v-card-title>
-                    <v-card-text>Room '{{ creationDeviceName }}' successfully deleted</v-card-text>
+                    <v-card-title prepend-icon="mdi-check-circle-outline" class="font-weight-bold text-h5 card-title">Action Deleted</v-card-title>
+                    <v-card-text>Action '{{ actionName }}' successfully deleted</v-card-text>
                 </div>
             </v-card>
         </v-dialog>
@@ -66,9 +66,8 @@
     import { useAppStore } from '@/store/app';
     const store = useAppStore();
     
-    //QUE TIPO DE DATO ES UN DEVICE???
     const props = defineProps({
-      device: {
+      deviceId: {
         type: String,
         required: true
       },
@@ -86,14 +85,17 @@
       }
     })
       
-      const device = ref(props.device);
-      const deviceName = device.value.name; //ej: sony speaker, etc.
-      const deviceTypeId = device.value.type.id;
-      const deviceTypeName = device.value.type.name; //ej: refrigerator, oven, etc.
+      const deviceId = ref(props.deviceId);
       const actionName = ref(props.actionName);
       const params = ref(props.params);
       const routineId = ref(props.routineId);
-      const routineName = store.getARoutine(routineId.value).name;
+
+      const device = store.getADevice(deviceId.value);
+      const deviceName = device.name; //ej: sony speaker, etc.
+      const deviceTypeId = device.type.id;
+      const deviceTypeName = device.type.name; //ej: refrigerator, oven, etc.
+      
+      //const routineName = store.getARoutine(routineId.value).name;
       
       const tempActionName = ref('');
       const isDialogOpen = ref(false);
@@ -113,6 +115,7 @@
             actionName.value = tempActionName.value; // Update the roomName variable with the new value
             
             //UPDATE AN ACTION !!!
+            //borro action, uso los datos que se mantienen igual y creo una nueva accion (createAction). Pusheo a rutina
         }
         openEditDialog();
         clearVar();

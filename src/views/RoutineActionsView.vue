@@ -1,9 +1,23 @@
 // pagina de una rutina especifica (muestra sus acciones)
 <script setup>
+    import ActionBox from '../components/ActionBox.vue';
+    import { onMounted } from '@vue/runtime-core';
     import { reactive } from 'vue';
     import { ref, computed, defineProps, defineEmits } from 'vue'
     import { useAppStore } from '@/store/app';
+    import { useRoute } from 'vue-router'
 
+    onMounted(async () => {             // cuando se monta la pagina pido los datos
+    try {
+    // pido el update de los datos
+    await store.getAllRoomsAPI();
+    await store.getAllDevicesAPI();
+    await store.getAllRoutinesAPI();
+    } catch (error) {
+    console.error(error);
+    }
+    }); 
+    
     const store = useAppStore();
     const props = defineProps({
     routineId: {
@@ -12,16 +26,18 @@
     }
   });
 
-    //usando el ID de la rutina, accedo al array de sus acciones
-    const routineId = ref(props.routineId);
-    const routineName = store.getARoutine(routineId.value).name;
-    const actions = store.getARoutine(routineId.value).actions;
+    //uso el route para encontrar nombre de rutina -> uso nombre de rutina para conseguir ID y resto de los datos
+    const route = useRoute();
+    const routineName = route.params.routineName;
+
+    const routine = store.getARoutineByName(routineName);
+    const actions = routine.actions;
+   
 
     
 </script>
 
 <template>
-    <!-- <cComponent> -->
     <main>
         <div class="canvas">
             <v-card class="vcard">
@@ -31,7 +47,7 @@
                 <v-row justify-end>
                         <!-- iterar sobre array de actions de un cuarto -->
                         <v-col cols="5" v-for="action in actions">
-                            <ActionBox class="grid-item" :device="action.device" :actionName="action.actionName" :params="action.params" :routineId="routineId"></ActionBox>
+                            <ActionBox class="grid-item" :deviceId="action.device.id" :actionName="action.actionName" :params="action.params" :routineId="routine.id"></ActionBox>
                         </v-col>
 
                 </v-row>  

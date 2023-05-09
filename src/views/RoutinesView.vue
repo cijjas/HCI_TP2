@@ -11,6 +11,8 @@
     onMounted(async () => {             // cuando se monta la pagina pido los datos
     try {
     // pido el update de los datos
+    await store.getAllRoomsAPI();
+    await store.getAllDevicesAPI();
     await store.getAllRoutinesAPI();
     } catch (error) {
     console.error(error);
