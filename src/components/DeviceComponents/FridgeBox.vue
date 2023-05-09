@@ -79,70 +79,74 @@ const props = defineProps({
 
 <template>
   <v-card :class="{'bg-on': isOn}" class="toggle-card"  @click="toggleCard">
-      <v-row>
-        <v-col cols="6">
-          <v-toolbar  :rounded="true" class="rounded-toolbar" transparent>
-            
-            <v-btn @click="openFridgeDialog" text color="transparent">
-              <v-toolbar-title class="font-weight-bold text-h4 card-title">{{deviceName}}</v-toolbar-title>
-              <v-tooltip
-                activator="parent"
-                location="right"
-              >Edit</v-tooltip>
-            </v-btn>
-            <v-spacer></v-spacer>
-            
-          </v-toolbar>
+    
+    <v-row>
+      <v-col cols="12">
+        <v-toolbar  :rounded="true" class="rounded-toolbar" transparent>
+          
+          <v-btn @click="openFridgeDialog" text color="transparent">
+            <v-toolbar-title class="font-weight-bold text-h4 card-title">{{deviceName}}</v-toolbar-title>
+            <v-tooltip
+              activator="parent"
+              location="right"
+            >Edit</v-tooltip>
+          </v-btn>
+          <v-spacer></v-spacer>
+          
+        </v-toolbar>
 
-          <v-row no-gutters style="padding-bottom: 0px">
-            <v-col cols="6">
-              <v-subheader class="ml-4">Ubicación</v-subheader>
-            </v-col>
-          </v-row>
-        </v-col>
-
-        <v-col cols="6" style="padding-top: 40px; padding-left: 40px;">
-              <v-row>
-                <v-text  class=" font-weight-bold text-h6 mb-0 icier-text"> {{ tempFreezerTemperature }}°C </v-text>
-              </v-row>
-              <v-row>
-                <v-text  class="font-weight-bold text-h3 mb-0 ice-text" >{{ tempFridgeTemperature }}°C </v-text>
-              </v-row>
-        </v-col>
-      </v-row>
-      <!-- locations for-->
-      
-            
-        <v-row no-gutters class="button-row">
-          <v-col cols="auto" class="ml-auto">
-            <v-row no-gutters>
-              <v-col cols="auto" style="padding-top: 40px">
-
-                  <v-btn :color="!fridgeMode ? 'primary' : 'offcolor'" 
-                  @click.stop="fridgeMode = 0" 
-                  class="secondary text-right small-button-left"
-                    >Normal
-                  </v-btn>
-                
-                  <v-btn 
-                    :color="fridgeMode ===1 ? 'primary' : 'offcolor'"
-                    @click.stop="fridgeMode = 1" 
-                    class="text-right small-button-center"
-                    >fiesta
-                  </v-btn>
-                  <v-btn 
-                    :color="fridgeMode===2 ? 'primary' : 'offcolor'"
-                    @click.stop="fridgeMode = 2" 
-                    class="text-right small-button-right"
-                    >Vacaciones
-                  </v-btn>
-              </v-col>
-            </v-row>
+        <v-row no-gutters style="padding-bottom: 0px">
+          <v-col cols="6">
+            <v-subheader class="ml-4">Ubicación</v-subheader>
           </v-col>
-
         </v-row>
+      </v-col>
 
-        <v-dialog v-model="isDialogOpen" width="1024" @click:outside="cancelSettings">
+      
+    </v-row>
+    
+    <v-row style="margin-top: -10px;">
+
+      <v-spacer> </v-spacer>
+      <v-col cols="6" >
+              <v-row >
+                <v-text  class=" font-weight-bold text-h5 mb-0 icier-text"> {{ tempFreezerTemperature }}°C </v-text>
+              </v-row>
+              <v-row style="margin-top: -20px">
+                <v-text  class="font-weight-bold  mb-0 ice-text " style="font-size:70px;">{{ tempFridgeTemperature }}°C </v-text>
+              </v-row>
+        </v-col>
+    </v-row>
+
+
+    <v-row no-gutters class="button-row" style="padding-bottom:10px ;">
+      <v-col cols="auto" class="ml-auto">
+          <v-col cols="auto" >
+
+              <v-btn :color="!fridgeMode ? 'primary' : 'offcolor'" 
+              @click.stop="fridgeMode = 0" 
+              class="secondary text-right small-button-left"
+                >Normal
+              </v-btn>
+            
+              <v-btn 
+                :color="fridgeMode ===1 ? 'primary' : 'offcolor'"
+                @click.stop="fridgeMode = 1" 
+                class="text-right small-button-center"
+                >fiesta
+              </v-btn>
+              <v-btn 
+                :color="fridgeMode===2 ? 'primary' : 'offcolor'"
+                @click.stop="fridgeMode = 2" 
+                class="text-right small-button-right"
+                >Vacaciones
+              </v-btn>
+          </v-col>
+      </v-col>
+
+    </v-row>
+
+    <v-dialog v-model="isDialogOpen" width="1024" @click:outside="cancelSettings">
           <v-card class="toggle-card-popup">
         <v-card-title class="font-weight-bold text-h5 card-title">Fridge Settings</v-card-title>
         <v-card-text>
@@ -308,6 +312,38 @@ const props = defineProps({
 
 
 <style scoped>
+.button-row {
+  position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+.toggle-card {
+  cursor: pointer;
+  padding: 16px;  
+  border-radius: 20px;
+  background-color: #F4CF6D;
+  transition: all .2s ease-in-out;
+  height: 300px;
+  width: 400px;
+  background: radial-gradient(at 80% 60%, rgb(100, 202, 227), rgba(255, 248, 108, 0.846));
+
+}
+
+.toggle-card::before {
+    content: "";
+    position: absolute;
+    top: 1px;
+    left: 0px;
+    bottom: 300;
+    width: 100%;
+    height: 100%;
+    background-image: url("./DeviceAssets/del-snow-flake.png");
+    background-size: 50%;
+    background-position: calc(100% - 0px) top;
+    background-repeat: no-repeat;
+    opacity: 0.05;
+}
 .delete-button {
   width: 200px;
   height: 40px;
@@ -412,32 +448,7 @@ const props = defineProps({
   border-radius: 0px 10px 10px 0px;
 }
 
-.toggle-card {
-  cursor: pointer;
-  padding: 16px;  
-  border-radius: 10px;
-  background-color: #F4CF6D;
-  transition: all .2s ease-in-out;
-  height: 200px;
-  width: 400px;
-  background: radial-gradient(at 80% 50%, rgba(127, 212, 233, 0.881), rgb(245, 213, 86));
 
-}
-
-.toggle-card::before {
-    content: "";
-    position: absolute;
-    top: 1px;
-    left: 0px;
-    bottom: 300;
-    width: 100%;
-    height: 100%;
-    background-image: url("./DeviceAssets/del-snow-flake.png");
-    background-size: 50%;
-    background-position: calc(100% - 0px) top;
-    background-repeat: no-repeat;
-    opacity: 0.05;
-}
 .toggle-card:hover {
   box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
 }

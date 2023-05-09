@@ -42,7 +42,7 @@ const openCreateDialog = () => {
 </script>
 
 <template>
-    <v-card width="500" class="mx-auto card-style">
+    <v-card width="450" class="mx-auto card-style">
       <v-toolbar color="transparent" dense dark style="height: 120px;">
         <v-col cols="12" >
             <v-row >

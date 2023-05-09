@@ -31,8 +31,8 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
           <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Home</v-card-title>
           <v-divider color="gris"></v-divider>
         </v-row>
+        <AddDeviceCard></AddDeviceCard>
         <v-row justify-end>
-          <AddDeviceCard></AddDeviceCard>
           <v-layout justify-start>
             <v-flex v-for="c in store.getComponents()" :key="c.id" xs12 sm6 md4 lg3>
               <v-card class="grid-item">

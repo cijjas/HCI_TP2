@@ -4,6 +4,7 @@
     import { onMounted } from '@vue/runtime-core';
     import { ref, computed, defineProps, defineEmits } from 'vue'
     import { useAppStore } from '@/store/app';
+    import AddRoutineCard from '@/components/CreationComponents/AddRoutineCard.vue'
 
     const store = useAppStore();
 
@@ -19,6 +20,7 @@
 
 <template>
     <main>
+        <AddRoutineCard></AddRoutineCard>
         <v-card class="vcard elevation-0" color="transparent">
             <v-row style="margin-top: 20px;">
                 <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Routines</v-card-title>
@@ -26,9 +28,9 @@
             </v-row>
             
             <v-row justify-end>
-                    <v-col cols="5" v-for="routine in store.getAllRoutines()" :key="room">
-                        <RoutinesBox class="grid-item" :routineName="routine.name" :routineId="routine.id" :actionsCount="routine.actions.length"></RoutinesBox>
-                    </v-col>
+                <v-col cols="5" v-for="routine in store.getAllRoutines()" :key="room">
+                    <RoutinesBox class="grid-item" :routineName="routine.name" :routineId="routine.id" :actionsCount="routine.actions.length"></RoutinesBox>
+                </v-col>
             </v-row>  
         </v-card>
     </main>

@@ -69,8 +69,7 @@ const props = defineProps({
 
 <template>
     <v-card
-    :class="{'bg-on': isOn, 'bg-off': !isOn}"
-    class="toggle-card"
+    :class="{'toggle-card-on': isOn, 'toggle-card-off': !isOn}"
     @click="toggleCard">
 
       <v-toolbar :rounded="true" class="rounded-toolbar" @click:outside="cancelSettings">
@@ -99,41 +98,42 @@ const props = defineProps({
         </v-col>
       </v-row>
 
-      <v-card-text>
-        <v-row >
-          <v-col>
-              <v-text-field 
-                  v-model="amountValue" 
-                  type="number" 
-                  label="Amount" 
-                  variant="solo" 
+      <v-card-action class="actions-style" style="height: 90px; margin: 20px ">
+        <v-card-text>
+          <v-row >
+            <v-col>
+                <v-text-field 
+                    v-model="amountValue" 
+                    type="number" 
+                    label="Amount" 
+                    variant="solo" 
+                    :disabled="!isOn" 
+                    :min="0"
+                    :max="100"  
+                    class="rounded-input green-text" 
+                    bg-color='transparent' flat/>
+            </v-col>
+            <v-col >
+              <v-select 
+                  v-model="selectedUnit" 
                   :disabled="!isOn" 
-                  :min="0"
-                  :max="100"  
-                  class="rounded-input green-text" 
-                  bg-color='transparent' flat/>
-          </v-col>
-          <v-col >
-            <v-select 
-                v-model="selectedUnit" 
+                  :items="unit" 
+                  label="Unit" 
+                  variant="solo" 
+                  class="rounded-select green-text"   
+                  bg-color='transparent' flat />
+            </v-col>
+            <v-col >
+              <v-btn 
                 :disabled="!isOn" 
-                :items="unit" 
-                label="Unit" 
-                variant="solo" 
-                class="rounded-select green-text"   
-                bg-color='transparent' flat />
-          </v-col>
-          <v-col >
-            <v-btn 
-              :disabled="!isOn" 
-              color="primary" 
-              @click="handleButtonClick();" 
-              class="small-button"
-              >Dispense</v-btn>
-          </v-col>
-        </v-row>
-      </v-card-text>
-
+                color="primary" 
+                @click="handleButtonClick();" 
+                class="small-button"
+                >Dispense</v-btn>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card-action>
       <v-dialog v-model="isDialogOpen" width="1024" persistent>
       <v-card class="toggle-card-popup">
 
@@ -164,6 +164,44 @@ const props = defineProps({
 </template>
 
 <style scoped>
+.actions-style {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+.toggle-card-on {
+  cursor: pointer;
+  padding: 16px;  
+  border-radius: 10px;
+  background-color: #F4CF6D;
+  background-image: url('https://i.imgur.com/X5XbwP4.png');
+  background-size: cover;
+  transition: all .2s ease-in-out;
+  height: 300px;
+  width: 400px;
+}
+.toggle-card-off {
+  cursor: pointer;
+  padding: 16px;  
+  border-radius: 10px;
+  background-color: #F4CF6D;
+  background-image: url('https://i.imgur.com/X5XbwP4.png');
+  background-size: cover;
+  transition: all .2s ease-in-out;
+  height: 300px;
+  width: 400px;
+}
+.toggle-card-off::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.5; /* Change this value to adjust opacity */
+  background-color: black; /* Change this value to adjust color */
+}
 .delete-button {
   width: 200px;
   height: 40px;
@@ -226,30 +264,7 @@ const props = defineProps({
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
-.toggle-card {
-  cursor: pointer;
-  padding: 16px;  
-  border-radius: 10px;
-  background-color: #F4CF6D;
-  transition: all .2s ease-in-out;
-  height: 200px;
-  width: 400px;
-
-}
-.toggle-card::before {
-    content: "";
-    position: absolute;
-    top: 5px;
-    left: 30px;
-    bottom: 300;
-    width: 100%;
-    height: 100%;
-    background-image: url("./DeviceAssets/del-tap.png");
-    background-size: 50%;
-    background-position: calc(100% - 0px) top;
-    background-repeat: no-repeat;
-    opacity: 0.05;
-}
+  
 .toggle-card:hover {
   box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
 }

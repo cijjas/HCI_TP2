@@ -35,12 +35,15 @@ const props = defineProps({
   const tempTemperatureValue = ref(temperatureValue.value);
   
   const computedShadow = computed(() => {
-    const color1 = isOn.value ? [244, 207, 109] : [140, 120, 58] ; // RGB values for #EECC66 and #8C783A
-    const color2 = [236, 94, 63]; // RGB values for #EC5E3F
-    const ratio = (tempTemperatureValue.value-90) / 100;
-    const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
-    return `inset -5px 40px 90px rgba(${color.join(',')},1), inset -10px -40px 40px rgba(${color.join(',')}, 1)`;
-  });
+  if (tempTemperatureValue.value ==90) { // if value is not defined
+    return 'inset -5px 40px 90px rgba(0, 0, 0, 0), inset -10px -40px 40px rgba(0, 0, 0, 0)'; // return transparent shadow
+  }
+  const color1 = isOn.value ? [244, 207, 109] : [140, 120, 58] ; // RGB values for #EECC66 and #8C783A
+  const color2 = [236, 94, 63]; // RGB values for #EC5E3F
+  const ratio = (tempTemperatureValue.value-90) / 100;
+  const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
+  return `inset -5px 40px 90px rgba(${color.join(',')},1), inset -10px -40px 40px rgba(${color.join(',')}, 1)`;
+});
   const computedShadow2 = computed(() => {
     const color1 =  [140, 120, 58] ; // RGB values for #EECC66 and #8C783A
     const color2 = [236, 94, 63]; // RGB values for #EC5E3F
@@ -108,9 +111,8 @@ const props = defineProps({
 
 <template>
   <v-card
-    :class="{'bg-on': isOn, 'bg-off': !isOn}"
+    :class="{'toggle-card-on': isOn, 'toggle-card-off': !isOn}"
     :style="{ boxShadow: computedShadow}"
-    class="toggle-card"
     @mousover="grow"
     @mouseout="shrink"
     @click="toggleCard"
@@ -147,12 +149,20 @@ const props = defineProps({
       <v-col cols="6">
         <v-subheader class="ml-1">Location</v-subheader>
       </v-col>
-      <v-col cols="6">
-        <v-text  class=" font-weight-bold text-h3 mb-0 green-text"> {{ tempTemperatureValue }}°C </v-text>
-      </v-col>
+    </v-row>
+    
+    
+    <v-row >
+      <v-spacer> </v-spacer>
+      <v-col cols="6" >
+        
+        <v-row >
+          <v-text  class=" font-weight-bold text-h2 mb-0 green-text"> {{ tempTemperatureValue }}°C </v-text>
+              </v-row>
+        </v-col>
     </v-row>
 
-    <v-row no-gutters class="button-row">
+    <v-row no-gutters class="mr-5 ml-5" style="margin-top: 40px">
       <v-slider
         color="primary"
         v-model="tempTemperatureValue"
@@ -337,6 +347,42 @@ const props = defineProps({
 
 
 <style scoped>
+.toggle-card-on {
+  cursor: pointer;
+  padding: 16px;
+  border-radius: 10px;
+  background-color: #F4CF6D;
+  background-image:url('https://i.imgur.com/0T37Y5i.png');
+  background-size: cover;
+  transition: all .2s ease-in-out;
+  height: 300px;
+  width: 400px;
+  
+}
+.toggle-card-off {
+  position: relative;
+  cursor: pointer;
+  padding: 16px;
+  border-radius: 10px;
+  background-color: #F4CF6D;
+  background-image: url('https://i.imgur.com/0T37Y5i.png');
+  background-size: cover;
+  transition: all .2s ease-in-out;
+  height: 300px;
+  width: 400px;
+}
+
+.toggle-card-off::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.5; /* Change this value to adjust opacity */
+  background-color: black; /* Change this value to adjust color */
+}
+
 .delete-button {
   width: 200px;
   height: 40px;
@@ -344,16 +390,7 @@ const props = defineProps({
   background-color: #ff2a00;
   box-shadow: 0 2px 4px rgba(24, 15, 15, 0.589);
 }
-.toggle-card {
-  cursor: pointer;
-  padding: 16px;
-  border-radius: 10px;
-  background-color: #F4CF6D;
-  transition: all .2s ease-in-out;
-  height: 200px;
-  width: 400px;
-  
-}
+
 
 .temperature-box-small {
   font-size: 20px;
@@ -431,7 +468,6 @@ const props = defineProps({
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url("./DeviceAssets/del-fire.png");
   background-size: 70%;
   background-position: calc(100% - 0px) top;
   background-repeat: no-repeat;
@@ -446,12 +482,12 @@ const props = defineProps({
 }
 
 .bg-on {
-  background-color: #F4CF6D;
+  background-color: #f4a86d;
 }
 
 /* background color when turned off */
 .bg-off {
-  background-color: #8C783A;
+  background-color: #000000;
 }
 
 

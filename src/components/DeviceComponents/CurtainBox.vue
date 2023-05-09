@@ -115,14 +115,17 @@ const props = defineProps({
       <v-col cols="8">
         <v-subheader class="ml-1">Ubicación</v-subheader>
       </v-col>
-      <v-col cols="4">
-        <v-card-text class="text--white font-weight-bold text-h4 mb-0 slider-value">
+      
+    </v-row>
+    <v-row >
+        <v-spacer>  </v-spacer>
+        <v-card-text class="font-weight-bold text-h2 slider-value">
           {{ sliderValue }}
         </v-card-text>
-      </v-col>
+     
     </v-row>
 
-    <v-row no-gutters class="button-row" style="margin-top: -20px">
+    <v-row no-gutters class="mr-5 ml-5" style="margin-top: 40px">
       <v-slider
         color="primary"
         v-model="sliderValue"
@@ -167,6 +170,30 @@ const props = defineProps({
 
 
 <style scoped>
+.toggle-card {
+  cursor: pointer;
+  padding: 16px;
+  border-radius: 10px;
+  background-color: #F4CF6D;
+  transition: all .5s ease-in-out;
+  height: 300px;
+  width: 400px;
+}
+
+.toggle-card::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    bottom: 300;
+    width: 100%;
+    height: 100%;
+    background-image: url("./DeviceAssets/del-curtain.png");
+    background-size: 80%;
+    background-position: calc(100% - 0px) top;
+    background-repeat: no-repeat;
+    opacity: 0.05;
+}
 .delete-button {
   width: 200px;
   height: 40px;
@@ -205,30 +232,7 @@ const props = defineProps({
   border-radius: 10px;
   background-color: #1C4035;
 }
-.toggle-card {
-  cursor: pointer;
-  padding: 16px;
-  border-radius: 10px;
-  background-color: #F4CF6D;
-  transition: all .5s ease-in-out;
-  height: 200px;
-  width: 400px;
-}
 
-.toggle-card::before {
-    content: "";
-    position: absolute;
-    top: -10px;
-    left: 10px;
-    bottom: 300;
-    width: 100%;
-    height: 100%;
-    background-image: url("./DeviceAssets/del-curtain.png");
-    background-size: 80%;
-    background-position: calc(100% - 0px) top;
-    background-repeat: no-repeat;
-    opacity: 0.05;
-}
 .toggle-card:hover {
   box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
 }

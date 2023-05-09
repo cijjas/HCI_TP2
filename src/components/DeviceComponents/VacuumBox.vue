@@ -107,42 +107,45 @@ const props = defineProps({
             <v-subheader class="ml-4">Ubicación</v-subheader>
           </v-col>
         </v-row>
-            
+              
+    <v-card-action class="actions-style" style="height: 70px; margin: 20px ">
         <v-row no-gutters class="button-row">
-          <v-col cols="auto">
-            <v-card-actions>
-              <v-btn color="primary" block @click="returnToBase">Return to Base</v-btn>
-            </v-card-actions>
-          </v-col>
-          
-          <v-col cols="auto" class="ml-auto">
-            <v-row no-gutters>
-                <v-col cols="auto" style="padding-top: 10px">
+        <v-col cols="auto">
+          <v-card-actions>
+            <v-btn color="primary" block @click="returnToBase">Return to Base</v-btn>
+          </v-card-actions>
+        </v-col>
+        
+        <v-col cols="auto" class="ml-auto">
+          <v-row no-gutters>
+              <v-col cols="auto" style="padding-top: 10px">
 
-                  <v-btn :color="vacuumMode === 0 ? 'primary' : 'offcolor'" 
-                  @click.stop="vacuumMode = 0" 
-                  class="secondary text-right small-button-vacuum"
-                  :disabled="!isOn" 
-                    >Vacuum
-                  </v-btn>
-                
-                </v-col>
-                <v-col cols="auto" style="padding-top: 10px">
-
-                  <v-btn 
-                    :color="vacuumMode ? 'primary' : 'offcolor'"
-                    @click.stop="vacuumMode = 1" 
-                    class="text-right small-button-mop"
-                    :disabled="!isOn"
-                    >Mop
-                  </v-btn>
-
+                <v-btn :color="vacuumMode === 0 ? 'primary' : 'offcolor'" 
+                @click.stop="vacuumMode = 0" 
+                class="secondary text-right small-button-vacuum"
+                :disabled="!isOn" 
+                  >Vacuum
+                </v-btn>
+              
               </v-col>
-            </v-row>
-          </v-col>
+              <v-col cols="auto" style="padding-top: 10px">
 
-        </v-row>
+                <v-btn 
+                  :color="vacuumMode ? 'primary' : 'offcolor'"
+                  @click.stop="vacuumMode = 1" 
+                  class="text-right small-button-mop"
+                  :disabled="!isOn"
+                  >Mop
+                </v-btn>
 
+            </v-col>
+          </v-row>
+        </v-col>
+
+      </v-row>
+    </v-card-action>
+        
+        
     <v-dialog v-model="isDialogOpen" width="1024" @click:outside="cancelSettings">
       <v-card class="toggle-card-popup">
 
@@ -245,6 +248,16 @@ const props = defineProps({
 
 
 <style scoped>
+.toggle-card {
+  cursor: pointer;
+  padding: 16px;  
+  border-radius: 10px;
+  background-color: #F4CF6D;
+  transition: all .2s ease-in-out;
+  height: 300px;
+  width: 400px;
+  
+}
 .delete-button {
   width: 200px;
   height: 40px;
@@ -252,16 +265,12 @@ const props = defineProps({
   background-color: #ff2a00;
   box-shadow: 0 2px 4px rgba(24, 15, 15, 0.589);
 }
-.toggle-card {
-  cursor: pointer;
-  padding: 16px;  
-  border-radius: 10px;
-  background-color: #F4CF6D;
-  transition: all .2s ease-in-out;
-  height: 200px;
-  width: 400px;
-  
-}
+.actions-style {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
 
 .toggle-card::before {
     content: "";
