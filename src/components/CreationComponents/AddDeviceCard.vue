@@ -58,7 +58,7 @@
 </script>
 
 <template>
-    <v-card width="450" class="mx-auto card-style">
+    <v-card width="400" class="mx-auto card-style">
       <v-toolbar color="transparent" dense dark style="height: 120px;">
         <v-col cols="12" >
             <v-row >
@@ -165,7 +165,7 @@
     background-image: url('https://i.imgur.com/TN3egpF.png');
     background-size: cover;
     background-position: 0px -70px;
-    height: 620px;
+    height: 654px;
   }
   .v-card__title {
     padding: 0;

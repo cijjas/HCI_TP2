@@ -1,4 +1,3 @@
-// HomeView
 
 <script setup>
 
@@ -30,26 +29,49 @@ function getComponent(file) {
 
 <template>
   <main>
-
     <div class="canvas">
-        <v-card class="vcard elevation-0" color="transparent">
-          <v-row style="margin-top: 20px;">
-            <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Home</v-card-title>
-            <v-divider color="gris"></v-divider>
-          </v-row>
-          <AddDeviceCard></AddDeviceCard>
-          <!-- quiero que se cicle usando el store.devices, quiero transferir la informacion que se queire aislar con componente
-          y agregarla a la informacion que tiene un componente, una metadata mas
-        -->
-          <v-row justify-end>
-          <v-layout justify-start>
-              <v-flex v-for="device in store.devices" :key="device.id">
-                <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id"></component>
-              </v-flex>
-            </v-layout>
-          </v-row>
-        </v-card>
+      <v-card class="vcard elevation-0" color="transparent">
+        <v-row style="margin-top: 20px;">
+          <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Home</v-card-title>
+          <v-divider color="gris"></v-divider>
+        </v-row>
+      
+        <v-row>
+          <v-col md="3" class="add-card-column">
+            <AddDeviceCard></AddDeviceCard>
+          </v-col>
 
+          
+          <v-col md="9">
+            <v-row>
+              <template v-for="(device, index) in store.devices" :key="device.id">
+                <template v-if="index < 6">
+                  <v-col xs="12" sm="12" md="6" lg="4">
+                    <v-card class="grid-item" width="400">
+                      <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id"></component>
+                    </v-card>
+                  </v-col>
+                </template>
+              </template>
+            </v-row>
+          </v-col>
+
+          <v-col>
+            <v-row>
+              <template v-for="(device, index) in store.devices" :key="device.id">
+                <template v-if="index >= 6">
+                  <v-col xs="12" sm="6" md="4" lg="3">
+                    <v-card class="grid-item" width="400">
+                      <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id"></component>
+                    </v-card>
+                  </v-col>
+                </template>
+              </template>
+            </v-row>
+          </v-col>
+
+        </v-row>
+      </v-card>
     </div>
   </main>
 </template>
@@ -74,6 +96,10 @@ function getComponent(file) {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+}
+
+.add-card-column {
+  padding-top: 28px; /* Adjust the value as per your preference */
 }
 
 </style>
