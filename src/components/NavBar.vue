@@ -37,13 +37,14 @@ export default {
 
     </v-app-bar>
 
-
+    <!-- image="https://i.imgur.com/Sa2BNdR.png"  -->
     <v-navigation-drawer 
       v-model="drawer" 
       app class="normal" 
       expand-on-hover
-        rail 
-      image="https://i.imgur.com/Sa2BNdR.png"
+      rail 
+      image='./ComponentsAssets/nav.png'
+
       >
       
       <v-list>

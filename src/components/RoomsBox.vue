@@ -8,14 +8,15 @@
         </v-btn>
       </v-toolbar>
       <v-card-text>
-        <v-row align="center">
+        <v-row >
           <v-col>
             <v-subheader class="ml-1">Devices in Room: </v-subheader>
             <span class="font-weight-bold text-body mb-0">{{ roomId }}</span>
             <!-- <span class="font-weight-bold text-body mb-0">{{ devicesCount }}</span> -->
           </v-col>
         </v-row>
-        <v-row class="justify-center">
+
+        <v-row class="justify-center" style="margin-top: 60px;">
           <v-btn to="/AddDevice" color="primary" class="pl-5 pr-5 mr-5">Add Device</v-btn>
           <v-btn color="primary" class="mr-5 pl-5 pr-5" @click="openEditDialog">Edit Room</v-btn>
           <router-link :to="{ name: 'room', params: { roomName: roomName } }">
@@ -24,6 +25,7 @@
           <!-- acceso a la pagina de ese cuarto especifico, donde estaran sus devices -->
           <!-- <RouterLink :to="{name: `${$route.name}/${roomName}`, params: ':roomName' }"></RouterLink> -->
         </v-row>
+
       </v-card-text>
 
       <v-dialog v-model="isDialogOpen" width="1024" persistent>
@@ -178,8 +180,8 @@ const props = defineProps({
   border-radius: 10px;
   background-color: #F4CF6D;
   transition: all .2s ease-in-out;
-  max-height: 400px;
-  max-width: 400px;
+  height: 300px;
+  width: 400px;
 }
 
 .toggle-card:hover {
