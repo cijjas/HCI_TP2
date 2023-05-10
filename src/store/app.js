@@ -454,12 +454,13 @@ export const useAppStore = defineStore('app', {
         }
         // update remoto
         this.updateARoom(room.id, room.name);
-        //delete component
-        // var device = this.getADevice(id);
-        // var index = this.components.findIndex(component => component.name === device.type.name + "Box");
-        // if (index !== -1) {
-        //   this.components.splice(index, 1);
-        //} //chequear
+        // delete component
+        var device = this.getADevice(id);
+        var index = this.components.findIndex(component => component.name === device.type.name + "Box");
+        if (index !== -1) {
+          this.components.splice(index, 1);
+        } //chequear
+        this.getAllDevicesAPI();
         return result;
       } catch (error) {
         console.error(error);
@@ -468,6 +469,7 @@ export const useAppStore = defineStore('app', {
     async deleteADeviceByName(name){
       try {
         var deviceId = getIdByName(this.devices, name);
+        
         return this.deleteADevice(deviceId);
       } catch (error) {
         console.error(error);
