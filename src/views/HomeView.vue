@@ -20,6 +20,12 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
     }
 });
 
+import { defineAsyncComponent } from 'vue';
+
+function getComponent(file) {
+  return defineAsyncComponent(() => import(/* @vite-ignore */file));    // require hecho a mano, porque no esta globalmente incluido
+}
+
 </script>
 
 <template>
@@ -27,21 +33,21 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
 
     <div class="canvas">
         <v-card class="vcard elevation-0" color="transparent">
-        <v-row style="margin-top: 20px;">
-          <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Home</v-card-title>
-          <v-divider color="gris"></v-divider>
-        </v-row>
-        <AddDeviceCard></AddDeviceCard>
-        <v-row justify-end>
+          <v-row style="margin-top: 20px;">
+            <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Home</v-card-title>
+            <v-divider color="gris"></v-divider>
+          </v-row>
+          <AddDeviceCard></AddDeviceCard>
+          <!-- quiero que se cicle usando el store.devices, quiero transferir la informacion que se queire aislar con componente
+          y agregarla a la informacion que tiene un componente, una metadata mas
+        -->
+          <v-row justify-end>
           <v-layout justify-start>
-            <v-flex v-for="c in store.getComponents()" :key="c.id" xs12 sm6 md4 lg3>
-              <v-card class="grid-item">
-                <component :is="c.component" :componentName="c.name" :componentId="c.id"></component>
-              </v-card>
-            </v-flex>
-          </v-layout>
-        </v-row>
-
+              <v-flex v-for="device in store.devices" :key="device.id">
+                <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id"></component>
+              </v-flex>
+            </v-layout>
+          </v-row>
         </v-card>
 
     </div>
