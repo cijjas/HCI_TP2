@@ -352,9 +352,10 @@ const props = defineProps({
   cursor: pointer;
   padding: 16px;
   border-radius: 10px;
-  background-color: #f4ac6d;
+  background-color: #F4CF6D;
   background-image:url('./DeviceAssets/fuego.png');
   background-size: cover;
+  background-position: center;
   transition: all .2s ease-in-out;
   height: 300px;
   width: 400px;
@@ -365,9 +366,10 @@ const props = defineProps({
   cursor: pointer;
   padding: 16px;
   border-radius: 10px;
-  background-color: #f4ac6d;
+  background-color: #F4CF6D;
   background-image: url('./DeviceAssets/fuego.png');
   background-size: cover;
+  background-position: center;
   transition: all .2s ease-in-out;
   height: 300px;
   width: 400px;
@@ -398,16 +400,14 @@ const props = defineProps({
   margin: 10px;
   padding: 20px;
   width: 120px;
-  box-shadow: inset 0 1px 7px rgba(0, 0, 0, 0.2), 
-              inset 0 -1px 3px rgba(240, 222, 162, 0.5);
-  background-color: #F4CF6Dd8;
+  background-color: #f3b373d8;
+  box-shadow: inset 0 1px 7px rgba(0, 0, 0, 0.3), 
+              inset 0 -4px 5px rgba(240, 222, 162, 0.5);
   border-radius: 10px;
   box-sizing: border-box;
   overflow: hidden;
 }
-.red-text {
-  color: #ff0000;
-}
+
 .temperature-box {
   padding: 30px;
   box-shadow: inset 0 1px 7px rgba(0, 0, 0, 0.2), 
@@ -444,43 +444,17 @@ const props = defineProps({
   padding: 30px;
   border-radius: 15px !important;
   background-image: url("./DeviceAssets/fuego.png");
+  background-position-x: 50%;
+  background-position-y: -100px ;
+  background-size: 1200px;
   background-color: #f4e8c6ae;
   backdrop-filter: blur(8px);
-  background-size: cover;
-  background-color: radial-gradient(at 80% 50%, rgba(240, 147, 65, 0.739), rgba(244, 207, 109, 0.99));
 }
-
-
-
-.toggle-card::before {
-  content: "";
-  position: absolute;
-  top: 0px;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: 70%;
-  background-position: calc(100% - 0px) top;
-  background-repeat: no-repeat;
-  opacity: 0.05;
-}
-
-
 
 .rounded-toolbar {
   border-radius: 20px;
   background-color: transparent;
 }
-
-.bg-on {
-  background-color: #f4a86d;
-}
-
-/* background color when turned off */
-.bg-off {
-  background-color: #000000;
-}
-
 
 .green-text {
   color: #1C4035; /* Change the color to your desired value */
@@ -493,7 +467,6 @@ const props = defineProps({
   white-space: nowrap;
   overflow: hidden;
   margin-left: -10px;
-
 }
 
 .on-button:active {
