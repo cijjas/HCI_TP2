@@ -6,6 +6,10 @@
     import { onMounted } from '@vue/runtime-core';
     import { useRoute } from 'vue-router'
 
+    import AddDeviceToRoomCard from '@/components/CreationComponents/AddDeviceToRoomCard.vue'
+
+    import { getIdByName } from '@/Lib/lib.js'
+
     const store = useAppStore();
 
     onMounted(async () => {             // cuando se monta la pagina pido los datos
@@ -21,49 +25,90 @@
 
     const route = useRoute();
     const roomName = route.params.roomName;
-    const room = store.getARoomByName(roomName);
-    const devices = room.devices;
+    const roomId = store.getRoomId(roomName);
+    const roomDevices = store.getRoomDevices(roomId);
 
+    import { defineAsyncComponent } from 'vue';
+
+    function getComponent(file) {
+    return defineAsyncComponent(() => import(/* @vite-ignore */file));    // require hecho a mano, porque no esta globalmente incluido
+}
     
 </script>
 
 <template>
-    <!-- <cComponent> -->
     <main>
-        <div class="canvas">
-            <v-card class="vcard">
-                <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">{{roomName}}</v-card-title>
-                <v-divider color="gris"></v-divider>
-                
-                <v-row justify-end>
-                        <!-- iñakis job: iterar sobre array de devices de un cuarto -->
-                        <v-col cols="5" v-for="device in devices">
-                            <!-- display componente generico de un device -->
-                            <!-- <RoomsBox class="grid-item" :roomName="room.name" :devicesCount="room.devices.length"></RoomsBox> -->
-                        </v-col>
-
-                </v-row>  
-            </v-card>
-        </div>
+      <div class="canvas">
+        <v-card class="vcard elevation-0" color="transparent">
+          <v-row style="margin-top: 20px;">
+            <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">{{roomName}}</v-card-title>
+            <v-divider color="gris"></v-divider>
+          </v-row>
+        
+          <v-row>
+            <v-col md="3" class="add-card-column">
+              <AddDeviceToRoomCard :roomName="roomName"></AddDeviceToRoomCard>
+            </v-col>
+  
+            
+            <v-col md="9">
+              <v-row>
+                <template v-for="(device, index) in roomDevices" :key="device.id">
+                  <template v-if="index < 6">
+                    <v-col xs="12" sm="12" md="6" lg="4">
+                      <v-card class="grid-item" width="400">
+                        <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id"></component>
+                      </v-card>
+                    </v-col>
+                  </template>
+                </template>
+              </v-row>
+            </v-col>
+  
+            <v-col>
+              <v-row>
+                <template v-for="(device, index) in roomDevices" :key="device.id">
+                  <template v-if="index >= 6">
+                    <v-col xs="12" sm="6" md="4" lg="3">
+                      <v-card class="grid-item" width="400">
+                        <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id"></component>
+                      </v-card>
+                    </v-col>
+                  </template>
+                </template>
+              </v-row>
+            </v-col>
+  
+          </v-row>
+        </v-card>
+      </div>
     </main>
-</template>
-
-<style scoped>
-
-.canvas {
-  width: 95%;
-  height: 2632px;
-  background: primary;
-  border-radius: 38px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-gap:  2%;
-  padding: 2.5%;
-}
-
-.vcard {
-    border-radius: 8px;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%), rgba(233, 247, 242, 0.03);
-}
-
-</style>
+  </template>
+  
+  <style scoped>
+  .grid-item {
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin: 1rem;
+    padding: 0;
+    transition: box-shadow 0.2s ease;
+    background-color: transparent;
+  }
+  
+  
+  .grid-item:hover {
+    transition: transform 0.3s ease-out;
+    transform: scale(1.01);
+  }
+  
+  .v-layout {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .add-card-column {
+    padding-top: 28px; /* Adjust the value as per your preference */
+  }
+  
+  </style>

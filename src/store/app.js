@@ -77,8 +77,9 @@ export const useAppStore = defineStore('app', {
       var roomId = getIdByName(this.rooms, name);
       return this.getARoom(roomId);
     },
-
-
+    getRoomId(name){
+      return getIdByName(this.rooms, name);
+    },
 
     async createARoom(roomName){
       try {
@@ -429,6 +430,8 @@ export const useAppStore = defineStore('app', {
     // no testeada
     getRoomDevices(idRoom){
       var arr = [];
+      console.log("getRoomDevices");
+      console.log(idRoom);
       var room = this.getARoomByName(idRoom);
       for ( let i = 0; i < room.meta.devices ; i++ ){
         arr.push(this.getADevice(room.meta.devices));
@@ -639,9 +642,9 @@ export const useAppStore = defineStore('app', {
       },
       getRoomDevices(idRoom){
         var arr = [];
-        var room = this.getARoomByName(idRoom);
-        for ( let i = 0; i < room.meta.devices ; i++ ){
-          arr.push(this.getADevice(room.meta.devices));
+        var room = this.getARoom(idRoom);
+        for ( let i = 0; i < room.meta.devices.length ; i++ ){
+          arr.push(this.getADevice(room.meta.devices[i]));
         }
         return arr;
       },

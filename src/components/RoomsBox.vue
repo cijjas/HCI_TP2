@@ -202,4 +202,5 @@ const props = defineProps({
 .rounded-toolbar .text--white {
   color: #1C4035;
 }
+
 </style>
