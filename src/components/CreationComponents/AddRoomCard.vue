@@ -1,20 +1,12 @@
 <script setup>
 import { onMounted } from '@vue/runtime-core';
 import { useAppStore } from '@/store/app';
+import { useField, useForm } from 'vee-validate'
 import { ref } from 'vue';
-const store = useAppStore();
 
-const selectedRoomName = ref("");
+const store = useAppStore();
 const isCreateDialogOpen= ref(false)
 
-const rules = {
-    minLength: value => value.length >= 3 || 'Min 3 characters',
-    maxLength: value => value.length <= 20 || 'Max 20 characters',
-    required: value => !!value || 'Required.',
-}; 
-function clearVar(){
-    selectedRoomName.value = "";
-}
 onMounted(async () => {             // cuando se monta la pagina pido los datos
     try {
       await store.getAllRoomsAPI();
@@ -22,22 +14,32 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
       console.error(error);
     }
 });
-const submitAddRoom = () =>{
-    if(selectedRoomName.value){
-        store.createARoom(selectedRoomName.value);
-        openCreateDialog();
-        clearVar();
-    }
-    else{
-    }
-}
 
 const openCreateDialog = () => {
     isCreateDialogOpen.value = true;
     setTimeout(() => {
-        isCreateDialogOpen.value = false;
+      isCreateDialogOpen.value = false;
     }, 2000);
 };
+  
+
+const {handleSubmit, handleReset} = useForm({
+  validationSchema:{
+    roomName(value){
+      if(value?.length >= 3 && value?.length <= 20) return true
+      return 'Name must be between 3 and 20 characters long.'
+    }
+  },
+})
+
+const roomName = useField('roomName');
+
+const submit = handleSubmit(values => {
+    store.createARoom(values.roomName);
+    openCreateDialog();
+    handleReset();
+  
+})
 
 </script>
 
@@ -51,25 +53,27 @@ const openCreateDialog = () => {
         </v-col>
       </v-toolbar>
 
-        <v-form @submit.prevent="submitAddRoom">
+        <v-form @submit.prevent="submit">
                 
                 <v-text-field 
-                label="Room Name" 
+                v-model="roomName.value.value"
+                :error-messages="roomName.errorMessage.value"
+                :counter="20"
+                label="Select a Room Name" 
                 variant="outlined" 
-                :rules="[rules.required ,rules.maxLength, rules.minLength]" 
                 clearable="true"
                 clear-icon="mdi-close-circle-outline"  
                 class="pa-8" 
                 color="verdatim"
                 base-color="primary"
-                v-model="selectedRoomName"></v-text-field>
+                ></v-text-field>
                  
                 <v-card-actions class="actions-style" style="height: 100px;  "  >
-                    <v-spacer></v-spacer>
+                  <v-btn @click="handleReset" class="ml-8">Clear</v-btn>
+                  <v-spacer></v-spacer>
                   <v-btn 
                   class="small-button-add mr-12"
                   type="submit" 
-                  text 
                   color="white"
                   >ADD</v-btn>
                 </v-card-actions>

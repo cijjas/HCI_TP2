@@ -1,55 +1,60 @@
 <script setup>
-import { onMounted } from '@vue/runtime-core';
-import { useAppStore } from '@/store/app';
-import { ref } from 'vue';
-const store = useAppStore();
+  import { onMounted } from '@vue/runtime-core';
+  import { useAppStore } from '@/store/app';
+  import { useField, useForm } from 'vee-validate';
+  import { ref} from 'vue';
+
+  const store = useAppStore();
+  const isCreateDialogOpen = ref(false);
+
+  onMounted(async () => {             // cuando se monta la pagina pido los datos
+      try {
+      // pido el update de los dato
+        await store.getDeviceActionsAPI();
+        await store.getAllRoomsAPI();
+        await store.getAllDevicesAPI();
+      } catch (error) {
+        console.error(error);
+      }
+  });
 
 
-const isCreateDialogOpen = ref(false);
-
-const selectedDeviceRoom = ref("");
-const selectedDeviceType = ref("");
-const selectedDeviceName = ref("");
-
-const openCreateDialog = () => {
-  isCreateDialogOpen.value = true;
-  setTimeout(() => {
-    isCreateDialogOpen.value = false;
-  }, 2000);
-  clearVar();
-};
-const rules = {
-    minLength: value => value.length >= 3 || 'Min 3 characters',
-    maxLength: value => value.length <= 15 || 'Max 15 characters',
-    required: value => !!value || 'Required.',
-}; 
-function clearVar(){
-    selectedDeviceName.value = "";
-    selectedDeviceType.value = "";
-    selectedDeviceRoom.value = "";
-}
+  const openCreateDialog = () => {
+    isCreateDialogOpen.value = true;
+    setTimeout(() => {
+      isCreateDialogOpen.value = false;
+    }, 2000);
+  };
 
 
-onMounted(async () => {             // cuando se monta la pagina pido los datos
-    try {
-    // pido el update de los dato
-    await store.getDeviceActionsAPI();
-    await store.getAllRoomsAPI();
-    await store.getAllDevicesAPI();
-    loading.value = false;          // una vez updateados los uso
-    } catch (error) {
-    console.error(error);
+
+  const {handleSubmit, handleReset} = useForm(
+    {
+      validationSchema: {
+        room(value){
+          if(value) return true
+          return 'Select a room for the device.'
+        },
+        type(value){
+          if(value) return true
+          return 'Select a device type.'
+        },
+        name(value){
+          if (value?.length >= 3 && value?.length <= 15) return true
+          return 'Name must be between 3 and 15 characters long.'
+        }
+      },
     }
-});
+  )
+  const name= useField('name');
+  const room= useField('room');
+  const type= useField('type');
 
-const submitAddDevice = () =>{
-    if(selectedDeviceName.value  && selectedDeviceRoom.value  && selectedDeviceType.value ){
-        store.createADevice(selectedDeviceRoom.value, selectedDeviceName.value, selectedDeviceType.value);
-        openCreateDialog();
-    }
-    else{
-    }
-}
+  const submit = handleSubmit(values => {
+          store.createADevice(values.room, values.name, values.type);
+          handleReset();
+          openCreateDialog();
+  })
 </script>
 
 <template>
@@ -62,49 +67,48 @@ const submitAddDevice = () =>{
         </v-col>
       </v-toolbar>
 
-        <v-form @submit.prevent="submitAddDevice">
+        <v-form @submit.prevent="submit">
                 <v-select
+                    v-model="room.value.value"
+                    :error-messages="room.errorMessage.value"
+                    :items="store.getRoomNames"
+                    label="Device's Room"
                     variant="outlined"
                     class="pl-8 pt-8 pr-8"
-                    label="Select the Device's Room"
-                    :items="store.getRoomNames"
-                    v-model="selectedDeviceRoom"
-
                     base-color="primary"
                     color="verdatim"
-                    validate-on="submit"
 
-
-                    :rules="[rules.required]"
                 ></v-select>
                 <v-select
+                    v-model="type.value.value"
+                    :error-messages="type.errorMessage.value"
+                    :items="store.getSupportedDevicesNames"
+                    label="Device Type"
                     variant="outlined"
                     class="pl-8 pt-8 pr-8"
-                    label="Select the Device Type"
-                    :items="store.getSupportedDevicesNames"
-                    v-model="selectedDeviceType"
-                    :rules="[rules.required]"
                     base-color="primary"
                     color="verdatim"
-                    validate-on="submit"
                     ></v-select>
                 <v-text-field 
-                    clearable="true"
-                    :rules="[rules.required,rules.maxLength, rules.minLength]" 
+                    v-model="name.value.value"
+                    :error-messages="name.errorMessage.value"
+                    :counter="15"
+                    label="Device Name" 
                     variant="outlined" 
                     class="pa-8" 
-                    label="Device Name" 
                     base-color="primary"
                     color="verdatim"
+                    clearable="true"
                     clear-icon="mdi-close-circle-outline"  
-                    v-model="selectedDeviceName"></v-text-field>
+
+                    ></v-text-field>
                     
                 <v-card-actions class="actions-style" style="height: 100px; ">
+                  <v-btn @click="handleReset" class="ml-8">Clear</v-btn>
                   <v-spacer></v-spacer>
                   <v-btn 
                   class="small-button-add mr-12"
-                  type="submit" 
-                  text 
+                  type="submit"
                   color="white"
                   >ADD</v-btn>
                 </v-card-actions>
@@ -122,12 +126,9 @@ const submitAddDevice = () =>{
                 
     </v-card>
   </template>
+
+<style scoped>
   
-  <style scoped>
-  .ok-button {
-    width: 80px;
-    color: #60d75a;
-}
 .check-icon {
   font-size: 3rem;
   color: #60d75a;

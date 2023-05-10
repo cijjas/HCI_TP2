@@ -10,10 +10,13 @@
   },
   "dependencies": {
     "@mdi/font": "^7.2.96",
+    "@vuelidate/core": "^2.0.2",
+    "@vuelidate/validators": "^2.0.2",
     "@websanova/vue-knob": "^0.4.2",
     "core-js": "^3.29.0",
     "pinia": "^2.0.0",
     "roboto-fontface": "*",
+    "vee-validate": "^4.9.2",
     "vue": "^3.2.0",
     "vue-knob-control": "^1.7.0",
     "vue-router": "^4.0.0",

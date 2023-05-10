@@ -10,7 +10,7 @@ import { DevicesApi } from '@/API/devices';
 import { RoomApi } from '@/API/room.js';
 import { RoutinesApi } from '@/API/routines';
 
-import VacuumBox from '../components/DeviceComponents/VacuumBox.vue';
+import VacuumBox from '@/components/DeviceComponents/VacuumBox.vue';
 import CurtainBox from '@/components/DeviceComponents/CurtainBox.vue';
 import TapBox from '@/components/DeviceComponents/TapBox.vue';
 import FridgeBox from '@/components/DeviceComponents/FridgeBox.vue';
@@ -170,7 +170,6 @@ export const useAppStore = defineStore('app', {
 
     async createADevice(roomName, deviceName, type){
       try {
-
         var typeId = getIdByName(this.supportedDevices, type);
         var deviceObj = {
           type : {
@@ -198,7 +197,7 @@ export const useAppStore = defineStore('app', {
             deviceObj.meta.component = CurtainBox
             break;
           default :
-          console.log(`${type} should be one of these : Blinds, Faucet, Refrigerator, Oven, Vacuum `);
+            console.log(`${type} should be one of these : Blinds, Faucet, Refrigerator, Oven, Vacuum `);
         }
 
         console.log(deviceObj);
