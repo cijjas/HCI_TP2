@@ -1,36 +1,66 @@
 <template>
     <v-card :class="{'bg-on': toggleValue, 'bg-off': !toggleValue}" class="toggle-card">    
         <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
-            <v-btn text color="transparent">
                 <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">
-                  {{ actionName }}
+                  {{ deviceName }}
                 </v-toolbar-title>
-            </v-btn>
+                <v-btn variant="text" color="primary" @click="isOn = !isOn" :class="{'primary': isOn}">
+                  Edit
+                </v-btn>
         </v-toolbar>
         <v-card-text>
-            <!-- <v-row align="center">
-              <v-col>
-                <v-subheader class="ml-1">Devices in Room: </v-subheader>
-                <span class="font-weight-bold text-body mb-0">{{ roomId }}</span>
-              </v-col>
-            </v-row> -->
-            <v-row class="justify-center">
-                <v-btn color="primary" class="mr-5 pl-5 pr-5" @click="openEditDialog">Edit Action</v-btn>
-              <!-- <router-link :to="{ name: 'room', params: { roomName: roomName } }">
-                <v-btn color="primary" class="mr-5 pl-5 pr-5 mt-3">View Devices</v-btn>
-              </router-link> -->
-            </v-row>
+            <v-col>
+              <v-row>
+                <v-card-text>{{ actionName }} holaaa</v-card-text>
+              </v-row>
+              <v-row class="justify-center">
+                  <v-btn color="lightersecondary" class="mr-5 pl-5 pr-5" @click="openEditDialog">Edit Action</v-btn>
+              </v-row>
+            </v-col>
         </v-card-text>
+
+        <v-card-actions class="actions-style" style="height: 140px;">
+          <v-col>
+            <v-row class="row-style">
+              <v-col>
+                <v-card-text>Device: {{ deviceTypeName }}</v-card-text>
+              </v-col>
+            </v-row>
+            
+            <v-row class="row-style-settings">
+              <v-col class="justify-end">
+                <v-card-text>Action: {{ actionName }}</v-card-text>
+              </v-col>
+              <!-- <v-col>
+                <v-card-text>Settings: </v-card-text>
+              </v-col> -->
+            </v-row>
+            <v-row class="row-style">
+              <!-- HACER FOR SOBRE LOS PARAMETROS PARA IMPRIMIRLOS -->
+              <template v-for="param in params.value" :key="device.id">
+                <v-col>
+                  <v-card-text>{{ param }}</v-card-text>
+                </v-col>  
+              </template>
+              <!-- <v-col>
+                <v-card-text>Temperature:</v-card-text>
+              </v-col>
+              <v-col>
+                <v-card-text>Parameters: params</v-card-text>
+              </v-col> -->
+            </v-row>
+
+          </v-col>
+        </v-card-actions>
     
         <v-dialog v-model="isDialogOpen" width="1024" persistent>
             <v-card class="toggle-card-popup">
                 <v-card-title class="headline">Edit Action</v-card-title>
                 <v-card-text>
-                    <v-text-field label="New Room Name" v-model="tempActionName" :placeholder="actionName"></v-text-field>
+                    <v-text-field label="New Action Name" v-model="tempActionName" :placeholder="actionName"></v-text-field>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn class="delete-button" color="white" @click="openDeleteDialog"> Delete Action</v-btn>
-                    <!-- <v-btn color="primary" @click="openDeleteDialog" variant="outlined">Delete Room</v-btn> -->
                     <v-spacer></v-spacer>
                     <v-btn color="primary" @click="openEditDialog">Cancel</v-btn>
                     <v-btn color="primary" variant="flat" @click="saveName">Save</v-btn>
@@ -101,6 +131,7 @@
       const deviceId = ref(props.deviceId);
       const actionName = ref(props.actionName);
       const params = ref(props.params);
+      console.log(params.value);
       const routineId = ref(props.routineId);
       const routine = store.getARoutine(routineId.value);
       const routineName = routine.name;
@@ -129,9 +160,11 @@
       const saveName = () => {
         if (tempActionName.value !== '') {
             actionName.value = tempActionName.value; // Update the roomName variable with the new value
-            
+
             //UPDATE AN ACTION !!!
             //borro action, uso los datos que se mantienen igual y creo una nueva accion (createAction). Pusheo a rutina
+            deleteActionFromAPI();
+            store.createAction(deviceId.value, actionName.value, params.value);
         }
         openEditDialog();
         clearVar();
@@ -144,22 +177,19 @@
       const openDeleteDialog = () => {
         isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
       };
-    
-      const deleteAction = () => {
-        // DELETE AN ACTION !!!!
+
+      const deleteActionFromAPI = () => {
         //buscar en array de acciones de la rutina la accion que quiero borrar, la borro, hago updateARoutine con ese nuevo array
         var index = actions.findIndex(action => action.actionName === actionName.value);
-        console.log("index: ");
-        console.log(index);
-        console.log("routine: ");
-        console.log(routineId.value);
-        console.log(routineName);
-        console.log(actions);
-        // var index = this.components.findIndex(component => component.name === device.type.name + "Box");
         if (index !== -1) {
           actions.splice(index, 1);
         }
         store.updateARoutine(routineId.value, routineName,actions);
+      }
+    
+      const deleteAction = () => {
+        // DELETE AN ACTION !!!!
+        deleteActionFromAPI();
         openDeleteDialog();
         openEditDialog();
       };
@@ -172,6 +202,15 @@
     
     
 <style scoped>
+.row-style {
+  margin-bottom: -5px;
+  margin-top: -40px;
+}
+
+.row-style-settings {
+  margin-bottom: -15px;
+  margin-top: -45px;
+}
 .delete-button {
       width: 150px;
       height: 40px;
@@ -198,7 +237,8 @@
       cursor: pointer;
       padding: 16px;
       border-radius: 15px;
-      background-color: whitesmoke;
+      background-color: #f4e8c6ae;
+      backdrop-filter: blur(8px);
       transition: all .2s ease-in-out;
     
     }
@@ -221,7 +261,7 @@
       border-radius: 10px;
       background-color: #F4CF6D;
       transition: all .2s ease-in-out;
-      max-height: 400px;
+      max-height: 600px;
       max-width: 400px;
     }
     
@@ -235,7 +275,7 @@
     }
     
     .bg-on {
-      background-color: #F4CF6D;
+      background-color: #FEEBB1;
     }
     
     .bg-off {
@@ -244,5 +284,13 @@
     .rounded-toolbar .text--white {
       color: #1C4035;
     }
+
+    .actions-style {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #DBD0AF ;
+  }
 </style>
     

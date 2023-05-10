@@ -34,7 +34,8 @@ export default createVuetify({
           gris: '#AFC1BB',
           lightergray: '#326D3F',
           lightersecondary : '#F3EED3',
-          verdatim:'#496F70'
+          verdatim:'#496F70',
+          routinedarkred: '#7E0C0C'
         },
       },
     },

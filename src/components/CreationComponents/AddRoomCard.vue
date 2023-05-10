@@ -82,7 +82,7 @@ const submit = handleSubmit(values => {
                     <v-card class="toggle-card-popup">
                         <div class="text-center">
                             <v-icon icon="mdi-check-circle-outline" class="check-icon"></v-icon>
-                            <v-card-title prepend-icon="mdi-check-circle-outline" class="font-weight-bold text-h5 card-title">Device Created</v-card-title>
+                            <v-card-title prepend-icon="mdi-check-circle-outline" class="font-weight-bold text-h5 card-title">Room Created</v-card-title>
                             <v-card-text>Room successfully created</v-card-text>
                         </div>
                     </v-card>

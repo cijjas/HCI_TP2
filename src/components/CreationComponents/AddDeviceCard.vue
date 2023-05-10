@@ -118,7 +118,7 @@
                         <div class="text-center">
                             <v-icon icon="mdi-check-circle-outline" class="check-icon"></v-icon>
                             <v-card-title prepend-icon="mdi-check-circle-outline" class="font-weight-bold text-h5 card-title">Device Created</v-card-title>
-                            <v-card-text>Routine successfully created</v-card-text>
+                            <v-card-text>Device successfully created</v-card-text>
                         </div>
                     </v-card>
                 </v-dialog>
