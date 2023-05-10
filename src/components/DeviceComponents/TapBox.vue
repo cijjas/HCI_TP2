@@ -18,6 +18,7 @@ const props = defineProps({
   const componentId = ref(props.componentId);
   const isOn = ref(false);
   const isDialogOpen = ref(false);
+  const isDeleteDialogOpen = ref(false);
   const disabledFields = ref(false);
 
   const deviceName = ref(props.componentName);
@@ -62,6 +63,16 @@ const props = defineProps({
     deviceName.value = tempDeviceName.value;
     isDialogOpen.value = false;
   };
+  const deleteDevice = () => {
+    store.deleteADeviceByName(deviceName.value);
+    openDeleteDialog();
+    cancelSettings();
+    router.push('/');
+};
+
+const openDeleteDialog = () => {
+        isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
+};
 
 
 </script>
@@ -151,11 +162,22 @@ const props = defineProps({
           ></v-text-field>
 
         <v-card-actions>
-          <v-btn class="delete-button" color="white" @click="deleteDevice"> Delete {{ deviceName }}</v-btn>
+          <v-btn class="delete-button" color="white" @click="openDeleteDialog()"> Delete device</v-btn>
           <v-spacer></v-spacer>
           <v-btn color="primary" @click="cancelSettings">Cancel</v-btn>
           <v-btn class="small-button-save" color="white" @click="saveSettings">Save</v-btn>
         </v-card-actions>
+
+        <v-dialog v-model="isDeleteDialogOpen" width="1024" persistent>
+            <v-card class="toggle-card-popup">
+                <v-card-title class="headline">Are you sure you want to delete {{ deviceName }}?</v-card-title>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary" variant="plain" @click="deleteDevice();">Delete</v-btn>
+                    <v-btn color="primary" @click="openDeleteDialog">Cancel</v-btn>
+              </v-card-actions>
+            </v-card>
+        </v-dialog>
 
       </v-card>
     </v-dialog>
