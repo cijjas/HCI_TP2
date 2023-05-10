@@ -29,7 +29,6 @@ export const useAppStore = defineStore('app', {
     rooms : [],
     routines : [],
     devices : [],
-    components : [],
     deviceActionsRaw : [],
     deviceActions : [],
 
@@ -154,65 +153,6 @@ export const useAppStore = defineStore('app', {
       try {
         var result = await DevicesApi.getAll();
         this.devices = result;
-
-        //empty components
-        this.components = [];
-
-
-        for ( let i = 0; i < this.devices.length; i++ ){
-          var deviceType = this.devices[i].type.name;
-          switch(deviceType){
-            case 'vacuum':
-              this.components.push({
-                component: VacuumBox,
-                id: this.devices[i].type.id,
-                name: this.devices[i].name
-              });
-              break;
-            case 'faucet':
-              this.components.push({
-                component: TapBox,
-                id: this.devices[i].type.id,
-                name: this.devices[i].name
-              });
-              break;
-            case 'refrigerator':
-              this.components.push({
-                component: FridgeBox,
-                id: this.devices[i].type.id,
-                name: this.devices[i].name
-              });
-              break;
-            case 'oven':
-              this.components.push({
-                component: OvenBox,
-                id: this.devices[i].type.id,
-                name: this.devices[i].name
-              });
-              break;
-            case 'blinds':
-              this.components.push({
-                component: CurtainBox,
-                id: this.devices[i].type.id,
-                name: this.devices[i].name
-              });
-              break;
-            default :
-            console.log(`${deviceType} should be one of these : Blinds, Faucet, Refrigerator, Oven, Vacuum `);
-          }
-          if(this.devices[i].type.name == "vacuum"){
-
-          }else if(this.devices[i].type.name == "faucet"){
-
-          }else if(this.devices[i].type.name == "refrigerator"){
-
-          }else if(this.devices[i].type.name == "oven"){
-
-          }else if(this.devices[i].type.name == "blinds"){
-
-          }
-        }
-
         return result;
       } catch (error) {
         console.error(error);
@@ -230,47 +170,44 @@ export const useAppStore = defineStore('app', {
 
     async createADevice(roomName, deviceName, type){
       try {
-        console.log("IM CREATING A DEVICE")
-        /* const vacuumFunction = () => {
-          this.components.push(VacuumBox);
-        };
-        const curtainFunction = () => {
-          this.components.push(CurtainBox);
-        };
-        const faucetFunction = () => {
-          this.components.push(TapBox);
-        };
-        const fridgeFunction = () => {
-          this.components.push(FridgeBox);
-        };
-        const ovenFunction = () => {
-          this.components.push(OvenBox);
-        };
-        const blindsFunction = () => {
-          this.components.push(CurtainBox);
-        };
-
-        const deviceMap = {
-          "Vacuum": vacuumFunction,
-          "Curtain": curtainFunction,
-          "Faucet": faucetFunction,
-          "Refrigerator": fridgeFunction,
-          "Oven": ovenFunction,
-          "Blinds": blindsFunction
-        }; */
-
 
         var typeId = getIdByName(this.supportedDevices, type);
         var deviceObj = {
           type : {
             id : typeId
           },
-          name : deviceName
+          name : deviceName,
+          meta : {
+            component : "default"
+          }
         }
-        //update remoto
+        switch(type.toLowerCase()){
+          case 'vacuum':
+            deviceObj.meta.component = VacuumBox
+            break;
+          case 'faucet':
+            deviceObj.meta.component = TapBox
+            break;
+          case 'refrigerator':
+            deviceObj.meta.component = FridgeBox
+            break;
+          case 'oven':
+            deviceObj.meta.component = OvenBox
+            break;
+          case 'blinds':
+            deviceObj.meta.component = CurtainBox
+            break;
+          default :
+          console.log(`${type} should be one of these : Blinds, Faucet, Refrigerator, Oven, Vacuum `);
+        }
+
+        console.log(deviceObj);
+
+        // UPDATE DE DEVICE
+        // remoto
         var result = await DevicesApi.add(deviceObj);
+        console.log(result);
         // local
-        // independizar de la api la actualizacion
         this.devices.push(result);
         // UPDATE DE ROOMS
         // local
@@ -278,7 +215,6 @@ export const useAppStore = defineStore('app', {
         room.meta.devices.push(result.id);
         // remoto
         this.updateARoom(room.id, room.name);
-        /* deviceMap[type](); */
 
         return result;
       } catch (error) {
@@ -469,7 +405,7 @@ export const useAppStore = defineStore('app', {
     async deleteADeviceByName(name){
       try {
         var deviceId = getIdByName(this.devices, name);
-        
+
         return this.deleteADevice(deviceId);
       } catch (error) {
         console.error(error);
