@@ -29,7 +29,7 @@
                     <v-text-field label="New Room Name" v-model="tempActionName" :placeholder="actionName"></v-text-field>
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn class="delete-button" color="white" @click="openDeleteDialog"> Delete Room</v-btn>
+                    <v-btn class="delete-button" color="white" @click="openDeleteDialog"> Delete Action</v-btn>
                     <!-- <v-btn color="primary" @click="openDeleteDialog" variant="outlined">Delete Room</v-btn> -->
                     <v-spacer></v-spacer>
                     <v-btn color="primary" @click="openEditDialog">Cancel</v-btn>
@@ -43,7 +43,7 @@
                 <v-card-title class="headline">Are you sure you want to delete {{ actionName }}?</v-card-title>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="primary" variant="plain" @click="deleteRoom();" >Delete</v-btn>
+                    <v-btn color="primary" variant="plain" @click="deleteAction();" >Delete</v-btn>
                     <v-btn color="primary" @click="openDeleteDialog">Cancel</v-btn>
               </v-card-actions>
             </v-card>
@@ -63,8 +63,21 @@
       
 <script setup>
     import { ref, defineProps } from 'vue'
+    import { onMounted } from '@vue/runtime-core';
     import { useAppStore } from '@/store/app';
     const store = useAppStore();
+
+    onMounted(async () => {             // cuando se monta la pagina pido los datos
+      try {
+      // pido el update de los datos
+      await store.getAllRoomsAPI();
+      await store.getAllDevicesAPI();
+      await store.getAllRoutinesAPI();
+      await store.getDeviceActionsAPI();
+      } catch (error) {
+      console.error(error);
+      }
+    }); 
     
     const props = defineProps({
       deviceId: {
@@ -89,6 +102,9 @@
       const actionName = ref(props.actionName);
       const params = ref(props.params);
       const routineId = ref(props.routineId);
+      const routine = store.getARoutine(routineId.value);
+      const routineName = routine.name;
+      const actions = routine.actions;
 
       const device = store.getADevice(deviceId.value);
       const deviceName = device.name; //ej: sony speaker, etc.
@@ -129,10 +145,21 @@
         isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
       };
     
-      const deleteRoom = () => {
-
+      const deleteAction = () => {
         // DELETE AN ACTION !!!!
-        // store.deleteARoom(roomId.value);
+        //buscar en array de acciones de la rutina la accion que quiero borrar, la borro, hago updateARoutine con ese nuevo array
+        var index = actions.findIndex(action => action.actionName === actionName.value);
+        console.log("index: ");
+        console.log(index);
+        console.log("routine: ");
+        console.log(routineId.value);
+        console.log(routineName);
+        console.log(actions);
+        // var index = this.components.findIndex(component => component.name === device.type.name + "Box");
+        if (index !== -1) {
+          actions.splice(index, 1);
+        }
+        store.updateARoutine(routineId.value, routineName,actions);
         openDeleteDialog();
         openEditDialog();
       };

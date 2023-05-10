@@ -23,7 +23,7 @@ const openCreateDialog = () => {
   console.log(selectedDeviceName.value);
   setTimeout(() => {
     isCreateDialogOpen.value = false;
-  }, 2000);
+  }, 1250);
   clearVar();
 };
 
