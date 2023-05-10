@@ -14,15 +14,12 @@
           <v-col>
             <v-subheader class="ml-1">Actions in Routine: </v-subheader>
             <span class="font-weight-bold text-body mb-0"> {{ actions.length }}</span>
-            <!-- <span class="font-weight-bold text-body mb-0">{{ actionsCount }}</span> -->
           </v-col>
         </v-row>
         <v-row >
           <v-btn variant="text" color="primary" class="mr-10 pl-6 pr-6" @click="openEditDialog">Edit Routine</v-btn>
-          <!-- <v-btn variant="text" color="primary" class="pl-6 pr-6">Add Action</v-btn> -->
           <router-link :to="{ name: 'routineview', params: { routineName: nameRoutine } }">
             <v-btn color="lightersecondary">View Actions</v-btn>
-            <!-- class="mr-5 pl-5 pr-5 mt-3" -->
           </router-link>
         </v-row>
       </v-card-text>

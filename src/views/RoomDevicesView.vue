@@ -1,25 +1,29 @@
 // pagina de un room especifico (muestra sus dispositivos)
 <script setup>
-    import VacuumBox from '../components/DeviceComponents/VacuumBox.vue';
-    import CurtainBox from '@/components/DeviceComponents/CurtainBox.vue';
-    import TapBox from '@/components/DeviceComponents/TapBox.vue';
-    import FridgeBox from '@/components/DeviceComponents/FridgeBox.vue';
-    import OvenBox from '@/components/DeviceComponents/OvenBox.vue';
-
     import { reactive } from 'vue';
     import { ref, computed, defineProps, defineEmits } from 'vue'
     import { useAppStore } from '@/store/app';
+    import { onMounted } from '@vue/runtime-core';
+    import { useRoute } from 'vue-router'
 
     const store = useAppStore();
-    const props = defineProps({
-    roomId: {
-      type: String,
-      required: true,
-    }
-  });
 
-    const roomId = ref(props.roomId);
-    const devices = store.getRoomDevices(roomId.value);
+    onMounted(async () => {             // cuando se monta la pagina pido los datos
+    try {
+    // pido el update de los datos
+    await store.getAllRoomsAPI();
+    await store.getAllDevicesAPI();
+    await store.getAllRoutinesAPI();
+    } catch (error) {
+    console.error(error);
+    }
+    }); 
+
+    const route = useRoute();
+    const roomName = route.params.roomName;
+    const room = store.getARoomByName(roomName);
+    const devices = room.devices;
+
     
 </script>
 
@@ -28,11 +32,11 @@
     <main>
         <div class="canvas">
             <v-card class="vcard">
-                <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">{{room.Name}}</v-card-title>
+                <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">{{roomName}}</v-card-title>
                 <v-divider color="gris"></v-divider>
                 
                 <v-row justify-end>
-                        <!-- iterar sobre array de devices de un cuarto -->
+                        <!-- iñakis job: iterar sobre array de devices de un cuarto -->
                         <v-col cols="5" v-for="device in devices">
                             <!-- display componente generico de un device -->
                             <!-- <RoomsBox class="grid-item" :roomName="room.name" :devicesCount="room.devices.length"></RoomsBox> -->

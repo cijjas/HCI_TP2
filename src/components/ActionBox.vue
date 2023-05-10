@@ -4,8 +4,8 @@
                 <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">
                   {{ deviceName }}
                 </v-toolbar-title>
-                <v-btn variant="text" color="primary" @click="isOn = !isOn" :class="{'primary': isOn}">
-                  Edit
+                <v-btn variant="text" color="primary" @click="openDeleteDialog">
+                  delete
                 </v-btn>
         </v-toolbar>
         <v-card-text>
@@ -42,12 +42,6 @@
                   <v-card-text>{{ param }}</v-card-text>
                 </v-col>  
               </template>
-              <!-- <v-col>
-                <v-card-text>Temperature:</v-card-text>
-              </v-col>
-              <v-col>
-                <v-card-text>Parameters: params</v-card-text>
-              </v-col> -->
             </v-row>
 
           </v-col>
@@ -73,7 +67,7 @@
                 <v-card-title class="headline">Are you sure you want to delete {{ actionName }}?</v-card-title>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="primary" variant="plain" @click="deleteAction();" >Delete</v-btn>
+                    <v-btn color="routinedarkred" variant="plain" @click="deleteAction();" >Delete</v-btn>
                     <v-btn color="primary" @click="openDeleteDialog">Cancel</v-btn>
               </v-card-actions>
             </v-card>
@@ -131,7 +125,7 @@
       const deviceId = ref(props.deviceId);
       const actionName = ref(props.actionName);
       const params = ref(props.params);
-      console.log(params.value);
+      
       const routineId = ref(props.routineId);
       const routine = store.getARoutine(routineId.value);
       const routineName = routine.name;

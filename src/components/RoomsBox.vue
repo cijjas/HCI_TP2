@@ -12,18 +12,17 @@
           <v-col>
             <v-subheader class="ml-1">Devices in Room: </v-subheader>
             <span class="font-weight-bold text-body mb-0">{{ roomId }}</span>
-            <!-- <span class="font-weight-bold text-body mb-0">{{ devicesCount }}</span> -->
           </v-col>
         </v-row>
 
         <v-row class="justify-center" style="margin-top: 60px;">
           <v-btn to="/AddDevice" color="primary" class="pl-5 pr-5 mr-5">Add Device</v-btn>
           <v-btn color="primary" class="mr-5 pl-5 pr-5" @click="openEditDialog">Edit Room</v-btn>
-          <router-link :to="{ name: 'room', params: { roomName: roomName } }">
-            <v-btn color="primary" class="mr-5 pl-5 pr-5 mt-3">View Devices</v-btn>
-          </router-link>
+
           <!-- acceso a la pagina de ese cuarto especifico, donde estaran sus devices -->
-          <!-- <RouterLink :to="{name: `${$route.name}/${roomName}`, params: ':roomName' }"></RouterLink> -->
+          <router-link :to="{ name: 'roomview', params: { roomName: nameRoom } }">
+            <v-btn color="lightersecondary" class="mr-5 pl-5 pr-5 mt-3">View Devices</v-btn>
+          </router-link>
         </v-row>
 
       </v-card-text>

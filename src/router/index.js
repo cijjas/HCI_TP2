@@ -85,8 +85,7 @@ const router = createRouter({
     /* Para acceder a cuartos en particular y ver los devices dentro de ese mismo*/
     {
       path: '/rooms/:roomName',
-      name: 'room',
-      params: ':roomId',
+      name: 'roomview',
       component: () => import('../views/RoomDevicesView.vue')
     },
 
