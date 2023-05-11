@@ -11,10 +11,15 @@ const props = defineProps({
   componentId: {
     type: String,
     required: true
+  },
+  componentRoom: {
+    type: String,
+    required: true
   }
 })
   // const props = defineProps(['roomName', 'devicesCount']);
   const componentId = ref(props.componentId);
+  const componentRoom = ref(props.componentRoom);
 
   const isOn = ref(false);
   const sliderValue = ref(10);
@@ -124,7 +129,7 @@ const openDeleteDialog = () => {
     <!-- locations for-->
     <v-row style="margin-bottom: 20px">
       <v-col cols="8">
-        <v-subheader class="ml-1">Ubicación</v-subheader>
+        <v-subheader class="ml-1">{{componentRoom}}</v-subheader>
       </v-col>
       
     </v-row>

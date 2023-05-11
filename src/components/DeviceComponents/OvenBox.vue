@@ -3,7 +3,7 @@
   import { useAppStore } from '@/store/app';
   const store = useAppStore();
 
-const props = defineProps({
+  const props = defineProps({
   componentName: {
     type: String,
     required: true
@@ -11,10 +11,15 @@ const props = defineProps({
   componentId: {
     type: String,
     required: true
+  },
+  componentRoom: {
+    type: String,
+    required: true
   }
 })
   // const props = defineProps(['roomName', 'devicesCount']);
   const componentId = ref(props.componentId);
+  const componentRoom = ref(props.componentRoom);
 
   const isOn = ref(false);
   const id = ref(0);
@@ -159,7 +164,7 @@ const openDeleteDialog = () => {
     <!-- locations for-->
     <v-row no-gutters  style="padding-bottom: 15px">
       <v-col cols="6">
-        <v-subheader class="ml-1">Location</v-subheader>
+        <v-subheader class="ml-1">{{componentRoom}}</v-subheader>
       </v-col>
     </v-row>
     

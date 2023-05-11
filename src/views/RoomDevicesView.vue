@@ -57,7 +57,7 @@
                   <template v-if="index < 6">
                     <v-col xs="12" sm="12" md="6" lg="4">
                       <v-card class="grid-item" width="400">
-                        <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id"></component>
+                        <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id" :componentRoom="store.getDevicesRoom(device.id)"></component>
                       </v-card>
                     </v-col>
                   </template>
@@ -71,7 +71,7 @@
                   <template v-if="index >= 6">
                     <v-col xs="12" sm="6" md="4" lg="3">
                       <v-card class="grid-item" width="400">
-                        <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id"></component>
+                        <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id" :componentRoom="store.getDevicesRoom(device.id)"></component>
                       </v-card>
                     </v-col>
                   </template>
