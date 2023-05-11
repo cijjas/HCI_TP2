@@ -1,13 +1,12 @@
 <script setup>
 import { onMounted } from '@vue/runtime-core';
 import { useAppStore } from '@/store/app';
-import { useField, useForm } from 'vee-validate'
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 const store = useAppStore();
 const isCreateDialogOpen = ref(false);
-
 const actionCounter = ref(0);
+
 onMounted(async () => {             
   try {
     await store.getAllDevicesAPI();
@@ -22,8 +21,11 @@ const openCreateDialog = () => {
     isCreateDialogOpen.value = true;
     setTimeout(() => {
       isCreateDialogOpen.value = false;
-    }, 2000);
+    }, 1250);
   };
+
+
+
 
 /* ------------------- CREAR RUTINA ------------------ */
 const deviceObj2 = ref({});
@@ -41,7 +43,14 @@ const paramsArr = ref([]);
 /* se define cuando se confirma una rutina */
 const routineActions = ref([]);
 
-
+const rules = {
+    required: value => !!value || 'Required.',
+    min: (value) => value.length >= 1 || 'Min 1 characters',
+    max: (value) => value.length <= 20 || 'Max 20 characters',
+    notRepeated: (value) => !store.getRoutinesNames.includes(value) || 'Routine already exists',
+    isNumber: (value) => !isNaN(value) || 'Must be a number',
+    isAcceptableNumber: (value, minValue, maxValue) => ((!isNaN(value) && value >= minValue && value <= maxValue)) || `Must be a number between ${minValue} and ${maxValue}`,
+}; 
 
 
 function updateActions(selection){
@@ -50,119 +59,140 @@ function updateActions(selection){
     actionsArr.value = store.getTypeActionsNames(deviceObj2.value.type.name)
 }
 function updateParams(selection){
-    selectedAction.value = selection;
-    paramsArr.value = store.getActionParameters(deviceObj2.value.type.name,selectedAction.value);
+  selectedAction.value = selection;
+  paramsArr.value = store.getActionParameters(deviceObj2.value.type.name,selectedAction.value);
+  console.log(paramsArr.value)
 }
 function updateParamValue(selection, index){
     selectedParams.value[index] = selection
 }
 function addAction(){
     routineActions.value.push(store.createAction(deviceObj2.value.id, selectedAction.value, selectedParams.value))
-    actionsArr.value = []
-    paramsArr.value = []
-    selectedDevice.value = ""
-    selectedAction.value = ""
-    selectedParams.value = []
 }
 const submitRoutine = () => {
-  if(routineName.value){
+  if(routineName.value && routineActions.value.length > 0){
     store.createARoutine(routineName.value, routineActions.value); 
     routineName.value = ""
     routineActions.value = []
     openCreateDialog();
   }
 }
+const submitAction = () => { // si se quiere hacer feo, se puede aca
+  if(selectedDevice.value && selectedAction.value ){
+    console.log(selectedDevice.value)
+    console.log(selectedAction.value)
+    console.log(selectedParams.value)
+    addAction();
+    actionsArr.value = []
+    paramsArr.value = []
+    selectedDevice.value = ""
+    selectedAction.value = ""
+    selectedParams.value = []
+  }
+}
+const isFormValid = ref(false);
 
-const rules = {
-    required: value => !!value || 'Required.',
-}; 
-
+const submitButtonDisabled = computed(() => {
+  return !isFormValid.value;
+});
 
 </script>
+
 
 <template>
     <v-card width="1200" class="mx-auto card-style">
       <v-toolbar color="transparent" dense dark style="height: 120px;">
         <v-col cols="12" >
             <v-row >
-                <v-toolbar-title class="font-weight-bold text-h4 title-style mt-16 ml-8">Add Routine</v-toolbar-title>
+                <v-toolbar-title class="font-weight-bold text-h4 title-style mt-16 ml-8">Build Routine</v-toolbar-title>
                 
                 <v-toolbar-title class="font-weight-bold text-h4 title-style mt-16 ml-8">Actions</v-toolbar-title>
             </v-row>
         </v-col>
       </v-toolbar>
       <!-- lado izquierdo DE LA CARD -->
-
-      <v-form @submit.prevent="submitRoutine">
+      
       <v-row>
         <v-col cols="6">
-                  <v-select 
-                  @update:modelValue = "updateActions"
-                  :items="store.getDevicesNames"
-                  label="Device"
-                  variant="outlined"
-                  class="pl-8  pr-8"
-                  base-color="primary"
-                  color="verdatim"
-                  ></v-select>
+          <v-form @submit.prevent="submitAction" v-model="isFormValid"> 
+
+            <v-select 
+              @update:modelValue = "updateActions"
+              :rules="[rules.required]"
+              :items="store.getDevicesNames"
+              label="Device"
+              variant="outlined"
+              class="pl-8  pr-8"
+              base-color="primary"
+              color="verdatim"
+            ></v-select>
+            
+            <v-select v-if="selectedDevice"
+                @update:modelValue = "updateParams($event, index)"
+                label="Select An Action"
+                :rules="[rules.required]"
+                :items="actionsArr"
+                variant="outlined"
+                class="pl-8  pr-8"
+                base-color="primary"
+                color="verdatim"
+            ></v-select>
                   
-                  <v-select v-if="selectedDevice"
-                      @update:modelValue = "updateParams($event, index)"
-                      label="Select An Action"
-                      :items="actionsArr"
+                  
+              <v-card-text v-for="(param, index) in paramsArr" >
+
+                    <v-select v-if="param.type == 'string' && param.name != 'roomId'"
+                      @update:modelValue="updateParamValue($event, index)"
+                      label="Select An Option"
+                      :rules="[rules.required]"
+                      :items="param.supportedValues"
                       variant="outlined"
-                      class="pl-8  pr-8"
+                      class="pl-8 pr-8"
                       base-color="primary"
                       color="verdatim"
-                  ></v-select>
-                  
-                  
-                  <v-row >
-                  <v-card-text v-for="(param, index) in paramsArr">
-                      <v-row>
+                    ></v-select>
 
-                        <v-col v-if="param.type == 'string' && param.name != 'roomId'" cols="12">
-                          <v-select
-                            @update:modelValue="updateParamValue($event, index)"
-                            label="Select An Option !"
-                            :items="param.supportedValues"
-                            variant="outlined"
-                            class="pl-4 pr-4"
-                            base-color="primary"
-                            color="verdatim"
-                          ></v-select>
-                        </v-col>
-                        <v-col v-if="param.type == 'string' && param.name == 'roomId'" cols="12">
-                          <v-select
-                            @update:modelValue="updateParamValue($event, index)"
-                            label="Select An Option"
-                            :items="store.getRoomNames"
-                            variant="outlined"
-                            class="pl-4 pr-4"
-                            base-color="primary"
-                            color="verdatim"
-                          ></v-select>
-                        </v-col>
-                    </v-row>
+                    <v-select v-if="param.type == 'string' && param.name == 'roomId'"
+                      @update:modelValue="updateParamValue($event, index)"
+                      label="Select An Option (Room)"
+                      :rules="[rules.required]"
+                      :items="store.getRoomNames"
+                      variant="outlined"
+                      class="pl-8 pr-8"
+                      base-color="primary"
+                      color="verdatim"
+                    ></v-select>
 
-                      <v-col v-if="param.type == 'number'" cols="12">
-                        <v-text-field
-                          @update:modelValue="updateParamValue($event, index)"
-                          type="number"
-                          :min="param.minValue"
-                          :max="param.maxValue"
-                          variant="outlined"
-                          class="pl-4 pt-4 pr-4"
-                          base-color="primary"
-                          color="verdatim"
-                          :label="`${param.name}`"
-                        ></v-text-field>
-                      </v-col>
-                  </v-card-text>
+
+                  <v-text-field v-if="param.type == 'number'"
+                    @update:modelValue="updateParamValue($event, index)"
+                    :label="`${param.name }`"
+                    type="number"
+                    :rules="[rules.required, (value) => rules.isAcceptableNumber(value, param.minValue, param.maxValue)]"
+                    :min="param.minValue"
+                    :max="param.maxValue"
+                    variant="outlined"
+                    class="pl-8  pr-8"
+                    base-color="primary"
+                    color="verdatim"
+                  ></v-text-field>
+
+                  
+                </v-card-text>
+                <v-row class="pr-10">
+                  <v-spacer></v-spacer>
+                  <v-btn 
+                  type="submit" 
+                  color="m1" 
+                  class="ml-8"
+                  :disabled="submitButtonDisabled"
+                  >
+                  <v-icon>mdi-plus</v-icon>
+                  Add Action 
+                  </v-btn>
+
                 </v-row>
-
-
-            <v-btn @click="addAction" elevation="0" color="m1" class="ml-8 mt-10">Add Action to Routine</v-btn><br> <!-- añade al array de acciones en la rutina, storage en componente -->
+          </v-form>
         </v-col>
         <!-- lado derecho -->
         <v-col cols="6" >
@@ -178,28 +208,29 @@ const rules = {
 
       </v-row>
 
-      <v-card-actions class="actions-style" style="height: 100px;  "  >
-          <v-btn color="white" @click="handleReset" class="ml-8">Clear</v-btn>
-          
-          <v-spacer></v-spacer>
-          <v-text-field 
-            :rules="[rules.required]"  
-            v-model="routineName"
-            label="Routine's Name"
-            variant="outlined"
-            class="pl-8 mt-6 pr-8"
-            base-color="g1"
-            color="g1"
-            clearable="true"
-            clear-icon="mdi-close-circle-outline"
-            />
-          <v-btn 
-          type="submit" 
-          class="small-button-add mr-12"
-          color="white"
-          >Create Routine</v-btn>
-      </v-card-actions>
-    </v-form>
+      <v-form @submit.prevent="submitRoutine">
+        <v-card-actions class="actions-style" style="height: 100px;  "  >
+            <v-btn color="white" @click="handleReset" class="ml-8">Clear</v-btn>
+            
+            <v-spacer></v-spacer>
+            <v-text-field 
+              :rules="[rules.required, rules.notRepeated]"  
+              v-model="routineName"
+              label="Routine's Name"
+              variant="outlined"
+              class="pl-8 mt-6 pr-8"
+              base-color="g1"
+              color="g1"
+              clearable="true"
+              clear-icon="mdi-close-circle-outline"
+              />
+            <v-btn 
+            type="submit" 
+            class="small-button-add mr-12"
+            color="white"
+            >Create Routine</v-btn>
+        </v-card-actions>
+      </v-form>
 
       <v-dialog v-model="isCreateDialogOpen" width="500" color="gris" >
           <v-card class="toggle-card-popup">
@@ -212,7 +243,7 @@ const rules = {
       </v-dialog>
                 
     </v-card>
-  </template>
+</template>
   
 <style scoped>
 
@@ -272,5 +303,5 @@ const rules = {
     height: 654px;
   }
  
-  </style>
+</style>
   

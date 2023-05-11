@@ -1,5 +1,5 @@
 <template>
-    <v-card :class="{'bg-on': isOn, 'bg-off': !isOn}" class="toggle-card" style="width: 400px;" @click="toggleCard" >
+    <v-card :class="bg-on" class="toggle-card" style="width: 400px;" @click="toggleCard" >
     
       <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
         <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">
@@ -10,14 +10,14 @@
           </v-btn>
       </v-toolbar>
       <v-card-text>
-        <v-row align="center">
+        <v-row >
           <v-col>
-            <v-subheader class="ml-1">Actions in Routine: </v-subheader>
-            <span class="font-weight-bold text-body mb-0"> {{ actions.length }}</span>
+            <v-text class="text--white" >Actions in Routine: </v-text>
+            <span class="text--white font-weight-bold text-body mb-0"> {{ actions.length }}</span>
           </v-col>
         </v-row>
         <v-row >
-          <v-btn variant="text" color="primary" class="mr-10 pl-6 pr-6" @click="openEditDialog">Edit Routine</v-btn>
+          <v-btn variant="text" color="brown" class="mr-10 pl-6 pr-6" @click="openEditDialog">Edit Routine</v-btn>
           <router-link :to="{ name: 'routineview', params: { routineName: nameRoutine } }">
             <v-btn color="lightersecondary">View Actions</v-btn>
           </router-link>
@@ -110,7 +110,7 @@
   </script>
   
   <style scoped>
-  .delete-button {
+.delete-button {
   width: 150px;
   height: 40px;
   border-radius: 10px;
@@ -124,7 +124,7 @@
   margin-left: 30px;
   margin-right: 30px;
   border-radius: 10px;
-  background-color: #E57373;
+  background-color: #795454;
   transition: all .2s ease-in-out;
   max-height: 400px;
   max-width: 450px;
@@ -139,16 +139,10 @@
   background-color: transparent;
 }
 
-.bg-on {
-  background-color: #E57373;
-}
 
-.bg-off {
-  background-color: #E57373;
-}
 
-.rounded-toolbar .text--white {
-  color: #1C4035;
+.text--white {
+  color: #f8dfc2;
 }
 
 .toggle-card-popup {
