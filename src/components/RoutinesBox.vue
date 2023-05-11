@@ -5,7 +5,7 @@
         <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">
             {{ nameRoutine }}
         </v-toolbar-title>
-        <v-btn variant="flat" color="routinedarkred" @click="isOn = !isOn" :class="{'primary': isOn}">
+        <v-btn  class="run-btn" @click="isOn = !isOn" color="lightersecondary">
             RUN
           </v-btn>
       </v-toolbar>
@@ -16,12 +16,17 @@
             <span class="text--white font-weight-bold text-body mb-0"> {{ actions.length }}</span>
           </v-col>
         </v-row>
-        <v-row >
-          <v-btn variant="text" color="brown" class="mr-10 pl-6 pr-6" @click="openEditDialog">Edit Routine</v-btn>
-          <router-link :to="{ name: 'routineview', params: { routineName: nameRoutine } }">
-            <v-btn color="lightersecondary">View Actions</v-btn>
-          </router-link>
-        </v-row>
+
+        <v-card-actions class="actions-style " style="height: 100px;">
+          <v-row >
+            <v-btn variant="text" color="brown" class=" ml-10" @click="openEditDialog">Edit Routine</v-btn>
+            <v-spacer></v-spacer>
+            <router-link :to="{ name: 'routineview', params: { routineName: nameRoutine } }">
+              <v-btn class="view-actions-btn mr-10" color="primary">View Actions</v-btn>
+            </router-link>
+          </v-row>
+        </v-card-actions>
+        
       </v-card-text>
 
       <v-dialog v-model="isDialogOpen" width="1024" persistent>
@@ -109,7 +114,29 @@
 }
   </script>
   
-  <style scoped>
+<style scoped>
+.run-btn{
+  width: 50px;
+  height: 40px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(24, 15, 15, 0.589);
+  background-color: #795454;
+
+}
+.view-actions-btn{
+  background-color: #EFE5C5;
+  width: 150px;
+  height: 40px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(24, 15, 15, 0.589);
+}
+.actions-style {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color:#795454;
+  }
 .delete-button {
   width: 150px;
   height: 40px;
@@ -120,11 +147,8 @@
 .toggle-card {
   cursor: pointer;
   padding: 16px;
-  margin-top: 30px;
-  margin-left: 30px;
-  margin-right: 30px;
-  border-radius: 10px;
-  background-color: #795454;
+  border-radius: 20px;
+  background-color: #EFE5C5;
   transition: all .2s ease-in-out;
   height: 300px;
   width: 400px;
@@ -139,10 +163,8 @@
   background-color: transparent;
 }
 
-
-
 .text--white {
-  color: #f8dfc2;
+  color: #795454;
 }
 
 .toggle-card-popup {

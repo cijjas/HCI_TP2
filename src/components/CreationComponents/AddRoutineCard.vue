@@ -100,7 +100,7 @@ const submitButtonDisabled = computed(() => {
 
 
 <template>
-    <v-card width="1200" class="mx-auto card-style">
+    <v-card width="800" class="mx-auto card-style">
       <v-toolbar color="transparent" dense dark style="height: 120px;">
         <v-col cols="12" >
             <v-row >

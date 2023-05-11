@@ -172,15 +172,15 @@ function updateRoutineId( selection ){
                     :items="store.getRoomNames"
                     >
                     </v-select>
-                <v-text-field v-if="param.type == 'number'"
-                @update:modelValue = "updateParamValue($event, index)"
-                type="number"
-                class="pl-8 pt-8 pr-8"
-                variant="solo"
-                :min="param.minValue"
-                :max="param.maxValue"
-                :label="`${param.name}`"></v-text-field>
-                </v-card-text>
+                    <v-text-field v-if="param.type == 'number'"
+                    @update:modelValue = "updateParamValue($event, index)"
+                    type="number"
+                    class="pl-8 pt-8 pr-8"
+                    variant="solo"
+                    :min="param.minValue"
+                    :max="param.maxValue"
+                    :label="`${param.name}`"></v-text-field>
+                    </v-card-text>
 
                 <v-btn @click="addAction" elevation="0" color="secondary" class="ml-8 mb-8">Add Action to Routine</v-btn><br> <!-- añade al array de acciones en la rutina, storage en componente -->
                 <v-btn @click="store.createARoutine(routineName, routineActions)" elevation="0" color="secondary" class="ml-8 mb-8">Create Routine</v-btn> <!-- Crea la rutina con el nombre y el array de acciones que se construyo -->
