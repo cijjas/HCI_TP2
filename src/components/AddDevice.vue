@@ -9,6 +9,7 @@ const store = useAppStore();
 
 const loading = ref(true);
 
+const editDeviceName = ref("");
 const selectedDeviceName = ref("");
 const selectedDeviceName2 = ref("");
 const selectedDeviceRoom = ref("");
@@ -153,7 +154,7 @@ const submitAddDevice = () =>{
                     class="pl-8 pt-8 pr-8"
                     label="Select the Device"
                     :items="store.getDevicesNames"
-                    v-model="editDeviceName"
+                    v-model="selectedDeviceName"
                     ></v-select>
                     <v-text-field
                         clearable
@@ -161,8 +162,8 @@ const submitAddDevice = () =>{
                         variant="outlined"
                         class="pa-8"
                         label="New Name"
-                        v-model="newDeviceName"></v-text-field>
-                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8"  @click="() => { store.updateADeviceByName(selectedDeviceName, newDeviceName); clearVar(); }" > CONFIRM </v-btn>
+                        v-model="editDeviceName"></v-text-field>
+                    <v-btn elevation="0" color="secondary" class="ml-8 mb-8"  @click="() => { store.updateADeviceByName(selectedDeviceName, editDeviceName); clearVar(); }" > CONFIRM </v-btn>
                 </v-card>
 
                 <!-- DELETE A DEVICE -->

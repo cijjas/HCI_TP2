@@ -231,7 +231,11 @@ export const useAppStore = defineStore('app', {
         var deviceObj = {
           id : id,
           name : newname,
+          meta: {
+            component : this.getADevice(id).meta.component
+          }
         }
+        console.log(deviceObj);
         var result = await DevicesApi.modify(deviceObj);
         // local
         this.devices.find( device => device.id == id).name = newname;
