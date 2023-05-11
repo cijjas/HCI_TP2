@@ -26,8 +26,13 @@ const openCreateDialog = () => {
 const {handleSubmit, handleReset} = useForm({
   validationSchema:{
     roomName(value){
-      if(value?.length >= 3 && value?.length <= 20) return true
-      return 'Name must be between 3 and 20 characters long.'
+      const repeated = store.getARoomByName(value) ? true : false;
+      if(repeated) {
+        return 'Room name already in use.'
+      }
+      if(value?.length >= 3 && value?.length <= 15) return true
+      return 'Name must be between 3 and 15 characters long.'
+
     }
   },
 })

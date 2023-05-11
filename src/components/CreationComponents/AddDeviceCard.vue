@@ -26,8 +26,7 @@
     }, 1250);
   };
 
-
-
+  
   const {handleSubmit, handleReset} = useForm(
     {
       validationSchema: {
@@ -40,8 +39,16 @@
           return 'Select a device type.'
         },
         name(value){ // agregar testeo de si ya existe el nombre
-          if (value?.length >= 3 && value?.length <= 15) return true
-          return 'Name must be between 3 and 15 characters long.'
+          const repeated = store.getADeviceByName(value) ? true : false;
+          if(repeated) {
+            return 'Name already in use.'
+          }
+          const tooLong = value?.length > 15 ? true : false;
+          const tooShort = value?.length < 3 ? true : false;
+          if(tooLong || tooShort) {
+            return 'Name must be between 3 and 15 characters long.'
+          }
+          return true
         }
       },
     }
