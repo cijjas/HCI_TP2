@@ -131,7 +131,7 @@ const submitAddDevice = () =>{
                             class="ml-8 mb-8"
                             > CONFIRM </v-btn>
 
-                            <v-dialog v-model="isCreateDialogOpen" width="500" color="gris" persistent>
+                            <v-dialog v-model="isCreateDialogOpen" width="500" color="gris" >
                                 <v-card class="toggle-card-popup">
                                     <div class="text-center">
                                         <v-icon icon="mdi-check-circle-outline" class="check-icon"></v-icon>

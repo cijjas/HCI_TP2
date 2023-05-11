@@ -33,7 +33,7 @@
     isCreateDialogOpen.value = true;
     setTimeout(() => {
       isCreateDialogOpen.value = false;
-    }, 2000);
+    }, 1250);
   };
 
 

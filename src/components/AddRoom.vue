@@ -34,7 +34,7 @@ const openCreateDialog = () => {
     isCreateDialogOpen.value = true;
     setTimeout(() => {
         isCreateDialogOpen.value = false;
-    }, 2000);
+    }, 1250);
 };
 
 </script>
@@ -77,7 +77,7 @@ const openCreateDialog = () => {
                     <!-- <v-btn elevation="0" color="secondary" class="ml-8 mb-8" @click="store.createARoom(creationRoomName)"> CONFIRM </v-btn> -->
                     <v-btn elevation="0" color="secondary" class="ml-8 mb-8" @click="store.createARoom(creationRoomName); openCreateDialog()"> CONFIRM </v-btn>
 
-                    <v-dialog v-model="isCreateDialogOpen" width="500" color="gris" persistent>
+                    <v-dialog v-model="isCreateDialogOpen" width="500" color="gris" >
                         <v-card class="toggle-card-popup">
                             <div class="text-center">
                                 <v-icon icon="mdi-check-circle-outline" class="check-icon"></v-icon>
