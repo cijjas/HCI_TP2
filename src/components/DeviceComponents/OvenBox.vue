@@ -373,8 +373,8 @@ const openDeleteDialog = () => {
 .toggle-card-on {
   cursor: pointer;
   padding: 16px;
-  border-radius: 10px;
-  background-color: #F4CF6D;
+  border-radius: 20px;
+  background-color: #DBD0AF;
   background-image:url('./DeviceAssets/fuego.png');
   background-size: cover;
   background-position: center;
@@ -387,8 +387,8 @@ const openDeleteDialog = () => {
   position: relative;
   cursor: pointer;
   padding: 16px;
-  border-radius: 10px;
-  background-color: #F4CF6D;
+  border-radius: 20px;
+  background-color: #DBD0AF;
   background-image: url('./DeviceAssets/fuego.png');
   background-size: cover;
   background-position: center;

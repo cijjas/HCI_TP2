@@ -44,7 +44,7 @@ const submit = handleSubmit(values => {
 </script>
 
 <template>
-    <v-card width="450" class="mx-auto card-style">
+    <v-card width="400" class="mx-auto card-style">
       <v-toolbar color="transparent" dense dark style="height: 120px;">
         <v-col cols="12" >
             <v-row >
@@ -54,7 +54,6 @@ const submit = handleSubmit(values => {
       </v-toolbar>
 
         <v-form @submit.prevent="submit">
-                
                 <v-text-field 
                 v-model="roomName.value.value"
                 :error-messages="roomName.errorMessage.value"
@@ -69,7 +68,7 @@ const submit = handleSubmit(values => {
                 ></v-text-field>
                  
                 <v-card-actions class="actions-style" style="height: 100px;  "  >
-                  <v-btn @click="handleReset" class="ml-8">Clear</v-btn>
+                  <v-btn color="white" @click="handleReset" class="ml-8">Clear</v-btn>
                   <v-spacer></v-spacer>
                   <v-btn 
                   class="small-button-add mr-12"
@@ -82,7 +81,7 @@ const submit = handleSubmit(values => {
                     <v-card class="toggle-card-popup">
                         <div class="text-center">
                             <v-icon icon="mdi-check-circle-outline" class="check-icon"></v-icon>
-                            <v-card-title prepend-icon="mdi-check-circle-outline" class="font-weight-bold text-h5 card-title">Device Created</v-card-title>
+                            <v-card-title prepend-icon="mdi-check-circle-outline" class="font-weight-bold text-h5 card-title">Room Created</v-card-title>
                             <v-card-text>Room successfully created</v-card-text>
                         </div>
                     </v-card>
@@ -134,7 +133,7 @@ const submit = handleSubmit(values => {
     background-image: url('https://i.imgur.com/TN3egpF.png');
     background-size: cover;
     background-position: 0px -70px;
-    height: 600px;
+    height: 654px;
   }
   .v-card__title {
     padding: 0;

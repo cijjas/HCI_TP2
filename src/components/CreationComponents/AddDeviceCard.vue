@@ -39,7 +39,7 @@
           if(value) return true
           return 'Select a device type.'
         },
-        name(value){
+        name(value){ // agregar testeo de si ya existe el nombre
           if (value?.length >= 3 && value?.length <= 15) return true
           return 'Name must be between 3 and 15 characters long.'
         }
@@ -51,9 +51,10 @@
   const type= useField('type');
 
   const submit = handleSubmit(values => {
-          store.createADevice(values.room, values.name, values.type);
-          handleReset();
-          openCreateDialog();
+    console.log(values);
+    store.createADevice(values.room, values.name, values.type);
+    handleReset();
+    openCreateDialog();
   })
 </script>
 
@@ -104,7 +105,7 @@
                     ></v-text-field>
                     
                 <v-card-actions class="actions-style" style="height: 100px; ">
-                  <v-btn @click="handleReset" class="ml-8">Clear</v-btn>
+                  <v-btn color="white" @click="handleReset" class="ml-8">Clear</v-btn>
                   <v-spacer></v-spacer>
                   <v-btn 
                   class="small-button-add mr-12"
@@ -118,7 +119,7 @@
                         <div class="text-center">
                             <v-icon icon="mdi-check-circle-outline" class="check-icon"></v-icon>
                             <v-card-title prepend-icon="mdi-check-circle-outline" class="font-weight-bold text-h5 card-title">Device Created</v-card-title>
-                            <v-card-text>Routine successfully created</v-card-text>
+                            <v-card-text>Device successfully created</v-card-text>
                         </div>
                     </v-card>
                 </v-dialog>

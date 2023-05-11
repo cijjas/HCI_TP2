@@ -275,7 +275,7 @@ const openDeleteDialog = () => {
 .toggle-card {
   cursor: pointer;
   padding: 16px;  
-  border-radius: 10px;
+  border-radius: 20px;
   background-color: #F4CF6D;
   transition: all .2s ease-in-out;
   height: 300px;

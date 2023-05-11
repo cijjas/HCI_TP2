@@ -171,12 +171,12 @@ const openDeleteDialog = () => {
           <v-btn class="small-button-save" color="white" @click="saveSettings">Save</v-btn>
         </v-card-actions>
 
-        <v-dialog v-model="isDeleteDialogOpen" width="1024" persistent>
+        <v-dialog v-model="isDeleteDialogOpen" width="1024" >
             <v-card class="toggle-card-popup">
                 <v-card-title class="headline">Are you sure you want to delete {{ deviceName }}?</v-card-title>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="primary" variant="plain" @click="deleteDevice();">Delete</v-btn>
+                    <v-btn color="red" variant="plain" @click="deleteDevice();">Delete</v-btn>
                     <v-btn color="primary" @click="openDeleteDialog">Cancel</v-btn>
               </v-card-actions>
             </v-card>
@@ -194,7 +194,7 @@ const openDeleteDialog = () => {
 .toggle-card-on {
   cursor: pointer;
   padding: 16px;
-  border-radius: 10px;
+  border-radius: 20px;
   background-color: #F4CF6D;
   background-image: url("./DeviceAssets/del-cur-frame.png");
 
@@ -208,7 +208,7 @@ const openDeleteDialog = () => {
 .toggle-card-off{
   position: relative;
   padding: 16px;
-  border-radius: 10px;
+  border-radius: 20px;
   
   background-image: url('./DeviceAssets/del-cur-frame.png');
   background-size: cover;

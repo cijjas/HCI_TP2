@@ -195,7 +195,7 @@ const openDeleteDialog = () => {
 .toggle-card-on {
   cursor: pointer;
   padding: 16px;  
-  border-radius: 10px;
+  border-radius: 20px;
   background-color: #a3c1d6;
   background-image: url('./DeviceAssets/tap-wave.png');
   background-size: cover;
@@ -206,7 +206,7 @@ const openDeleteDialog = () => {
 .toggle-card-off {
   cursor: pointer;
   padding: 16px;  
-  border-radius: 10px;
+  border-radius: 20px;
   background-color: #a3c1d6;
   background-image: url('./DeviceAssets/tap-wave.png');
   background-size: cover;
