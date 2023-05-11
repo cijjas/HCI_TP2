@@ -425,6 +425,7 @@ export const useAppStore = defineStore('app', {
       for ( let i = 0; i < this.rooms.length; i++ ){
         for ( let j = 0; j < this.rooms[i].meta.devices.length; j++){
           if ( this.rooms[i].meta.devices[j] == id ){
+            console.log(this.rooms[i].name);
             return this.rooms[i].name;
           }
         }

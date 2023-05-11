@@ -4,7 +4,7 @@
   import { useAppStore } from '@/store/app';
   const store = useAppStore();
 
-const props = defineProps({
+  const props = defineProps({
   componentName: {
     type: String,
     required: true
@@ -12,10 +12,15 @@ const props = defineProps({
   componentId: {
     type: String,
     required: true
+  },
+  componentRoom: {
+    type: String,
+    required: true
   }
 })
   // const props = defineProps(['roomName', 'devicesCount']);
   const componentId = ref(props.componentId);
+  const componentRoom = ref(props.componentRoom);
   const isOn = ref(false);
   const isDialogOpen = ref(false);
   const isDeleteDialogOpen = ref(false);
@@ -105,7 +110,7 @@ const openDeleteDialog = () => {
 
       <v-row no-gutters  >
         <v-col cols="12">
-          <v-subheader class="ml-4">Ubicación</v-subheader>
+          <v-subheader class="ml-4">{{componentRoom}}</v-subheader>
         </v-col>
       </v-row>
 
