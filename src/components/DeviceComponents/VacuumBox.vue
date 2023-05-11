@@ -258,7 +258,7 @@ const openDeleteDialog = () => {
                 <v-card-title class="headline">Are you sure you want to delete {{ deviceName }}?</v-card-title>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="primary" variant="plain" @click="deleteDevice();">Delete</v-btn>
+                    <v-btn color="routinedarkred" variant="plain" @click="deleteDevice();">Delete</v-btn>
                     <v-btn color="primary" @click="openDeleteDialog">Cancel</v-btn>
               </v-card-actions>
             </v-card>
@@ -286,7 +286,7 @@ const openDeleteDialog = () => {
   width: 200px;
   height: 40px;
   border-radius: 10px;
-  background-color: #ff2a00;
+  background-color: #d82602;
   box-shadow: 0 2px 4px rgba(24, 15, 15, 0.589);
 }
 .actions-style {

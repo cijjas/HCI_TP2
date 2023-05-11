@@ -5,7 +5,7 @@
         <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">
             {{ nameRoutine }}
         </v-toolbar-title>
-        <v-btn variant="flat" color="primary" @click="isOn = !isOn" :class="{'primary': isOn}">
+        <v-btn variant="flat" color="routinedarkred" @click="isOn = !isOn" :class="{'primary': isOn}">
             RUN
           </v-btn>
       </v-toolbar>
@@ -13,22 +13,20 @@
         <v-row align="center">
           <v-col>
             <v-subheader class="ml-1">Actions in Routine: </v-subheader>
-            <span class="font-weight-bold text-body mb-0"> {{ actionsCount }}</span>
-            <!-- <span class="font-weight-bold text-body mb-0">{{ actionsCount }}</span> -->
+            <span class="font-weight-bold text-body mb-0"> {{ actions.length }}</span>
           </v-col>
         </v-row>
-        <v-row class="justify-center">
+        <v-row >
           <v-btn variant="text" color="primary" class="mr-10 pl-6 pr-6" @click="openEditDialog">Edit Routine</v-btn>
-          <v-btn variant="text" color="primary" class="pl-6 pr-6">Add Action</v-btn>
           <router-link :to="{ name: 'routineview', params: { routineName: nameRoutine } }">
-            <v-btn color="primary" class="mr-5 pl-5 pr-5 mt-3">View Actions</v-btn>
+            <v-btn color="lightersecondary">View Actions</v-btn>
           </router-link>
         </v-row>
       </v-card-text>
 
       <v-dialog v-model="isDialogOpen" width="1024" persistent>
         <v-card class="toggle-card-popup">
-          <v-card-title class="headline">Edit '{{ nameRoutine }}''</v-card-title>
+          <v-card-title class="headline">Edit '{{ nameRoutine }}'</v-card-title>
           <v-card-text>
             <v-text-field label="New Routine Name" v-model="tempRoutineName" :placeholder="nameRoutine"></v-text-field>
           </v-card-text>
@@ -126,7 +124,7 @@
   margin-left: 30px;
   margin-right: 30px;
   border-radius: 10px;
-  background-color: #F4CF6D;
+  background-color: #E57373;
   transition: all .2s ease-in-out;
   max-height: 400px;
   max-width: 450px;
@@ -142,15 +140,26 @@
 }
 
 .bg-on {
-  background-color: #F4CF6D;
+  background-color: #E57373;
 }
 
 .bg-off {
-  background-color: #F4CF6D;
+  background-color: #E57373;
 }
 
 .rounded-toolbar .text--white {
   color: #1C4035;
+}
+
+.toggle-card-popup {
+  padding: 30px;
+  border-radius: 15px !important;
+  background-image: url("./DeviceAssets/fuego.png");
+  background-position-x: 50%;
+  background-position-y: -100px ;
+  background-size: 1200px;
+  background-color: #f4e8c6ae;
+  backdrop-filter: blur(8px);
 }
 
 </style>
