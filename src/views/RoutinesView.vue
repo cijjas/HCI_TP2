@@ -22,12 +22,12 @@
 
 <template>
     <main>
-        <AddRoutineCard></AddRoutineCard>
         <v-card class="vcard elevation-0" color="transparent">
             <v-row style="margin-top: 20px;">
                 <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Routines</v-card-title>
                 <v-divider color="gris"></v-divider>
             </v-row>
+            <AddRoutineCard></AddRoutineCard>
             
             <v-row justify-end>
                 <v-col cols="5" v-for="routine in store.getAllRoutines()" :key="room">

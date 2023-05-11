@@ -1,5 +1,5 @@
 <template>
-    <v-card :class="bg-on" class="toggle-card" style="width: 400px;" @click="toggleCard" >
+    <v-card :class="bg-on" class="toggle-card"  @click="toggleCard" >
     
       <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
         <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">
@@ -126,8 +126,8 @@
   border-radius: 10px;
   background-color: #795454;
   transition: all .2s ease-in-out;
-  max-height: 400px;
-  max-width: 450px;
+  height: 300px;
+  width: 400px;
 }
 
 .toggle-card:hover {
