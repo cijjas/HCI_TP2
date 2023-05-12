@@ -5,7 +5,7 @@
       <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">
           {{ nameRoutine }}
       </v-toolbar-title>
-      <v-btn  class="run-btn" @click="isOn = !isOn" color="lightersecondary">
+      <v-btn  class="run-btn" @click="store.executeARoutine(routineId);" color="lightersecondary">
           RUN
         </v-btn>
     </v-toolbar>
@@ -108,6 +108,7 @@ const deleteRoutine = () => {
 function clearVar(){
   tempRoutineName.value = "";
 }
+
 </script>
 
 <style scoped>
