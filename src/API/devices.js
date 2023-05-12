@@ -17,6 +17,9 @@ class DevicesApi{
     static get(id){
         return Api.get(DevicesApi.getUrl(id));
     }
+    static getState(id){
+        return Api.get(`${DevicesApi.getUrl(id)}/state`);
+    }
     static getAll(){
         return Api.get(DevicesApi.getUrl());
     }
@@ -24,13 +27,8 @@ class DevicesApi{
         return Api.get(`${Api.baseUrl}/devicetypes`);
     }
     static executeAction(device,action, data){
-        console.log(`${Api.baseUrl}/devices/${device}/${action}`);
-        return Api.put(`${Api.baseUrl}/devices/${device}/${action}`,data)
+        return Api.put(`${Api.baseUrl}/devices/${device}/${action}`,data)// deberia usar el geturl de aca, refactorizar!
     }
 }
 
-
-/*
-controlar????
-*/
 export { DevicesApi }

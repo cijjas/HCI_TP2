@@ -251,8 +251,9 @@ export const useAppStore = defineStore('app', {
     },
     async updateADeviceState(id, action, paramsArr ){
       // se ejecuta accion y se cambia el estado del device en la API
+      // console.log("id: " + )
       try{
-        var result = DevicesApi.executeAction(id, action, paramsArr)
+        var result = await DevicesApi.executeAction(id, action, paramsArr)
         this.updateADeviceStateLocal(id, action, paramsArr);
         return result;
       }catch(error){
@@ -433,8 +434,8 @@ export const useAppStore = defineStore('app', {
       console.log("getRoomDevices");
       console.log(idRoom);
       var room = this.getARoomByName(idRoom);
-      for ( let i = 0; i < room.meta.devices ; i++ ){
-        arr.push(this.getADevice(room.meta.devices));
+      for ( let i = 0; i < room.meta.devices.length ; i++ ){
+        arr.push(this.getADevice(room.meta.devices[i]));
       }
       return arr;
     },
@@ -649,6 +650,14 @@ export const useAppStore = defineStore('app', {
         return arr;
       },
 
+      async getDeviceStateAPI(id){
+        try {
+          var result = await DevicesApi.getState(id)
+          return result;
+        } catch (error) {
+          console.error(error);
+        }
+      },
       getDeviceState(deviceId){
         for ( let i = 0; i < this.devices.length; i++ ){
           if ( this.devices[i].id == deviceId ){

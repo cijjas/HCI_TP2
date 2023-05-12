@@ -16,7 +16,7 @@ const props = defineProps({
 })
   // const props = defineProps(['roomName', 'devicesCount']);
   const componentId = ref(props.componentId);
-  const isOn = ref(false);
+  // const isOn = ref(false);
   const isDialogOpen = ref(false);
   const isDeleteDialogOpen = ref(false);
   const disabledFields = ref(false);
@@ -25,6 +25,7 @@ const props = defineProps({
   const amountValue = ref(0);
   const selectedUnit = ref(null);
   const unit = ref(['litres', 'gallons', 'mililitres', 'ounces']);
+  const dispensing = ref(false);
 
   const tempDeviceName = ref(deviceName.value);
   const tempAmountValue = ref(amountValue.value);
@@ -40,6 +41,7 @@ const props = defineProps({
 
   const handleButtonClick = () => {
     console.log(`Dispensing ${amountValue.value} ${selectedUnit.value}...`);
+    
     resetValues();
   }
 
@@ -61,6 +63,8 @@ const props = defineProps({
       return;
     }
     deviceName.value = tempDeviceName.value;
+    console.log("new name" + deviceName.value + " id: " + componentId.value);
+    // store.updateADevice(componentId.value, deviceName.value);
     isDialogOpen.value = false;
   };
   const deleteDevice = () => {
@@ -74,6 +78,67 @@ const openDeleteDialog = () => {
         isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
 };
 
+/* -------------------------------------- REFACTORING -------------------------------------- */
+const deviceState = ref(store.getDeviceState(props.componentId));           // estas variables inicialmente son correctas ya que vienen del MOUNT
+const status = ref(store.getDeviceState(props.componentId).status)
+const isOn = computed( ()=>{
+  return status.value == 'opened'
+})
+
+function changeStatus(){
+  console.log("Changing Status");
+  console.log("Previous Status " + status.value);
+  // moving.value = true;
+
+  //faucet solo tiene 2 estados: opened o closed
+  switch ( status.value ){
+    case 'closed':
+      status.value = "opened";
+      open();
+      break;
+    case 'opened':
+      status.value = "closed";
+      close();
+      break;
+    default :
+    console.log("CODE REDDDDDdd")
+  }
+
+  console.log("Proceding Status " + status.value);
+  // moving.value = false;
+}
+
+async function open() {
+  await store.updateADeviceState(props.componentId, "open", []);        // le avisa la api que abra, local storage "opened"
+}
+
+async function close() {
+  await store.updateADeviceState(props.componentId, "close", []);
+}
+
+async function dispense() {
+  console.log(`Dispensing ${amountValue.value} ${selectedUnit.value}...`);
+  if(amountValue.value < 1 || amountValue.value > 100 || selectedUnit.value == null) {
+    //mal la cantidad
+    return;
+  }
+  
+  status.value = "opened";
+  await store.updateADeviceState(props.componentId, "dispense", [amountValue.value, selectedUnit.value]);        // le avisa la api que arranque a abrir, local storage "opened"
+
+  //polling para chequear estado -> 
+  const intervalId = setInterval(async () => {
+    const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
+    deviceState.value = deviceStateRT;
+    console.log(deviceStateRT);
+
+    //cuando se dispensó todo, el state es 'closed' -> termino el polling
+    if (deviceStateRT.status == 'closed') {
+      clearInterval(intervalId);
+      status.value = "closed";
+    }
+  }, 1000);
+}
 
 </script>
 
@@ -95,10 +160,10 @@ const openDeleteDialog = () => {
         <v-spacer></v-spacer>
         <v-btn 
               icon 
-              @click="isOn = !isOn; if(!isOn) resetValues();" 
+              @click="isOn = !isOn; changeStatus(); if(!isOn) resetValues();" 
               :class="{'on-button': isOn, 'off-button': !isOn}"
               >
-              <v-icon>{{ isOn ? 'mdi-power' : 'mdi-power-standby' }}</v-icon>
+              <v-icon>{{ !isOn ? 'mdi-water-pump-off' : 'mdi-water-pump' }}</v-icon>
         </v-btn>
         
       </v-toolbar>
@@ -118,7 +183,7 @@ const openDeleteDialog = () => {
                     type="number" 
                     label="Amount" 
                     variant="solo" 
-                    :disabled="!isOn" 
+                    :disabled="isOn" 
                     :min="0"
                     :max="100"  
                     class="rounded-input green-text" 
@@ -127,7 +192,7 @@ const openDeleteDialog = () => {
             <v-col >
               <v-select 
                   v-model="selectedUnit" 
-                  :disabled="!isOn" 
+                  :disabled="isOn" 
                   :items="unit" 
                   label="Unit" 
                   variant="solo" 
@@ -136,9 +201,9 @@ const openDeleteDialog = () => {
             </v-col>
             <v-col >
               <v-btn 
-                :disabled="!isOn" 
+                :disabled="isOn" 
                 color="primary" 
-                @click="handleButtonClick();" 
+                @click="dispense();" 
                 class="small-button"
                 >Dispense</v-btn>
             </v-col>
@@ -307,10 +372,12 @@ const openDeleteDialog = () => {
 
 
 .on-button:active {
-  color: #631414;
+  /* color: #631414; */
+  color: black;
 }
 .off-button:active {
-  color: #1f8a3c;
+  /* color: #1f8a3c; */
+  color: black;
 }
 .on-button{
   color: #1f8a3c;
