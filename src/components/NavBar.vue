@@ -99,9 +99,9 @@ export default {
               </v-list-item>
               <v-list-item to="/CreationView" class="side-btn">
                 <template v-slot:prepend>
-                  <v-icon class="green-text" size="24">mdi-close</v-icon>
+                  <v-icon class="green-text" size="24">mdi-plus</v-icon>
                 </template>
-                <span>Test</span>
+                <span>Create</span>
               </v-list-item>
         </v-list>
       

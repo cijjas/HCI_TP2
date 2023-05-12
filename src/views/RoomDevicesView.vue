@@ -47,7 +47,7 @@
         </v-row>
 
         <v-row>
-          <v-col md="3" class="add-card-column">
+          <v-col md="3" class="mt-5">
             <AddDeviceToRoomCard :roomName="roomName"></AddDeviceToRoomCard>
           </v-col>
 
@@ -56,7 +56,7 @@
             <v-row>
               <template v-for="(device, index) in roomDevices" :key="device.id">
                 <template v-if="index < 6">
-                  <v-col xs="12" sm="12" md="6" lg="4">
+                  <v-col class="mt-5" xs="12" sm="12" md="6" lg="4">
                       <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id" :componentRoom="store.getDevicesRoom(device.id)"></component>
                   </v-col>
                 </template>
@@ -68,7 +68,7 @@
             <v-row>
               <template v-for="(device, index) in roomDevices" :key="device.id">
                 <template v-if="index >= 6">
-                  <v-col xs="12" sm="6" md="4" lg="3">
+                  <v-col class="mt-5" xs="12" sm="6" md="4" lg="3">
                       <component   :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id" :componentRoom="store.getDevicesRoom(device.id)"></component>
                   </v-col>
                 </template>
@@ -83,29 +83,11 @@
 </template>
 
 <style scoped>
-  .grid-item {
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    margin: 1rem;
-    padding: 0;
-    transition: box-shadow 0.2s ease;
-    background-color: transparent;
-  }
-
-
-  .grid-item:hover {
-    transition: transform 0.3s ease-out;
-    transform: scale(1.01);
-  }
 
   .v-layout {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-  }
-
-  .add-card-column {
-    padding-top: 28px; /* Adjust the value as per your preference */
   }
 
   </style>

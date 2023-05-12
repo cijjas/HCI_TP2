@@ -306,7 +306,7 @@ const submitButtonDisabled = computed(() => {
     background-size: cover;
     background-position-x: -50px;
     background-position-y: -50px;
-    height: 648px;
+    height: 646px;
     transition:  transform .3s ease-in-out;
   }
   .card-style:hover{

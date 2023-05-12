@@ -1,6 +1,6 @@
 
 <script setup>
-import { ref, defineProps } from 'vue'
+import { ref, computed, defineProps } from 'vue'
 import { useAppStore } from '@/store/app';
 
 const store = useAppStore();
@@ -23,6 +23,8 @@ const isDialogOpen = ref(false);
 const isDeleteDialogOpen = ref(false);
 const toggleValue = ref(true);
 const isConfirmationDialogOpen = ref(false);
+const roomDevices = computed(() => store.getRoomDevices(roomId.value));
+
 
 const openCreateDialog = () => {
   isConfirmationDialogOpen.value = true;
@@ -76,6 +78,12 @@ function clearVar(){
       </v-toolbar>
 
       <v-card-text>
+        <v-row >
+        <v-col>
+          <v-text class="text--white" >Devices in Room: </v-text>
+          <span class="text--white font-weight-bold text-body mb-0"> {{ roomDevices.length }}</span>
+        </v-col>
+      </v-row>
       </v-card-text>
 
       <v-card-actions class="actions-style" style="height:100px"> 

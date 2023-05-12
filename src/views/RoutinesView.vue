@@ -67,35 +67,10 @@
 
 <style scoped>
 
-
-.grid-item {
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  margin: 0;
-  padding: 0;
-  transition: box-shadow 0.2s ease;
-}
-
-
-.grid-item:hover {
-  transition: transform 0.3s ease-out;
-  transform: scale(1.01);
-}
-
 .v-layout {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-}
-
-</style>
-
-<style scoped>
-
-
-.vcard {
-    border-radius: 8px;
-    /* background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%), rgba(233, 247, 242, 0.03); */
 }
 
 </style>

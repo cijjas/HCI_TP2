@@ -46,7 +46,7 @@ function getComponent(file) {
         </v-row>
 
         <v-row>
-          <v-col md="3" class="add-card-column">
+          <v-col md="3" class="mt-5">
             <AddDeviceCard></AddDeviceCard>
           </v-col>
 
@@ -55,10 +55,8 @@ function getComponent(file) {
             <v-row>
               <template v-for="(device, index) in store.devices" :key="device.id">
                 <template v-if="index < 6">
-                  <v-col xs="12" sm="12" md="6" lg="4">
-                    <v-card class="grid-item" width="400">
+                  <v-col class="mt-5" xs="12" sm="12" md="6" lg="4">
                       <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id" :componentRoom="store.getDevicesRoom(device.id)"></component>
-                    </v-card>
                   </v-col>
                 </template>
               </template>
@@ -66,10 +64,10 @@ function getComponent(file) {
           </v-col>
 
           <v-col>
-            <v-row class="ml-1">
+            <v-row>
               <template v-for="(device, index) in store.devices" :key="device.id">
                 <template v-if="index >= 6">
-                  <v-col xs="12" sm="6" md="4" lg="3">
+                  <v-col class="mt-5" xs="12" sm="6" md="4" lg="3">
                       <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id" :componentRoom="store.getDevicesRoom(device.id)"></component>
                   </v-col>
                 </template>
@@ -84,23 +82,11 @@ function getComponent(file) {
 </template>
 
 <style scoped>
-.grid-item {
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  margin: 1rem;
-  padding: 0;
-  transition: box-shadow 0.2s ease;
-  background-color: transparent;
-}
 
 .v-layout {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-}
-
-.add-card-column {
-  padding-top: 28px; /* Adjust the value as per your preference */
 }
 
 </style>
