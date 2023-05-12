@@ -155,7 +155,7 @@ const props = defineProps({
 }
 .toggle-card-popup {
   cursor: pointer;
-  padding: 16px;
+  padding: 20px;
   border-radius: 15px;
   background-color: whitesmoke;
   transition: all .2s ease-in-out;

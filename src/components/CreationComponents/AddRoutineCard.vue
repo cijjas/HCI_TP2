@@ -100,7 +100,7 @@ const submitButtonDisabled = computed(() => {
 
 
 <template>
-    <v-card width="800" class="mx-auto card-style">
+    <v-card width="850" class="mx-auto card-style">
       <v-toolbar color="transparent" dense dark style="height: 120px;">
         <v-col cols="12" >
             <v-row >
@@ -302,8 +302,9 @@ const submitButtonDisabled = computed(() => {
     border-radius: 30px;
     background-image: url('../ComponentsAssets/background-long.png');
     background-size: cover;
+    background-position-x: -50px;
     background-position-y: -50px;
-    height: 654px;
+    height: 648px;
   }
  
 </style>
