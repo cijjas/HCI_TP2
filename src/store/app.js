@@ -32,7 +32,7 @@ export const useAppStore = defineStore('app', {
     deviceActionsRaw : [],
     deviceActions : [],
 
-    // vacuum cleaner, oven, fridge, curtain, tap/sprinkler
+    // speaker, oven, fridge, curtain, tap/sprinkler
 
     // STATIC API DATA
 
@@ -43,8 +43,8 @@ export const useAppStore = defineStore('app', {
       id: "im77xxyulpegfmv8",
       name: "Oven"
       },{
-      id: "ofglvd9gqx8yfl3l",
-      name: "Vacuum"
+      id: "c89b94e8581855bc",
+      name: "Speaker"
       },{
       id: "rnizejqr2di0okho",
       name: "Refrigerator"
@@ -52,7 +52,7 @@ export const useAppStore = defineStore('app', {
       id: "dbrlsh7o5sn8ur4i",
       name: "Faucet"
     }],
-    supportedDevicesNames : [ "blinds","oven" ,"vacuum" , "refrigerator", "faucet"]
+    supportedDevicesNames : [ "blinds","oven" ,"speaker" , "refrigerator", "faucet"]
   }),
 
 
@@ -128,6 +128,7 @@ export const useAppStore = defineStore('app', {
 
     async deleteARoom(id){
       try {
+        this.deleteRoomDevices(id);
         var result = await RoomApi.remove(id);
         removeItemFromArray(this.rooms, id);
         return result;
@@ -182,7 +183,7 @@ export const useAppStore = defineStore('app', {
           }
         }
         switch(type.toLowerCase()){
-          case 'vacuum':
+          case 'speaker':
             deviceObj.meta.component = VacuumBox
             break;
           case 'faucet':
@@ -198,7 +199,7 @@ export const useAppStore = defineStore('app', {
             deviceObj.meta.component = CurtainBox
             break;
           default :
-            console.log(`${type} should be one of these : Blinds, Faucet, Refrigerator, Oven, Vacuum `);
+            console.log(`${type} should be one of these : blinds, faucet, refrigerator, oven, speaker `);
         }
 
         console.log(deviceObj);
@@ -359,31 +360,45 @@ export const useAppStore = defineStore('app', {
                     console.log(`${action} is not a valid action for ${deviceType} `)
                 }
                 break;
-              case 'vacuum':
-                console.log("VACUUM LOCALLY UPDATED");
+              case 'speaker':
+                console.log("SPEAKER LOCALLY UPDATED");
                 /* Estas funcionalidades son freestyle */
                 switch(action){
-                  case 'start':
-                    this.devices[i].state.status = 'on';
+                  case 'setVolume':
+                    this.devices[i].state.volume = paramsArr[0];
+                    break;
+                  case 'play':
+                    this.devices[i].state.status = 'playing';
+                    break;
+                  case 'stop':
+                    this.devices[i].state.status = 'stopped';
                     break;
                   case 'pause':
                     this.devices[i].state.status = 'paused';
                     break;
-                  case 'dock':
-                    this.devices[i].state.status = 'docked';
+                  case 'resume':
+                    this.devices[i].state.status = 'playing';
                     break;
-                  case 'setMode':
-                    this.devices[i].state.mode = paramsArr[0];
+                  /* work in progress */
+                  case 'setGenre':
+                    this.devices[i].state.genre = paramsArr[0];
+                    this.devices[i].state.song = paramsArr[0];
                     break;
-                  case 'setLocation':
-                    this.devices[i].state.location = paramsArr[0];
+                  case 'nextSong':
+                    this.devices[i].state.song = paramsArr[0];
+                    break;
+                  case 'previousSong':
+                    this.devices[i].state.song = paramsArr[0];
+                    break;
+                  case 'getPlaylist':
+                    this.devices[i].state.playlist = paramsArr[0];
                     break;
                   default:
                     console.log(`${action} is not a valid action for ${deviceType} `)
                 }
                 break;
               default:
-                console.log(`${deviceType} should be one of these : Blinds, Faucet, Refrigerator, Oven, Vacuum `);
+                console.log(`${deviceType} should be one of these : blinds, faucet, refrigerator, oven, speaker `);
             }
           }
     },
@@ -406,11 +421,11 @@ export const useAppStore = defineStore('app', {
         // update remoto
         this.updateARoom(room.id, room.name);
         // delete component
-        var device = this.getADevice(id);
-        var index = this.components.findIndex(component => component.name === device.type.name + "Box");
-        if (index !== -1) {
-          this.components.splice(index, 1);
-        } //chequear
+        //var device = this.getADevice(id);
+        //var index = this.components.findIndex(component => component.name === device.type.name + "Box");
+        //if (index !== -1) {
+        //  this.components.splice(index, 1);
+        //} //chequear
         this.getAllDevicesAPI();
         return result;
       } catch (error) {
@@ -455,6 +470,16 @@ export const useAppStore = defineStore('app', {
         arr.push(this.getADevice(room.meta.devices[i]));
       }
       return arr;
+    },
+    deleteRoomDevices(idRoom) {
+      var room = this.getARoom(idRoom);
+      console.log("room entero: " + room);
+      if ( room === undefined )
+        return;
+      for ( let i = 0; i < room.meta.devices.length ; i++ ){
+        console.log("deleting device: " + room.meta.devices[i]);
+        this.deleteADevice(room.meta.devices[i]);
+      }
     },
 
 
