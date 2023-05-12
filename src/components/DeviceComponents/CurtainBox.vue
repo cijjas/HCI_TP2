@@ -20,7 +20,7 @@ const props = defineProps({
   // const props = defineProps(['roomName', 'devicesCount']);
   const componentId = ref(props.componentId);
   const componentRoom = ref(props.componentRoom);
-
+  const isValidLevel = ref(false);
   const sliderValue = ref(10);
   const isDialogOpen = ref(false);
   const isDeleteDialogOpen = ref(false);
@@ -30,13 +30,14 @@ const props = defineProps({
   const rules = {
     minLength: value => value.length >= 3 || 'Min 3 characters',
     maxLength: value => value.length <= 15 || 'Max 15 characters',
+    validateLevel: value => value >= 0 && value <= 100 || 'min 0, max 100'
   };
 
 
   const computedBackgroundColor = computed(() => {
     const color1 = [140, 120, 58]; // RGB values for #8C783A
     const color2 = [244, 207, 109]; // RGB values for #EECC66
-    const ratio = sliderValue.value / 100;
+    const ratio = selectedLevel.value / 100;
     const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
     return `rgb(${color.join(',')})`;
   });
@@ -203,36 +204,56 @@ function setLevel(){
     </v-toolbar>
 
     <!-- locations for-->
-    <v-row style="margin-bottom: 20px">
+    <v-row style="margin-bottom: 10px">
       <v-col cols="8">
         <v-subheader class="ml-1">{{componentRoom}}</v-subheader>
       </v-col>
 
     </v-row>
+
     <v-row >
-        <v-spacer>  </v-spacer>
         <!-- ACA JOACO -->
-        <v-text-field
-          :disabled = "moving"
-          v-model="selectedLevel"
-          type="number"
-          label="Set Level"
-          variant="solo"
-          :min="0"
-          :max="100"
-          class="rounded-input green-text"
-          bg-color='transparent' flat/>
-        <v-card-text class="font-weight-bold text-h2 slider-value">
-          <v-btn @click="setLevel()" >Set</v-btn>
-        </v-card-text>
-        <v-card-text>
-          current level :{{ deviceState.level }}
-        </v-card-text>
+        <v-col class="ml-3 mr-3">
+          <v-form @submit.prevent="submitLevel" v-model="isValidLevel">
+            <v-row justify="text-center">
+
+              <v-col cols="12">
+                <v-row>
+                  <v-text-field
+                  :disabled="moving"
+                  v-model="selectedLevel"
+                  type="number"
+                  label="Set Level"
+                  variant="solo"
+                  :min="0"
+                  :max="100"
+                  class="rounded-input green-text"
+                  bg-color='transparent'
+                  :rules="[rules.validateLevel]"
+                  flat>
+                  </v-text-field>
+                  <v-card-text class="font-weight-bold text-h2 slider-value">
+                    <v-btn 
+                    type="submit"
+                    :disabled="!isValidLevel"
+                    @click="setLevel()" >Set</v-btn>
+                  </v-card-text>
+
+                </v-row>
+
+              </v-col>
+
+              
+
+            </v-row>
+          </v-form>
+        </v-col>
+        
 
     </v-row>
 
     <v-row no-gutters class="mr-5 ml-5" style="margin-top: 40px">
-      <v-col class="ml-10 mr-10">
+      <v-col >
         <v-progress-linear
 
         v-model="deviceState.currentLevel"
@@ -351,7 +372,6 @@ function setLevel(){
     background-size: 80%;
     background-position: calc(100% - 0px) top;
     background-repeat: no-repeat;
-    opacity: 0.05;
 }
 .delete-button {
   width: 200px;

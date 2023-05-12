@@ -38,55 +38,51 @@
 </script>
 
 <template>
-    <main>
-      <div class="canvas">
-        <v-card class="vcard elevation-0" color="transparent">
-          <v-row style="margin-top: 20px;">
-            <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">{{roomName}}</v-card-title>
-            <v-divider color="gris"></v-divider>
-          </v-row>
+  <main>
+    <div class="canvas">
+      <v-card class="vcard elevation-0" color="transparent">
+        <v-row style="margin-top: 20px;">
+          <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">{{roomName}}</v-card-title>
+          <v-divider color="gris"></v-divider>
+        </v-row>
 
-          <v-row>
-            <v-col md="3" class="add-card-column">
-              <AddDeviceToRoomCard :roomName="roomName"></AddDeviceToRoomCard>
-            </v-col>
+        <v-row>
+          <v-col md="3" class="add-card-column">
+            <AddDeviceToRoomCard :roomName="roomName"></AddDeviceToRoomCard>
+          </v-col>
 
 
-            <v-col md="9">
-              <v-row>
-                <template v-for="(device, index) in roomDevices" :key="device.id">
-                  <template v-if="index < 6">
-                    <v-col xs="12" sm="12" md="6" lg="4">
-                      <v-card class="grid-item" width="400">
-                        <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id" :componentRoom="store.getDevicesRoom(device.id)"></component>
-                      </v-card>
-                    </v-col>
-                  </template>
+          <v-col md="9">
+            <v-row>
+              <template v-for="(device, index) in roomDevices" :key="device.id">
+                <template v-if="index < 6">
+                  <v-col xs="12" sm="12" md="6" lg="4">
+                      <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id" :componentRoom="store.getDevicesRoom(device.id)"></component>
+                  </v-col>
                 </template>
-              </v-row>
-            </v-col>
+              </template>
+            </v-row>
+          </v-col>
 
-            <v-col>
-              <v-row>
-                <template v-for="(device, index) in roomDevices" :key="device.id">
-                  <template v-if="index >= 6">
-                    <v-col xs="12" sm="6" md="4" lg="3">
-                      <v-card class="grid-item" width="400">
-                        <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id" :componentRoom="store.getDevicesRoom(device.id)"></component>
-                      </v-card>
-                    </v-col>
-                  </template>
+          <v-col>
+            <v-row>
+              <template v-for="(device, index) in roomDevices" :key="device.id">
+                <template v-if="index >= 6">
+                  <v-col xs="12" sm="6" md="4" lg="3">
+                      <component   :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id" :componentRoom="store.getDevicesRoom(device.id)"></component>
+                  </v-col>
                 </template>
-              </v-row>
-            </v-col>
+              </template>
+            </v-row>
+          </v-col>
 
-          </v-row>
-        </v-card>
-      </div>
-    </main>
-  </template>
+        </v-row>
+      </v-card>
+    </div>
+  </main>
+</template>
 
-  <style scoped>
+<style scoped>
   .grid-item {
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
