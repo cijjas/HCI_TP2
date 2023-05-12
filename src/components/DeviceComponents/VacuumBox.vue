@@ -124,10 +124,10 @@ const saveButtonDisabled = computed(() => {
           v-model="volumeLevel" 
           type="number" 
           label="Volume" 
-          variant="solo" 
           :rules="[rules.acceptableVolumeLevel]"
           :min="0"
           :max="100"  
+          variant="solo" 
           class="rounded-input " 
           bg-color='transparent' flat/>
         </v-col>
