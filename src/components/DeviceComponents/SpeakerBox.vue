@@ -131,11 +131,11 @@ function calculateProgress(songProgress, songDuration) {
 
 const progress = computed( ()=> {
   // console.log(deviceState.value);
-  if(deviceState.value) {
+  /* if(deviceState.value) {
     // console.log("dentro del if");
     // console.log(calculateProgress(deviceState.value.song.progress, deviceState.value.song.duration));
     return calculateProgress(deviceState.value.song.progress, deviceState.value.song.duration);
-  }
+  } */
   return 0;
 })
 
@@ -273,7 +273,9 @@ function increaseVolume() {
           :min="0"
           :max="10"  
           class="rounded-input " 
-          bg-color='transparent' flat/>
+          bg-color='transparent' 
+          variant="solo"
+          flat/>
         </v-col>
         <v-col cols="2">
           <v-btn icon  @click="setVolume" style="background-color:#f4e6bf; color: #1ed760"  flat>

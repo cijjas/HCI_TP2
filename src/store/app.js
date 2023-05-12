@@ -10,7 +10,7 @@ import { DevicesApi } from '@/API/devices';
 import { RoomApi } from '@/API/room.js';
 import { RoutinesApi } from '@/API/routines';
 
-import VacuumBox from '@/components/DeviceComponents/VacuumBox.vue';
+import SpeakerBox from '@/components/DeviceComponents/SpeakerBox.vue';
 import CurtainBox from '@/components/DeviceComponents/CurtainBox.vue';
 import TapBox from '@/components/DeviceComponents/TapBox.vue';
 import FridgeBox from '@/components/DeviceComponents/FridgeBox.vue';
@@ -184,7 +184,7 @@ export const useAppStore = defineStore('app', {
         }
         switch(type.toLowerCase()){
           case 'speaker':
-            deviceObj.meta.component = VacuumBox
+            deviceObj.meta.component = SpeakerBox
             break;
           case 'faucet':
             deviceObj.meta.component = TapBox
