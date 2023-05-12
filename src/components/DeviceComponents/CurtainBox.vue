@@ -30,6 +30,8 @@ const props = defineProps({
   const rules = {
     minLength: value => value.length >= 3 || 'Min 3 characters',
     maxLength: value => value.length <= 15 || 'Max 15 characters',
+    validateLevel : value => value >= 0 && value <= 100 || 'Min : 0 Max : 100',
+    required : value => !!value || 'required'
   };
 
 
@@ -92,35 +94,47 @@ const openDeleteDialog = () => {
         isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
 };
 
+/* --------------------------------------------- */
 
+const isValidLevel = ref(false);
+const submitLevel = ()=>{
+  setLevel();
+}
+/* --------------------------------------------- */
 
 const deviceState = ref(store.getDeviceState(props.componentId));           // estas variables inicialmente son correctas ya que vienen del MOUNT
 const status = ref(store.getDeviceState(props.componentId).status)
 const moving = ref(false);
 const selectedLevel = ref("")
 const isOn = computed( ()=>{
-  return status.value == 'opened' || status.value == 'opening'
+  return deviceState.value.status == 'opened' || deviceState.value.status == 'opening'
 })
 
 function changeStatus(){
   console.log("Changing Status");
   console.log("Previous Status " + status.value);
-  moving.value = true;
 
   switch ( status.value ){
     case 'closed':
+      console.log("executing open");
       status.value = "opening";
       open();
       break;
     case 'opened':
+    console.log("executing close");
+
       status.value = "closing";
       close();
       break;
     case 'closing':
+    console.log("executing open");
+
       status.value = "opening";
       open();
       break;
     case 'opening':
+    console.log("executing close");
+
       status.value = "closing";
       close();
       break;
@@ -128,7 +142,7 @@ function changeStatus(){
     console.log("CODE REDDDDDdd")
   }
 
-  console.log("Proceding Status " + status.value + "[shouldnt be opening nor closing]");
+  console.log("Proceding Status " + status.value );
 
 }
 
@@ -136,14 +150,16 @@ function changeStatus(){
 async function open() {
   await store.updateADeviceState(props.componentId, "open", []);        // le avisa la api que arranque a abrir, local storage "opened"
   const intervalId = setInterval(async () => {
+    moving.value = true;
     const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
     deviceState.value = deviceStateRT;
     console.log(deviceStateRT);
     if (deviceStateRT.status !== 'opening') {
-      moving.value = false;
       clearInterval(intervalId);
-      if ( status.value !== 'closing')
+      if ( status.value !== 'closing'){
+        moving.value = false;
         status.value = "opened";
+      }
     }
   }, 1000);
 }
@@ -151,21 +167,26 @@ async function open() {
 async function close() {
   await store.updateADeviceState(props.componentId, "close", []);
   const intervalId = setInterval(async () => {
+    moving.value = true;
     const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
     deviceState.value = deviceStateRT
     console.log(deviceStateRT);
     if (deviceStateRT.status !== 'closing') {
-      moving.value = false;
       clearInterval(intervalId);
-      if ( status.value !== 'opening')
+      if ( status.value !== 'opening'){
+        moving.value = false;
         status.value = "closed";
+      }
     }
   }, 1000);
 }
 
-function setLevel(){
-  store.updateADeviceState(props.componentId, "setLevel", [selectedLevel.value]);
-  selectedLevel.value = "";
+async function setLevel(){
+  await store.updateADeviceState(props.componentId, "setLevel", [selectedLevel.value]);
+  var deviceStateRT = await store.getDeviceStateAPI(props.componentId);
+  deviceState.value = deviceStateRT;
+  console.log("LALAL");
+  console.log(deviceState.value);
 }
 
 </script>
@@ -198,7 +219,7 @@ function setLevel(){
 
       <v-btn @click="isOn = !isOn; changeStatus() "
             :class="{'on-button': isOn, 'off-button': !isOn}">
-            {{ isOn ? 'CLOSE' : 'OPEN' }}
+            {{ isOn ? 'CLOSE' : 'OPEN' }} [{{ deviceState.status }}]
       </v-btn>
     </v-toolbar>
 
@@ -209,27 +230,34 @@ function setLevel(){
       </v-col>
 
     </v-row>
-    <v-row >
-        <v-spacer>  </v-spacer>
-        <!-- ACA JOACO -->
-        <v-text-field
-          :disabled = "moving"
-          v-model="selectedLevel"
-          type="number"
-          label="Set Level"
-          variant="solo"
-          :min="0"
-          :max="100"
-          class="rounded-input green-text"
-          bg-color='transparent' flat/>
-        <v-card-text class="font-weight-bold text-h2 slider-value">
-          <v-btn @click="setLevel()" >Set</v-btn>
-        </v-card-text>
-        <v-card-text>
-          current level :{{ deviceState.level }}
-        </v-card-text>
 
-    </v-row>
+
+
+      <!-- ACA JOACO -->
+      <v-form @submit.prevent="submitLevel" v-model="isValidLevel">
+        <v-row justify="center">
+          <v-col cols="6">
+            <v-text-field
+            :rules="[rules.validateLevel, rules.required]"
+            :disabled = "moving"
+            v-model="selectedLevel"
+            type="number"
+            label="Set Level"
+            variant="solo"
+            :min="0"
+            :max="100"
+            class="rounded-input green-text"
+            bg-color='transparent' flat/>
+          </v-col>
+          <v-col cols="6">
+            <v-card-text class="font-weight-bold text-h2 slider-value">
+              <v-btn :disabled = "moving || !isValidLevel" type="submit" >Set</v-btn>
+            </v-card-text>
+          </v-col>
+        </v-row>
+      </v-form>
+
+
 
     <v-row no-gutters class="mr-5 ml-5" style="margin-top: 40px">
       <v-col class="ml-10 mr-10">
