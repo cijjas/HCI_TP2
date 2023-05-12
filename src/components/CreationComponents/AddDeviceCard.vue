@@ -48,6 +48,8 @@
           if(tooLong || tooShort) {
             return 'Name must be between 3 and 15 characters long.'
           }
+          const isAlphanumeric = /^[a-zA-Z0-9\s]+$/.test(value);
+          if(!isAlphanumeric) return 'Only alphanumeric characters' 
           return true
         }
       },

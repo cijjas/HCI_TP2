@@ -30,9 +30,14 @@ const {handleSubmit, handleReset} = useForm({
       if(repeated) {
         return 'Room name already in use.'
       }
-      if(value?.length >= 3 && value?.length <= 15) return true
-      return 'Name must be between 3 and 15 characters long.'
-
+      const tooLong = value?.length > 15 ? true : false;
+      const tooShort = value?.length < 3 ? true : false;
+      if(tooLong || tooShort) {
+        return 'Name must be between 3 and 15 characters long.'
+      }
+      const isAlphanumeric = /^[a-zA-Z0-9\s]+$/.test(value);
+      if(!isAlphanumeric) return 'Only alphanumeric characters' 
+      return true
     }
   },
 })

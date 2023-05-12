@@ -49,7 +49,7 @@
     alphanumeric : value => isAlphanumeric(value) || 'Only alphanumeric characters'
   };
   const isAlphanumeric = (value) => {
-    return /^[a-zA-Z0-9]*$/.test(value);
+    return /^[a-zA-Z0-9\s]+$/.test(value);
   };
   const deleteDevice = () => {
     store.deleteADeviceByName(deviceName.value);

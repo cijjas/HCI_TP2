@@ -47,6 +47,7 @@ const rules = {
     notRepeated: (value) => !store.getRoutinesNames.includes(value) || 'Routine already exists',
     isNumber: (value) => !isNaN(value) || 'Must be a number',
     isAcceptableNumber: (value, minValue, maxValue) => ((!isNaN(value) && value >= minValue && value <= maxValue)) || `Must be a number between ${minValue} and ${maxValue}`,
+    alphanumeric : value => /^[a-zA-Z0-9\s]+$/.test(value) || 'Only alphanumeric characters'
 };
 
 
@@ -216,7 +217,7 @@ const submitButtonDisabled = computed(() => {
 
             <v-spacer></v-spacer>
             <v-text-field
-              :rules="[rules.required, rules.notRepeated]"
+              :rules="[rules.required, rules.notRepeated, rules.alphanumeric]"
               v-model="routineName"
               label="Routine's Name"
               variant="outlined"

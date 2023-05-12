@@ -60,7 +60,7 @@
     isDialogOpen.value = false;
   };
   const isAlphanumeric = (value) => {
-    return /^[a-zA-Z0-9]*$/.test(value);
+    return /^[a-zA-Z0-9\s]+$/.test(value);
   };
   const deviceNameRepeated = () =>{
     return store.getADeviceByName(tempDeviceName.value) ? true : false;
