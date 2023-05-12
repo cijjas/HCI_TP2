@@ -269,7 +269,6 @@ function increaseVolume() {
           v-model="volumeLevel" 
           type="number" 
           label="Volume" 
-          variant="solo" 
           :rules="[rules.acceptableVolumeLevel]"
           :min="0"
           :max="10"  

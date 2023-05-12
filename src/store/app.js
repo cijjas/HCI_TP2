@@ -639,7 +639,7 @@ export const useAppStore = defineStore('app', {
 
     async executeARoutine(routineId){
       var result = RoutinesApi.execute(routineId);
-
+      console.log("routine executed");
     },
 
     /* -------------------------------------------------- ACTIONS -------------------------------------------------- */

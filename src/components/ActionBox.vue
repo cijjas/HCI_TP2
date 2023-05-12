@@ -8,16 +8,6 @@
                   delete
                 </v-btn>
         </v-toolbar>
-        <v-card-text>
-            <v-col>
-              <v-row>
-                <v-card-text>{{ actionName }} holaaa</v-card-text>
-              </v-row>
-              <v-row class="justify-center">
-                  <v-btn color="lightersecondary" class="mr-5 pl-5 pr-5" @click="openEditDialog">Edit Action</v-btn>
-              </v-row>
-            </v-col>
-        </v-card-text>
 
         <v-card-actions class="actions-style" style="height: 140px;">
           <v-col>

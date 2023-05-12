@@ -21,7 +21,7 @@ class RoutinesApi{
         return Api.get(RoutinesApi.getUrl());
     }
     static execute(id){
-        return Api.post(RoutinesApi.getUrl(id+'/execute'));
+        return Api.put(RoutinesApi.getUrl(id+'/execute'));
     }
 }
 

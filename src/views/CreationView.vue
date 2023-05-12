@@ -16,9 +16,9 @@ import AddRoutineCard from '@/components/CreationComponents/AddRoutineCard.vue';
             <v-divider color="gris"></v-divider>
           </v-row>
           <v-row>
-            <AddRoutineCard></AddRoutineCard>
-            <AddRoomCard></AddRoomCard>
-            <AddDeviceCard></AddDeviceCard>
+            <AddRoutineCard class="mt-6"></AddRoutineCard>
+            <AddRoomCard class="mt-6"></AddRoomCard>
+            <AddDeviceCard class="mt-6"></AddDeviceCard>
 
           </v-row>
         </v-card>

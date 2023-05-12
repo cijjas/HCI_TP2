@@ -20,7 +20,6 @@ const props = defineProps({
   // const props = defineProps(['roomName', 'devicesCount']);
   const componentId = ref(props.componentId);
   const componentRoom = ref(props.componentRoom);
-
   const sliderValue = ref(10);
   const isDialogOpen = ref(false);
   const isDeleteDialogOpen = ref(false);
@@ -31,17 +30,11 @@ const props = defineProps({
     minLength: value => value.length >= 3 || 'Min 3 characters',
     maxLength: value => value.length <= 15 || 'Max 15 characters',
     validateLevel : value => value >= 0 && value <= 100 || 'Min : 0 Max : 100',
-    required : value => !!value || 'required'
+    required : value => !!value || 'required',
   };
 
 
-  const computedBackgroundColor = computed(() => {
-    const color1 = [140, 120, 58]; // RGB values for #8C783A
-    const color2 = [244, 207, 109]; // RGB values for #EECC66
-    const ratio = sliderValue.value / 100;
-    const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
-    return `rgb(${color.join(',')})`;
-  });
+  
 
   /* watch(
     () => sliderValue.value,
@@ -91,7 +84,7 @@ const props = defineProps({
 };
 
 const openDeleteDialog = () => {
-        isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
+  isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
 };
 
 /* --------------------------------------------- */
@@ -102,7 +95,7 @@ const submitLevel = ()=>{
 }
 /* --------------------------------------------- */
 
-const deviceState = ref(store.getDeviceState(props.componentId));           // estas variables inicialmente son correctas ya que vienen del MOUNT
+const deviceState = ref(store.getDeviceState(props.componentId) );           // estas variables inicialmente son correctas ya que vienen del MOUNT
 const status = ref(store.getDeviceState(props.componentId).status)
 const moving = ref(false);
 const selectedLevel = ref("")
@@ -188,7 +181,17 @@ async function setLevel(){
   console.log("LALAL");
   console.log(deviceState.value);
 }
+const check=ref(false);
 
+
+const computedBackgroundColor = computed(() => {
+    console.log(deviceState.value.currentLevel);
+    const color2 = [140, 120, 58]; // RGB values for #8C783A
+    const color1 = [244, 207, 109]; // RGB values for #EECC66
+    const ratio = deviceState.value.currentLevel / 100 || 0;
+    const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
+    return `rgb(${color.join(',')})`;
+  });
 </script>
 
 <template>
@@ -218,13 +221,12 @@ async function setLevel(){
       <v-spacer></v-spacer>
 
       <v-btn @click="isOn = !isOn; changeStatus() "
-            :class="{'on-button': isOn, 'off-button': !isOn}">
-            {{ isOn ? 'CLOSE' : 'OPEN' }} [{{ deviceState.status }}]
+            :class="{'on-button': isOn, 'off-button': !isOn}">  {{ isOn ? 'CLOSE' : 'OPEN' }}
       </v-btn>
     </v-toolbar>
 
     <!-- locations for-->
-    <v-row style="margin-bottom: 20px">
+    <v-row style="margin-bottom: 10px">
       <v-col cols="8">
         <v-subheader class="ml-1">{{componentRoom}}</v-subheader>
       </v-col>
@@ -250,8 +252,19 @@ async function setLevel(){
             bg-color='transparent' flat/>
           </v-col>
           <v-col cols="6">
-            <v-card-text class="font-weight-bold text-h2 slider-value">
-              <v-btn :disabled = "moving || !isValidLevel" type="submit" >Set</v-btn>
+            <v-card-text class="slider-value " style="margin-left: -10px; margin-top: -10px;">
+              <v-btn 
+    icon 
+    :disabled="moving || !isValidLevel" 
+    type="submit"
+    @click="check=!check"
+    :disable-background-color="true"
+    style="color:rgb(19, 168, 71); background-color: transparent;"
+    flat
+>
+    <v-icon>{{check ? 'mdi-check-circle': 'mdi-check-circle-outline'}}</v-icon>
+</v-btn>
+              
             </v-card-text>
           </v-col>
         </v-row>
@@ -259,8 +272,8 @@ async function setLevel(){
 
 
 
-    <v-row no-gutters class="mr-5 ml-5" style="margin-top: 40px">
-      <v-col class="ml-10 mr-10">
+    <v-row no-gutters class="mr-2 ml-2" style="margin-top: 40px">
+      <v-col >
         <v-progress-linear
 
         v-model="deviceState.currentLevel"
@@ -269,7 +282,7 @@ async function setLevel(){
         rounded="true"
         >
         <template v-slot:default="{ value }">
-          <strong>{{ Math.ceil(value) }}%</strong>
+          <strong>{{ Math.round(value) }}% {{ deviceState.status }}</strong>
         </template>
       </v-progress-linear>
 
@@ -300,7 +313,7 @@ async function setLevel(){
                 label="Device Name"
                 v-model.string="tempDeviceName"
                 type="string"
-                :rules="[rules.maxLength, rules.minLength]"
+                :rules="[rules.maxLength, rules.minLength ]"
           ></v-text-field>
 
         <v-card-actions>
@@ -348,21 +361,13 @@ async function setLevel(){
   position: relative;
   padding: 16px;
   border-radius: 20px;
-
   background-image: url('./DeviceAssets/del-cur-frame.png');
   background-size: cover;
   background-position: top;
   height: 300px;
   width: 400px;
 }
-.toggle-card-off::before {
-  content: "";
-  position: absolute;
-  background-image: url('./DeviceAssets/del-cur-frame.png');
-  background-size: cover;
-  background-position: top;
-  transition: background-position 0.5s ease-in-out;
-}
+
 
 
 .green-text {
@@ -379,7 +384,6 @@ async function setLevel(){
     background-size: 80%;
     background-position: calc(100% - 0px) top;
     background-repeat: no-repeat;
-    opacity: 0.05;
 }
 .delete-button {
   width: 200px;
