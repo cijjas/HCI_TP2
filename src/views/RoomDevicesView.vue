@@ -12,6 +12,7 @@
 
     const store = useAppStore();
 
+
     onMounted(async () => {             // cuando se monta la pagina pido los datos
     try {
     // pido el update de los datos
@@ -21,19 +22,19 @@
     } catch (error) {
     console.error(error);
     }
-    }); 
+    });
 
     const route = useRoute();
     const roomName = route.params.roomName;
-    const roomId = store.getRoomId(roomName);
-    const roomDevices = store.getRoomDevices(roomId);
+    const roomId = computed(() => store.getRoomId(roomName));
+    const roomDevices = computed(() => store.getRoomDevices(roomId.value));
 
     import { defineAsyncComponent } from 'vue';
 
     function getComponent(file) {
     return defineAsyncComponent(() => import(/* @vite-ignore */file));    // require hecho a mano, porque no esta globalmente incluido
 }
-    
+
 </script>
 
 <template>
@@ -44,13 +45,13 @@
             <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">{{roomName}}</v-card-title>
             <v-divider color="gris"></v-divider>
           </v-row>
-        
+
           <v-row>
             <v-col md="3" class="add-card-column">
               <AddDeviceToRoomCard :roomName="roomName"></AddDeviceToRoomCard>
             </v-col>
-  
-            
+
+
             <v-col md="9">
               <v-row>
                 <template v-for="(device, index) in roomDevices" :key="device.id">
@@ -64,7 +65,7 @@
                 </template>
               </v-row>
             </v-col>
-  
+
             <v-col>
               <v-row>
                 <template v-for="(device, index) in roomDevices" :key="device.id">
@@ -78,13 +79,13 @@
                 </template>
               </v-row>
             </v-col>
-  
+
           </v-row>
         </v-card>
       </div>
     </main>
   </template>
-  
+
   <style scoped>
   .grid-item {
     border-radius: 10px;
@@ -94,21 +95,21 @@
     transition: box-shadow 0.2s ease;
     background-color: transparent;
   }
-  
-  
+
+
   .grid-item:hover {
     transition: transform 0.3s ease-out;
     transform: scale(1.01);
   }
-  
+
   .v-layout {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
   }
-  
+
   .add-card-column {
     padding-top: 28px; /* Adjust the value as per your preference */
   }
-  
+
   </style>

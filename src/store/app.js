@@ -314,7 +314,7 @@ export const useAppStore = defineStore('app', {
                   case 'close':
                     this.devices[i].state.status = 'closed';
                     break;
-                  case 'dipense':
+                  case 'dispense':
                     this.devices[i].state.status = 'opened';
                     break;
                   default:
@@ -448,7 +448,9 @@ export const useAppStore = defineStore('app', {
       var arr = [];
       console.log("getRoomDevices");
       console.log(idRoom);
-      var room = this.getARoomByName(idRoom);
+      var room = this.getARoom(idRoom);
+      if ( room === undefined )
+        return [];
       for ( let i = 0; i < room.meta.devices.length ; i++ ){
         arr.push(this.getADevice(room.meta.devices[i]));
       }
@@ -659,6 +661,8 @@ export const useAppStore = defineStore('app', {
       getRoomDevices(idRoom){
         var arr = [];
         var room = this.getARoom(idRoom);
+        if ( room === undefined )
+          return null;
         for ( let i = 0; i < room.meta.devices.length ; i++ ){
           arr.push(this.getADevice(room.meta.devices[i]));
         }
