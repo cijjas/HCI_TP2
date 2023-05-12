@@ -138,7 +138,7 @@ const submit = handleSubmit(values => {
     background-image: url('https://i.imgur.com/TN3egpF.png');
     background-size: cover;
     background-position: 0px -70px;
-    height: 654px;
+    height: 646px;
   }
   .v-card__title {
     padding: 0;
