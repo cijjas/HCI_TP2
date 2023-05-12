@@ -1,3 +1,67 @@
+
+<script setup>
+import { ref, defineProps } from 'vue'
+import { useAppStore } from '@/store/app';
+const store = useAppStore();
+
+const props = defineProps({
+roomName: {
+  type: String,
+  required: true
+},
+roomId: {
+  type: String,
+  required: true
+}
+})
+// const props = defineProps(['roomName', 'devicesCount']);
+const roomId = ref(props.roomId);
+const nameRoom = ref(props.roomName);
+const tempRoomName = ref('');
+const isDialogOpen = ref(false);
+const isDeleteDialogOpen = ref(false);
+const toggleValue = ref(true);
+const isConfirmationDialogOpen = ref(false);
+
+const openCreateDialog = () => {
+  isConfirmationDialogOpen.value = true;
+  setTimeout(() => {
+    isConfirmationDialogOpen.value = false;
+  }, 2000);
+};
+
+const saveName = () => {
+  if (tempRoomName.value !== '') {
+      nameRoom.value = tempRoomName.value; // Update the roomName variable with the new value
+      store.updateARoom(roomId.value, nameRoom.value);
+  }
+  openEditDialog();
+  // isDialogOpen.value = !isDialogOpen.value;
+  clearVar();
+};
+
+const openEditDialog = () => {
+  isDialogOpen.value = !isDialogOpen.value;
+};
+
+const openDeleteDialog = () => {
+  isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
+};
+
+const deleteRoom = () => {
+  // BORRAR EL CUARTO
+  store.deleteARoom(roomId.value);
+  openDeleteDialog();
+  openEditDialog();
+};
+
+function clearVar(){
+  tempRoomName.value = "";
+}
+
+
+</script>
+
 <template>
 
 <v-card  class="toggle-card">    
@@ -66,68 +130,6 @@
         </v-dialog>
     </v-card>
 </template>
-  
-<script setup>
-import { ref, defineProps } from 'vue'
-import { useAppStore } from '@/store/app';
-const store = useAppStore();
-
-const props = defineProps({
-  roomName: {
-    type: String,
-    required: true
-  },
-  roomId: {
-    type: String,
-    required: true
-  }
-})
-  // const props = defineProps(['roomName', 'devicesCount']);
-  const roomId = ref(props.roomId);
-  const nameRoom = ref(props.roomName);
-  const tempRoomName = ref('');
-  const isDialogOpen = ref(false);
-  const isDeleteDialogOpen = ref(false);
-  const toggleValue = ref(true);
-  const isConfirmationDialogOpen = ref(false);
-
-  const openCreateDialog = () => {
-    isConfirmationDialogOpen.value = true;
-    setTimeout(() => {
-      isConfirmationDialogOpen.value = false;
-    }, 2000);
-  };
-  
-  const saveName = () => {
-    if (tempRoomName.value !== '') {
-        nameRoom.value = tempRoomName.value; // Update the roomName variable with the new value
-        store.updateARoom(roomId.value, nameRoom.value);
-    }
-    openEditDialog();
-    // isDialogOpen.value = !isDialogOpen.value;
-    clearVar();
-  };
-
-  const openEditDialog = () => {
-    isDialogOpen.value = !isDialogOpen.value;
-  };
-
-  const openDeleteDialog = () => {
-    isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
-  };
-
-  const deleteRoom = () => {
-    // BORRAR EL CUARTO
-    store.deleteARoom(roomId.value);
-    openDeleteDialog();
-    openEditDialog();
-  };
-
-  function clearVar(){
-    tempRoomName.value = "";
-  }
-
-</script>
 
 
 <style scoped>
@@ -182,7 +184,8 @@ const props = defineProps({
 }
 
 .toggle-card:hover {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
+  transform: scale3d(1.01, 1.01, 1.01);
+
 }
 
 .rounded-toolbar {

@@ -41,6 +41,8 @@ export default createVuetify({
           g1: '#EFE5C5',
           m1: '#795454',
           brown: '#f8dfc2',
+          common: '#f4e6bf',
+          common2: '#f1edcd',
         },
       },
     },
