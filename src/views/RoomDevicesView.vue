@@ -30,7 +30,6 @@
     const roomDevices = computed(() => store.getRoomDevices(roomId.value));
 
     import { defineAsyncComponent } from 'vue';
-
     function getComponent(file) {
     return defineAsyncComponent(() => import(/* @vite-ignore */file));    // require hecho a mano, porque no esta globalmente incluido
 }
@@ -48,7 +47,7 @@
 
         <v-row>
           <v-col md="3" class="mt-5">
-            <AddDeviceToRoomCard :roomName="roomName"></AddDeviceToRoomCard>
+            <AddDeviceToRoomCard :deviceRoom="roomName"></AddDeviceToRoomCard>
           </v-col>
 
 
