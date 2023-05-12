@@ -2,19 +2,19 @@
   import { onMounted } from '@vue/runtime-core';
   import { useAppStore } from '@/store/app';
   import { useField, useForm } from 'vee-validate';
-  import { ref} from 'vue';
+  import { ref, defineProps } from 'vue';
+import { computed } from 'vue';
 
   const store = useAppStore();
 
   const props = defineProps({
-    roomName: {
+    deviceRoom: {
       type: String,
       required: true
     },
   })
     // const props = defineProps(['roomName', 'devicesCount']);
-  const room = ref(props.roomName);
-
+  const localDeviceRoom = computed(()=> {return props.deviceRoom});
 
   const isCreateDialogOpen = ref(false);
 
@@ -41,10 +41,6 @@
   const {handleSubmit, handleReset} = useForm(
     {
       validationSchema: {
-        room(value){
-          if(value) return true
-          return 'Select a room for the device.'
-        },
         type(value){
           if(value) return true
           return 'Select a device type.'
@@ -59,16 +55,18 @@
           if(tooLong || tooShort) {
             return 'Name must be between 3 and 15 characters long.'
           }
+          const isAlphanumeric = /^[a-zA-Z0-9]*$/.test(value);
+          if(!isAlphanumeric(value)) return 'Only alphanumeric characters' 
           return true
         }
       },
-    }
+    }    
   )
   const name= useField('name');
   const type= useField('type');
 
   const submit = handleSubmit(values => {
-          store.createADevice(values.room, values.name, values.type);
+          store.createADevice(localDeviceRoom.value, values.name, values.type);
           handleReset();
           openCreateDialog();
   })
