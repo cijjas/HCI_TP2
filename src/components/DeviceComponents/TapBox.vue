@@ -38,12 +38,22 @@
   const rules = {
     minLength: value => value.length >= 3 || 'Min 3 characters',
     maxLength: value => value.length <= 15 || 'Max 15 characters',
+    required : value => !!value || 'required',
+    unique : value => !store.getADeviceByName(value) || 'Name already in use.',
+    alphanumeric : value => isAlphanumeric(value) || 'Only alphanumeric characters'
   };
-
+  const isAlphanumeric = (value) => {
+    return /^[a-zA-Z0-9]*$/.test(value);
+  };
   const toggleCard = () => {
     disabledFields.value = !disabledFields.value;
   }
-
+  const deviceNameRepeated = () =>{
+    return store.getADeviceByName(tempDeviceName.value) ? true : false;
+  }
+  const deviceNameIsValid= () =>{
+    return tempDeviceName.value.length >= 3 && tempDeviceName.value.length <= 15 && !deviceNameRepeated() && isAlphanumeric(tempDeviceName.value);
+  }
   const handleButtonClick = () => {
     console.log(`Dispensing ${amountValue.value} ${selectedUnit.value}...`);
     
@@ -64,8 +74,8 @@
     tempDeviceName.value = deviceName.value;
   };
   const saveSettings = () => {
-    if(tempDeviceName.value.length <3 || tempDeviceName.value.length > 15) {
-      return;
+    if(!deviceNameIsValid()) {
+        return;
     }
     deviceName.value = tempDeviceName.value;
     console.log("new name" + deviceName.value + " id: " + componentId.value);
@@ -228,7 +238,7 @@ async function dispense() {
                 label="Device Name"
                 v-model.string="tempDeviceName"
                 type="string"
-                :rules="[rules.maxLength, rules.minLength]"
+                :rules="[rules.maxLength, rules.minLength, rules.unique, rules.alphanumeric]"
           ></v-text-field>
 
         <v-card-actions>

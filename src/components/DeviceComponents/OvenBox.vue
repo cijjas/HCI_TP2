@@ -67,12 +67,19 @@
   const rules = {
     minLength: value => value.length >= 3 || 'Min 3 characters',
     maxLength: value => value.length <= 15 || 'Max 15 characters',
+    required : value => !!value || 'required',
+    unique : value => !store.getADeviceByName(value) || 'Name already in use.',
+    alphanumeric : value => isAlphanumeric(value) || 'Only alphanumeric characters'
   };
-
+  const isAlphanumeric = (value) => {
+    return /^[a-zA-Z0-9]*$/.test(value);
+  };
   function isOn() {
     return (state.value === 'on');
   }
-  
+  const deviceNameRepeated = () =>{
+    return store.getADeviceByName(tempDeviceName.value) ? true : false;
+  }
   // const isOn = computed( ()=>{
   // return state.value == 'on'
   // })
@@ -87,7 +94,9 @@
       }
     }
   );
-    
+  const deviceNameIsValid= () =>{
+    return tempDeviceName.value.length >= 3 && tempDeviceName.value.length <= 15 && !deviceNameRepeated() && isAlphanumeric(tempDeviceName.value);
+  }  
   const cancelSettings = () => {
     isDialogOpen.value = false;
     tempDeviceName.value = deviceName.value;
@@ -98,9 +107,8 @@
   };
 
   const saveSettings = () => {
-    if(tempDeviceName.value.length < 3 || tempDeviceName.value.length > 15) {
-      return;
-      //idealmente pop up de error
+    if(!deviceNameIsValid()) {
+        return;
     }
     if(tempTemperatureValue.value < 90 || tempTemperatureValue.value > 230) {
       return;
@@ -269,7 +277,7 @@ function flipState() {
               :clear-icon="!tempDeviceName ? '' : 'mdi-close-circle-outline'"
               label="Device Name"
               v-model.string="tempDeviceName"
-              :rules="[rules.maxLength, rules.minLength]"
+              :rules="[rules.maxLength, rules.minLength, rules.unique, rules.alphanumeric]"
             ></v-text-field>
 
             

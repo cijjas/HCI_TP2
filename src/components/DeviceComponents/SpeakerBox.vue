@@ -44,22 +44,32 @@
     minLength: value => value.length >= 3 || 'Min 3 characters',
     maxLength: value => value.length <= 15 || 'Max 15 characters',
     acceptableVolumeLevel: value => value >= 0 && value <= 10 || 'Min 0, Max 100',
+    required : value => !!value || 'required',
+    unique : value => !store.getADeviceByName(value) || 'Name already in use.',
+    alphanumeric : value => isAlphanumeric(value) || 'Only alphanumeric characters'
   };
-
-  
+  const isAlphanumeric = (value) => {
+    return /^[a-zA-Z0-9]*$/.test(value);
+  };
   const deleteDevice = () => {
     store.deleteADeviceByName(deviceName.value);
     openDeleteDialog();
     cancelSettings();
     router.push('/');
 };
-
+const deviceNameRepeated = () =>{
+    return store.getADeviceByName(tempDeviceName.value) ? true : false;
+  }
 const openDeleteDialog = () => {
   isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
 };
 const openSpeakerSettings = () => {
   isDialogOpen.value = true;
 };
+const deviceNameIsValid= () =>{
+    return tempDeviceName.value.length >= 3 && tempDeviceName.value.length <= 15 && !deviceNameRepeated() && isAlphanumeric(tempDeviceName.value);
+  }
+
 const timePlaying = ref(50);
 
 const playing = ref(false);
@@ -84,6 +94,9 @@ const cancelSettings = () => {
   tempDeviceName.value = deviceName.value;
 };
 const saveSettings = () => {
+  if(!deviceNameIsValid()) {
+        return;
+    }
   isDialogOpen.value = false;
   volumeLevel.value = tempVolumeLevel.value;
   deviceName.value = tempDeviceName.value;
@@ -372,7 +385,7 @@ function increaseVolume() {
               label="Device Name"
               v-model.string="tempDeviceName"
               type="string"
-              :rules="[rules.maxLength, rules.minLength]"
+              :rules="[rules.maxLength, rules.minLength, rules.unique, rules.alphanumeric]"
             ></v-text-field>
   
             </v-row>

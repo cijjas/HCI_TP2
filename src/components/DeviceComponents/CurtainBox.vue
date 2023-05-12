@@ -1,6 +1,7 @@
 <script setup>
   import { ref, computed, watch, defineProps } from 'vue';
   import { useAppStore } from '@/store/app';
+import { alphaNum } from '@vuelidate/validators';
   const store = useAppStore();
 
 const props = defineProps({
@@ -31,32 +32,9 @@ const props = defineProps({
     maxLength: value => value.length <= 15 || 'Max 15 characters',
     validateLevel : value => value >= 0 && value <= 100 || 'Min : 0 Max : 100',
     required : value => !!value || 'required',
+    unique : value => !store.getADeviceByName(value) || 'Name already in use.',
+    alphanumeric : value => isAlphanumeric(value) || 'Only alphanumeric characters'
   };
-
-
-  
-
-  /* watch(
-    () => sliderValue.value,
-    (newValue) => {
-      if (newValue <= 0) {
-        isOn.value = false;
-      } else {
-        isOn.value = true;
-      }
-    }
-  );
-
-  watch(
-    () => isOn.value,
-    (newValue) => {
-      if (newValue) {
-        sliderValue.value = 100;
-      } else {
-        sliderValue.value = 0;
-      }
-    }
-  ); */
 
   const toggleCard = () => {
     /* IR A ASPIRADORA */
@@ -69,13 +47,28 @@ const props = defineProps({
     isDialogOpen.value = false;
     tempDeviceName.value = deviceName.value;
   };
+
   const saveSettings = () => {
-    if(tempDeviceName.value.length < 3 || tempDeviceName.value.length > 15) {
+    if(!deviceNameIsValid()) {
         return;
     }
     deviceName.value = tempDeviceName.value;
     isDialogOpen.value = false;
   };
+
+  const deviceNameIsValid= () =>{
+    return tempDeviceName.value.length >= 3 && tempDeviceName.value.length <= 15 && !deviceNameRepeated() && isAlphanumeric(tempDeviceName.value);
+  }
+
+  const deviceNameRepeated = () =>{
+    return store.getADeviceByName(tempDeviceName.value) ? true : false;
+  }
+
+  const isAlphanumeric = (value) => {
+    return /^[a-zA-Z0-9]*$/.test(value);
+  };
+
+
   const deleteDevice = () => {
     store.deleteADeviceByName(deviceName.value);
     openDeleteDialog();
@@ -313,7 +306,7 @@ const computedBackgroundColor = computed(() => {
                 label="Device Name"
                 v-model.string="tempDeviceName"
                 type="string"
-                :rules="[rules.maxLength, rules.minLength ]"
+                :rules="[rules.maxLength, rules.minLength, rules.unique, rules.alphanumeric]"
           ></v-text-field>
 
         <v-card-actions>
