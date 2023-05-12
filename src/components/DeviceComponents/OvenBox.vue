@@ -31,7 +31,7 @@
   // const heatMode = ref(0);
   // const convectionMode = ref(0);
   // const temperatureValue = ref(90);
-  const state = ref(store.getDeviceState(props.componentId).state);
+  const state = ref(store.getDeviceState(props.componentId).status);
   // const isOn = (state.value === 'on') ? ref(true) : ref(false);
   const temperatureValue = ref(store.getDeviceState(props.componentId).temperature);
   const heatMode = ref(store.getDeviceState(props.componentId).heat);
@@ -73,6 +73,9 @@
     return (state.value === 'on');
   }
   
+  // const isOn = computed( ()=>{
+  // return state.value == 'on'
+  // })
   watch(
     () => isOn,
     (newValue) => {
@@ -132,7 +135,6 @@
     store.deleteADeviceByName(deviceName.value);
     openDeleteDialog();
     cancelSettings();
-    router.push('/');
 };
 
 const openDeleteDialog = () => {

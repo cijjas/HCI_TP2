@@ -31,7 +31,7 @@ export const useAppStore = defineStore('app', {
     devices : [],
     deviceActionsRaw : [],
     deviceActions : [],
-
+    playlist :[],
     // speaker, oven, fridge, curtain, tap/sprinkler
 
     // STATIC API DATA
@@ -768,7 +768,12 @@ export const useAppStore = defineStore('app', {
           }
         }
       },
-
+      async getPlaylistAPI(deviceId){
+        console.log("FUI LLAMADO");
+        this.playlist = await this.updateADeviceState(deviceId, "getPlaylist", []);
+        console.log(this.playlist)
+        return this.playlist
+      },
 
 
 

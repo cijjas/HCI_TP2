@@ -1,7 +1,17 @@
 <script setup>
   import { ref, computed, watch, defineProps } from 'vue';
   import { useAppStore } from '@/store/app';
+  // import { resolveDirective } from 'vue';
+  import { onMounted } from '@vue/runtime-core';
+
   const store = useAppStore();
+  // onMounted(async () => {             // cuando se monta la pagina pido los datos
+  //   try {
+  //     await store.getPlaylistAPI(props.componentId);
+  //   } catch (error) {
+  //   console.error(error);
+  //   }
+  //   });
 
   const props = defineProps({
   componentName: {
@@ -22,6 +32,7 @@
   const componentRoom = ref(props.componentRoom);
   const isDialogOpen = ref(false);
   const isDeleteDialogOpen = ref(false);
+  const volumeLevel = ref(store.getDeviceState(props.componentId).volume);
 
   //real values
   const deviceName = ref(props.componentName);
@@ -32,7 +43,7 @@
   const rules = {
     minLength: value => value.length >= 3 || 'Min 3 characters',
     maxLength: value => value.length <= 15 || 'Max 15 characters',
-    acceptableVolumeLevel: value => value >= 0 && value <= 100 || 'Min 0, Max 100',
+    acceptableVolumeLevel: value => value >= 0 && value <= 10 || 'Min 0, Max 100',
   };
 
   
@@ -50,11 +61,10 @@ const openSpeakerSettings = () => {
   isDialogOpen.value = true;
 };
 const timePlaying = ref(50);
-const volumeLevel = ref(50);
+
 const playing = ref(false);
 const tempVolumeLevel = ref(volumeLevel.value);
-const genre = ref('pop');
-const genres = ref(['clasical','country','pop','rock','dance','latina']);
+
 const isPlaylistDialogOpen = ref(false);
 const openPlaylistDialog = () => {
   isPlaylistDialogOpen.value = true;
@@ -65,6 +75,8 @@ const isFormValid = computed(() => {
     tempDeviceName.value.length <= 15
   );
 });
+
+
 
 const cancelSettings = () => {
   isDialogOpen.value = false;
@@ -84,17 +96,150 @@ function playButtonIcon(){
   }
 }
 
-function play(){
-  playing.value = !playing.value;
-}
 const saveButtonDisabled = computed(() => {
   return !isFormValid.value;
 });
+
+
+
+//setVolume[num], play[], stop[], pause[], resume[], nextSong[], previousSong[], 
+//setGenre[classical/country/dance/latina/pop/rock], 
+//getPlaylist[], 
+
+/* -------------------------------------- REFACTORING -------------------------------------- */
+const deviceState = ref(store.getDeviceState(props.componentId));           // estas variables inicialmente son correctas ya que vienen del MOUNT
+const status = ref(store.getDeviceState(props.componentId).status);
+const genre = ref(store.getDeviceState(props.componentId).genre);
+const genres = ref(['clasical','country','pop','rock','dance','latina']);
+
+
+// const songTitle = ref(store.getDeviceState(props.componentId).song.title);
+// const songArtist = ref(store.getDeviceState(props.componentId).song.artist);
+// const songAlbum = ref(store.getDeviceState(props.componentId).song.album);
+// const songDuration = ref(store.getDeviceState(props.componentId).song.duration);
+
+
+function calculateProgress(songProgress, songDuration) {
+  const timeArray1 = songProgress.split(':').map(Number);
+  const timeSeconds1 = timeArray1[0] * 60 + timeArray1[1];
+  const timeArray2 = songDuration.split(':').map(Number);
+  const timeSeconds2 = timeArray2[0] * 60 + timeArray2[1];
+  const progress = (timeSeconds1 / timeSeconds2) * 100;
+  const integer = Math.round(progress);
+  return integer
+}
+
+const progress = computed( ()=> {
+  // console.log(deviceState.value);
+  if(deviceState.value) {
+    // console.log("dentro del if");
+    // console.log(calculateProgress(deviceState.value.song.progress, deviceState.value.song.duration));
+    return calculateProgress(deviceState.value.song.progress, deviceState.value.song.duration);
+  }
+  return 0;
+})
+
+
+const isPlaying = computed( ()=>{
+  return status.value == 'playing'
+})
+
+// boton de play tiene tres funciones: play, resume, pause
+function playButton(){
+  
+  switch(status.value) {    // dummy value
+    case 'paused':
+      status.value = "playing";
+      store.updateADeviceState(props.componentId, "resume", []);
+        // polling para el tiempo de avance de la cancion
+      var intervalId = setInterval(async () => {
+        const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
+        deviceState.value = deviceStateRT;
+        // console.log(deviceStateRT);
+        if (deviceStateRT.status !== 'playing') {
+          clearInterval(intervalId);
+        }
+      }, 1000);
+      break;
+
+    case 'stopped':
+      status.value = "playing";
+      store.updateADeviceState(props.componentId, "play", []);
+        // polling para el tiempo de avance de la cancion
+      var intervalId = setInterval(async () => {
+        const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
+        deviceState.value = deviceStateRT;
+        // console.log(deviceStateRT);
+        if (deviceStateRT.status !== 'playing') {
+          clearInterval(intervalId);
+        }
+      }, 1000);
+      break;
+
+    case 'playing':
+      status.value = "paused";
+      store.updateADeviceState(props.componentId, "pause", []);
+      break;
+    default: 
+      console.log("que ha pasao");
+      break;
+  }
+
+}
+
+function stop(){
+  status.value = "stopped"
+  store.updateADeviceState(props.componentId, "stop", []);
+}
+
+
+function nextSong(){
+  store.updateADeviceState(props.componentId, "nextSong", []);
+}
+function previousSong(){ 
+  store.updateADeviceState(props.componentId, "previousSong", []);
+}
+
+
+async function updateGenre(selection){
+  await store.updateADeviceState(props.componentId, "setGenre", [selection]);
+  //nuevo genero -> nueva playlist
+  await store.getPlaylistAPI(props.componentId);
+}
+
+// async function getPlaylist() {
+//   var res = await store.updateADeviceState(props.componentId, "getPlaylist", []);
+//   return res;
+// }
+
+/* const playlist = ref(store.updateADeviceState(props.componentId, "getPlaylist", []));
+console.log(playlist.value); */
+
+// const playlist = computed( ()=> {
+//   return store.updateADeviceState(props.componentId, "getPlaylist", []);
+// })
+
+// console.log(playlist[0].title);
+// console.log(playlist[1].title);
+// console.log(playlist[2].title);
+
+function setVolume() {
+  store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value]);
+}
+function decreaseVolume() {
+  store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value - 1]);
+  volumeLevel.value -= 1
+}
+function increaseVolume() {
+  store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value + 1]);
+  volumeLevel.value += 1
+}
+
 </script>
 
 <template>
   <v-card class="toggle-card">
-
+    <!-- <v-card-text>{{   songTitle }}</v-card-text> -->
     <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
       <v-row >
         <v-col cols="9">
@@ -127,14 +272,19 @@ const saveButtonDisabled = computed(() => {
           variant="solo" 
           :rules="[rules.acceptableVolumeLevel]"
           :min="0"
-          :max="100"  
+          :max="10"  
           class="rounded-input " 
           bg-color='transparent' flat/>
+        </v-col>
+        <v-col cols="2">
+          <v-btn icon  @click="setVolume" style="background-color:#f4e6bf; color: #1ed760"  flat>
+            <v-icon>mdi-check-circle-outline</v-icon>
+          </v-btn>
         </v-col>
         <v-col cols="4">
             <v-select
             variant="solo"
-            v-model="genre"
+            @update:modelValue = "updateGenre($event)"
             :items="genres"
             label="Genre"
             class="rounded-input"
@@ -142,7 +292,7 @@ const saveButtonDisabled = computed(() => {
   
             
           </v-col>
-        <v-col cols="4">
+        <v-col cols="2">
           <v-btn icon @click="openPlaylistDialog" style="background-color: transparent; color:#204516;" flat>
             <v-icon>mdi-playlist-play</v-icon>
             <v-tooltip
@@ -170,8 +320,8 @@ const saveButtonDisabled = computed(() => {
               <v-btn icon @click="previousSong" style="background-color: transparent;" color="common">
                 <v-icon>mdi-skip-previous</v-icon>
               </v-btn>
-              <v-btn icon @click="play" style="background-color: #f1edcd;" color="black">
-                <v-icon>{{ playing ? 'mdi-pause' :'mdi-play' }}</v-icon>
+              <v-btn icon @click="playButton" style="background-color: #f1edcd;" color="black">
+                <v-icon>{{ isPlaying ? 'mdi-pause' :'mdi-play' }}</v-icon>
               </v-btn>
               <v-btn icon @click="nextSong" style="background-color: transparent;" color="common">
                 <v-icon>mdi-skip-next</v-icon>
@@ -183,19 +333,16 @@ const saveButtonDisabled = computed(() => {
           
           <v-row >
             <v-col cols="2">
-  
             </v-col>
             <v-col cols="8">
               <v-progress-linear
-              v-model="timePlaying"
+              v-model="progress"
               :min="0"
               :max="100"
               color="common2"
               ></v-progress-linear>
             </v-col>
             <v-col cols="2">
-              
-  
             </v-col>
           </v-row>
         </v-col>
@@ -256,14 +403,14 @@ const saveButtonDisabled = computed(() => {
             </v-card-title>
           </v-toolbar>
         </v-card-title>
-        <v-card-text>
+        <v-card-text class="mt-n10">
           <v-list>
-            <v-list-item v-for="song in playlist" :key="song.id" @click="playSong(playlist)">
-              <v-list-item-title>{{ playlist.name }}</v-list-item-title>
+            <v-list-item v-for="song in store.playlist">
+              <v-list-item-title> {{ song.title }} -- {{ song.artist }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-card-text>
-        <v-card-actions class="actions-style" style="height: 100px;">
+        <v-card-actions class="actions-style" style="height: 50px;">
           <v-spacer></v-spacer>
           <v-btn 
           style="background-color: #f1edcd;margin: 10px" 
@@ -376,3 +523,4 @@ const saveButtonDisabled = computed(() => {
 }
 
 </style>
+
