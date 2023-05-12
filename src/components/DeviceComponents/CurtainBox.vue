@@ -135,6 +135,18 @@ const openDeleteDialog = () => {
     </v-row>
     <v-row >
         <v-spacer>  </v-spacer>
+        <!-- ACA JOACO --> 
+        <v-text-field 
+          v-model="amountValue" 
+          type="number" 
+          label="Amount" 
+          variant="solo" 
+          :disabled="!isOn" 
+          :min="0"
+          :max="100"  
+          class="rounded-input green-text" 
+          bg-color='transparent' flat/>
+          
         <v-card-text class="font-weight-bold text-h2 slider-value">
           {{ sliderValue }}
         </v-card-text>
@@ -142,6 +154,17 @@ const openDeleteDialog = () => {
     </v-row>
 
     <v-row no-gutters class="mr-5 ml-5" style="margin-top: 40px">
+      <v-progress-linear
+        v-model="sliderValue"
+        color="darksecondary"
+        height="25"
+        rounded="true"
+        >
+        <template v-slot:default="{ value }">
+          <strong>{{ Math.ceil(value) }}%</strong>
+        </template>
+      </v-progress-linear>
+
       <v-slider
         color="primary"
         v-model="sliderValue"
@@ -231,7 +254,9 @@ const openDeleteDialog = () => {
 }
 
 
-
+.green-text {
+  color: #1C4035; /* Change the color to your desired value */
+}
 .toggle-card::before {
     content: "";
     position: absolute;
@@ -257,6 +282,13 @@ const openDeleteDialog = () => {
   white-space: nowrap;
   overflow: hidden;
   margin-left: -10px;
+}
+.rounded-input {
+  border-radius: 10px;
+  box-shadow: inset 3px 1px 2px rgba(0, 0, 0, 0.2), 
+              inset 0 -1px 3px rgba(240, 222, 162, 0.5);
+  background-color: transparent;
+  height: 60px;
 }
 .toggle-card-popup {
   padding: 30px;
