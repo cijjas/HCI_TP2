@@ -40,7 +40,7 @@
   const tempFreezerTemperature = ref(freezerTemperature.value);
 
   const rules = {
-    minLength: value => value.length >= 1 || 'Min 1 characters',
+    minLength: value => value.length >= 3 || 'Min 3 characters',
     maxLength: value => value.length <= 15 || 'Max 15 characters',
   };
   const openFridgeDialog = () => {
@@ -53,7 +53,7 @@
  
 
   const saveSettings = () => {
-    if(tempDeviceName.value.length < 1 || tempDeviceName.value.length > 15) {
+    if(tempDeviceName.value.length < 3 || tempDeviceName.value.length > 15) {
       return;
     }
     deviceName.value = tempDeviceName.value;

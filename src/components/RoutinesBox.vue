@@ -189,7 +189,7 @@ height: 300px;
 width: 400px;
 }
 .toggle-card:hover {
-box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
+  transform: scale3d(1.01, 1.01, 1.01);
 }
 .rounded-toolbar {
 border-radius: 20px;

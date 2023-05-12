@@ -20,63 +20,22 @@
   // const props = defineProps(['roomName', 'devicesCount']);
   const componentId = ref(props.componentId);
   const componentRoom = ref(props.componentRoom);
-  const isOn = ref(false);
   const isDialogOpen = ref(false);
   const isDeleteDialogOpen = ref(false);
 
   //real values
   const deviceName = ref(props.componentName);
-  const vacuumMode = ref(0);
-  const chargingBaseLocation = ref(0);
-  const returningToBase = ref(false);
-  const location = ref(0);
 
   //temp values
   const tempDeviceName = ref(deviceName.value);
-  const tempVacuumMode = ref(vacuumMode.value);
-  const tempChargingBaseLocation = ref(chargingBaseLocation.value);
-  const tempReturningToBase = ref(returningToBase.value);
-  const tempLocation = ref(location.value);
 
   const rules = {
-    minLength: value => value.length >= 1 || 'Min 1 characters',
+    minLength: value => value.length >= 3 || 'Min 3 characters',
     maxLength: value => value.length <= 15 || 'Max 15 characters',
-  };
-  const openVacuumDialog = () => {
-    isDialogOpen.value = true;
-  };
-  const closeVacuumDialog = () => {
-    isDialogOpen.value = false;
+    acceptableVolumeLevel: value => value >= 0 && value <= 100 || 'Min 0, Max 100',
   };
 
-  const saveSettings = () => {
-    if(tempDeviceName.value.length < 1 || tempDeviceName.value.length > 15) {
-      return;
-    }
-    deviceName.value = tempDeviceName.value;
-    vacuumMode.value = tempVacuumMode.value;
-    chargingBaseLocation.value = tempChargingBaseLocation.value;
-    returningToBase.value = tempReturningToBase.value;
-    location.value = tempLocation.value;
-    closeVacuumDialog();
-  };
-  const cancelSettings = () => {
-    tempDeviceName.value = deviceName.value;
-    tempVacuumMode.value = vacuumMode.value;
-    tempChargingBaseLocation.value = chargingBaseLocation.value;
-    tempReturningToBase.value = returningToBase.value;
-    tempLocation.value = location.value;
-    closeVacuumDialog();
-  };
-
-  const toggleCard = () => {
-
-  };
-
-  const returnToBase = () => {
-    // Code to execute when button is clicked
-  };
-
+  
   const deleteDevice = () => {
     store.deleteADeviceByName(deviceName.value);
     openDeleteDialog();
@@ -85,189 +44,234 @@
 };
 
 const openDeleteDialog = () => {
-        isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
+  isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
 };
+const openSpeakerSettings = () => {
+  isDialogOpen.value = true;
+};
+const timePlaying = ref(50);
+const volumeLevel = ref(50);
+const playing = ref(false);
+const tempVolumeLevel = ref(volumeLevel.value);
+const genre = ref('pop');
+const genres = ref(['clasical','country','pop','rock','dance','latina']);
+const isPlaylistDialogOpen = ref(false);
+const openPlaylistDialog = () => {
+  isPlaylistDialogOpen.value = true;
+};
+const isFormValid = computed(() => {
+  return (
+    tempDeviceName.value.length >= 3 &&
+    tempDeviceName.value.length <= 15
+  );
+});
 
-  
+const cancelSettings = () => {
+  isDialogOpen.value = false;
+  tempVolumeLevel.value = volumeLevel.value;
+  tempDeviceName.value = deviceName.value;
+};
+const saveSettings = () => {
+  isDialogOpen.value = false;
+  volumeLevel.value = tempVolumeLevel.value;
+  deviceName.value = tempDeviceName.value;
+};
+function playButtonIcon(){
+  if(playButtonIcon.value == 'mdi-play'){
+    playButtonIcon.value = 'mdi-pause';
+  }else{
+    playButtonIcon.value = 'mdi-play';
+  }
+}
+
+function play(){
+  playing.value = !playing.value;
+}
+const saveButtonDisabled = computed(() => {
+  return !isFormValid.value;
+});
 </script>
 
-
 <template>
-  <v-card :class="{'bg-on': isOn, 'bg-off': !isOn}" class="toggle-card"  @click="toggleCard">
-        <v-toolbar  :rounded="true" class="rounded-toolbar" transparent>
+  <v-card class="toggle-card">
 
-          
-          <v-btn @click="openVacuumDialog" text color="transparent">
-            <v-toolbar-title class="font-weight-bold text-h4 card-title">{{deviceName}}</v-toolbar-title>
+    <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
+      <v-row >
+        <v-col cols="9">
+          <v-btn @click="openSpeakerSettings" text color="transparent">
+            <v-card-title class="font-weight-bold text-h4 mb-0  card-title">{{ deviceName }}</v-card-title>
             <v-tooltip
-                activator="parent"
-                location="right"
-              >Edit</v-tooltip>
+                  activator="parent"
+                  location="right"
+                >Edit</v-tooltip>
           </v-btn>
-          <v-spacer></v-spacer>
-          <v-btn 
-            icon 
-            @click="isOn = !isOn" 
-            :class="{'on-button': isOn, 'off-button': !isOn}"
-            >
-            <v-icon>{{ isOn ? 'mdi-power' : 'mdi-power-standby' }}</v-icon>
-          </v-btn>
-          
-
-        </v-toolbar>
-
-        <!-- locations for-->
-        <v-row no-gutters style="padding-bottom: 10px">
-          <v-col cols="12">
-            <v-btn icon class="primary">
-              <v-icon>mdi-map-marker</v-icon>
-            </v-btn>
-            <v-subheader class="ml-4">{{componentRoom}}</v-subheader>
-          </v-col>
-        </v-row>
-              
-    <v-card-action class="actions-style" style="height: 70px; margin: 20px ">
-        <v-row no-gutters class="button-row">
-        <v-col cols="auto">
-          <v-card-actions>
-            <v-btn color="primary" block @click="returnToBase">Return to Base</v-btn>
-          </v-card-actions>
         </v-col>
-        
-        <v-col cols="auto" class="ml-auto">
-          <v-row no-gutters>
-              <v-col cols="auto" style="padding-top: 10px">
+        <v-spacer> </v-spacer>
+        <v-col class="text-center" cols="3" >
+          <v-btn icon @click="stop" color="primary">
+            <v-icon>mdi-stop</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-toolbar>
 
-                <v-btn :color="vacuumMode === 0 ? 'primary' : 'offcolor'" 
-                @click.stop="vacuumMode = 0" 
-                class="secondary text-right small-button-vacuum"
-                :disabled="!isOn" 
-                  >Vacuum
-                </v-btn>
-              
-              </v-col>
-              <v-col cols="auto" style="padding-top: 10px">
+    <v-card-text>
 
-                <v-btn 
-                  :color="vacuumMode ? 'primary' : 'offcolor'"
-                  @click.stop="vacuumMode = 1" 
-                  class="text-right small-button-mop"
-                  :disabled="!isOn"
-                  >Mop
-                </v-btn>
-
-            </v-col>
-          </v-row>
+      <v-row  justify="center">
+        <v-col class="text-center" cols="4">
+          <!-- row de volumen -->
+          <v-text-field
+          v-model="volumeLevel" 
+          type="number" 
+          label="Volume" 
+          variant="solo" 
+          :rules="[rules.acceptableVolumeLevel]"
+          :min="0"
+          :max="100"  
+          class="rounded-input " 
+          bg-color='transparent' flat/>
+        </v-col>
+        <v-col cols="4">
+            <v-select
+            variant="solo"
+            v-model="genre"
+            :items="genres"
+            label="Genre"
+            class="rounded-input"
+            bg-color='transparent' flat/>
+  
+            
+          </v-col>
+        <v-col cols="4">
+          <v-btn icon @click="openPlaylistDialog" style="background-color: transparent; color:#204516;" flat>
+            <v-icon>mdi-playlist-play</v-icon>
+            <v-tooltip
+                  activator="parent"
+                  location="right"
+                >See Playlist</v-tooltip>
+          </v-btn>
         </v-col>
 
       </v-row>
-    </v-card-action>
-        
-        
-    <v-dialog v-model="isDialogOpen" width="1024" @click:outside="cancelSettings">
-      <v-card class="toggle-card-popup">
+    </v-card-text>
 
-        <v-card-title class="font-weight-bold text-h5 card-title">Vacuum Settings</v-card-title>
-        <v-card-text>
+    <v-card-actions class="actions-style " style="height: 120px;">
+      <v-row justify="center">
+        <v-col cols="3">
+          <v-btn icon @click="decreaseVolume"  style="background-color: #0000000b; color:#f1edcd; margin-left: 30px; margin-top: 10px;"  flat>
+            <v-icon>mdi-volume-minus</v-icon>
+          </v-btn>
+        </v-col>
+        <v-col cols="6">
+  
+          <!-- row de play -->
+          <v-row  justify="center">
+            <v-col class="text-center" cols="12">
+              <v-btn icon @click="previousSong" style="background-color: transparent;" color="common">
+                <v-icon>mdi-skip-previous</v-icon>
+              </v-btn>
+              <v-btn icon @click="play" style="background-color: #f1edcd;" color="black">
+                <v-icon>{{ playing ? 'mdi-pause' :'mdi-play' }}</v-icon>
+              </v-btn>
+              <v-btn icon @click="nextSong" style="background-color: transparent;" color="common">
+                <v-icon>mdi-skip-next</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+  
+          <!-- mostrador de tiempo de cancion -->
           
           <v-row >
-            <v-text-field
+            <v-col cols="2">
+  
+            </v-col>
+            <v-col cols="8">
+              <v-progress-linear
+              v-model="timePlaying"
+              :min="0"
+              :max="100"
+              color="common2"
+              ></v-progress-linear>
+            </v-col>
+            <v-col cols="2">
+              
+  
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col cols="3">
+          <v-btn icon @click="increaseVolume" style="background-color: #0000000b; color:#f1edcd; margin-top: 10px;" flat>
+            <v-icon>mdi-volume-plus</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-card-actions>
+
+
+    <!-- dialog de cambiar nombre (settings) -->
+    <v-dialog v-model="isDialogOpen" width="700px" >
+      <v-card class="toggle-card-popup"> 
+        <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
+          <v-card-title class="font-weight-bold text-h5 card-title">{{ deviceName }} Settings</v-card-title>
+        </v-toolbar>
+        <v-form v-model="isFormValid" @submit.prevent="saveSettings">
+          <v-card-text>
+            <v-row>
+              <v-text-field
               variant="outlined"
-              clearable
-              :clear-icon="!tempDeviceName ? '' : 'mdi-close-circle-outline'"
-              style="padding-top: 50px;"  
+              solo
+              :counter="15"
               label="Device Name"
               v-model.string="tempDeviceName"
               type="string"
               :rules="[rules.maxLength, rules.minLength]"
             ></v-text-field>
-            
-          </v-row>
-          <v-row>
-            <v-text-field
-              variant="outlined"
-              clearable
-              :clear-icon="!tempChargingBaseLocation ? '' : 'mdi-close-circle-outline'"
-              style="padding-top: 50px;"  
-              label="Charging Base Location"
-              v-model.string="tempChargingBaseLocation"
-              type="string"
-              :rules="[rules.maxLength, rules.minLength]"
-            ></v-text-field>
-          </v-row>
-          <v-row>
-            <v-text-field
-              variant="outlined"
-              clearable
-              :clear-icon="!tempReturningToBase ? '' : 'mdi-close-circle-outline'"
-              style="padding-top: 50px;"  
-              label="Returning to Base"
-              v-model.string="tempReturningToBase"
-              type="string"
-              :rules="[rules.maxLength, rules.minLength]"
-            ></v-text-field>
-          </v-row>
-          <v-row>
-            <v-text-field
-              variant="outlined"
-              clearable
-              :clear-icon="!tempChargingBaseLocation ? '' : 'mdi-close-circle-outline'"
-              style="padding-top: 50px;"  
-              label="Charging Vacuum Location"
-              v-model.string="tempChargingBaseLocation"
-              type="string"
-              :rules="[rules.maxLength, rules.minLength]"
-            ></v-text-field>
-            <v-col>
-              <v-row no-gutters>
-                  <v-card-text class="text--white font-weight-bold text-h4 mb-0 slider-value" >
-                        <v-text> Cleaning Mode </v-text>
-                  </v-card-text>
-                  <v-col cols="auto" >
+  
+            </v-row>
+          </v-card-text>
+          <v-card-actions class="actions-style">
+            <v-spacer></v-spacer>
+            <v-btn color="common2" text @click="cancelSettings">Cancel</v-btn>
+            <v-btn 
+              :disabled="!isFormValid"
+              type="submit"
+              style="background-color: #f1edcd;margin: 10px" 
+              color="primary" 
+              text 
+              >Save</v-btn>
+          </v-card-actions>
 
-                    <v-btn :color="tempVacuumMode === 0 ? 'primary' : 'offcolor'" 
-                    @click.stop="tempVacuumMode = 0" 
-                    class="secondary text-right temp-small-button-vacuum"
-                      >Vacuum
-                    </v-btn>
-                  
+        </v-form>
+      </v-card>
+    </v-dialog>
 
-                    <v-btn :color="tempVacuumMode === 1 ? 'primary' : 'offcolor'"
-                      @click.stop="tempVacuumMode = 1" 
-                      class="text-right temp-small-button-mop"
-                      >Mop
-                    </v-btn>
 
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-row>
-
-          <v-row no-gutters class="button-row">
-            <v-col cols="auto" class="ml-auto " >
-              
-            </v-col>
-          </v-row>
-
+    <!-- dialog de playlist -->
+    <v-dialog v-model="isPlaylistDialogOpen" width="700px">
+      <v-card class="toggle-card-popup">
+        <v-card-title>
+          <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
+            <v-card-title class="font-weight-bold text-h5 card-title">
+              Songs in {{ genre }}
+            </v-card-title>
+          </v-toolbar>
+        </v-card-title>
+        <v-card-text>
+          <v-list>
+            <v-list-item v-for="song in playlist" :key="song.id" @click="playSong(playlist)">
+              <v-list-item-title>{{ playlist.name }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
         </v-card-text>
-        
-        <v-card-actions>
-          <v-btn class="delete-button" color="white" @click="openDeleteDialog()"> Delete device </v-btn>
+        <v-card-actions class="actions-style" style="height: 100px;">
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="cancelSettings">Cancel</v-btn>
-          <v-btn class="small-button-save" color="white" @click="saveSettings">Save</v-btn>
+          <v-btn 
+          style="background-color: #f1edcd;margin: 10px" 
+          color="primary" 
+          text 
+          @click="isPlaylistDialogOpen= false"
+          >Close</v-btn>
         </v-card-actions>
-
-        <v-dialog v-model="isDeleteDialogOpen" width="1024" persistent>
-            <v-card class="toggle-card-popup">
-                <v-card-title class="headline">Are you sure you want to delete {{ deviceName }}?</v-card-title>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="routinedarkred" variant="plain" @click="deleteDevice();">Delete</v-btn>
-                    <v-btn color="primary" @click="openDeleteDialog">Cancel</v-btn>
-              </v-card-actions>
-            </v-card>
-        </v-dialog>
 
       </v-card>
     </v-dialog>
@@ -276,17 +280,53 @@ const openDeleteDialog = () => {
 </template>
 
 
+
 <style scoped>
 .toggle-card {
   cursor: pointer;
   padding: 16px;  
   border-radius: 20px;
-  background-color: #F4CF6D;
+  background-color: #f4e6bf;
   transition: all .2s ease-in-out;
   height: 300px;
   width: 400px;
+  color: #1C4035; /* Change the color to your desired value */
   
 }
+.toggle-card-popup {
+  padding: 30px;
+  border-radius: 15px !important;
+  background-color: #f4e8c6ae;
+  backdrop-filter: blur(8px);
+  height: 400px
+}
+.toggle-card-popup::before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 1;
+}
+.rounded-input {
+  border-radius: 10px;
+  box-shadow: inset 3px 1px 2px rgba(0, 0, 0, 0.2), 
+              inset 0 -1px 3px rgba(240, 222, 162, 0.5);
+  background-color: transparent;
+  height: 60px;
+  width: 100px;
+  color: #3861557e; /* Change the color to your desired value */
+}
+.actions-style {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color:#1ed760;
+  }
 .delete-button {
   width: 200px;
   height: 40px;
@@ -294,101 +334,20 @@ const openDeleteDialog = () => {
   background-color: #d82602;
   box-shadow: 0 2px 4px rgba(24, 15, 15, 0.589);
 }
-.actions-style {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
 
-.toggle-card::before {
-    content: "";
-    position: absolute;
-    top: 1px;
-    left: -210px;
-    bottom: 300;
-    width: 100%;
-    height: 100%;
-    background-image: url("./DeviceAssets/del-vacuum.png");
-    background-size: 50%;
-    background-position: calc(100% - 0px) top;
-    background-repeat: no-repeat;
-    opacity: 0.05;
-}
-
-
-.slider-value {
+.green-color {
   color: #1C4035; /* Change the color to your desired value */
 }
-.toggle-card-popup {
-  padding: 30px;
-  border-radius: 15px !important;
-  background: radial-gradient(at 80% 50%, rgba(243, 230, 111, 0.843), rgba(244, 207, 109, 0.99));
-  backdrop-filter: blur(7px);
-}
-.toggle-card-popup::before {
-  content: "";
-  position: absolute;
-  top: 0px;
-  left: -400px;
-  width: 100%;
-  height: 100%;
-  background-image: url("./DeviceAssets/del-vacuum.png");
-  background-size: 70%;
-  background-position: calc(100% - 0px) top;
-  background-repeat: no-repeat;
-  opacity: 0.05;
-}
-
-.temp-small-button-vacuum {
-  width: 200px;
-  height: 40px;
-  border-radius: 10px 0px 0px 10px;
-}
-.temp-small-button-mop {
-  width: 200px;
-  height: 40px;
-  border-radius: 0px 10px 10px 0px;
-}
-
-.toggle-card:hover {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
-}
-.v-btn:hover .card-title {
-    color: #19642d;
-  }
-.rounded-toolbar {
-  border-radius: 20px;
-  background-color: transparent;
-
-}
-.bg-on {
-  background-color: #F4CF6D;
-}
-
-/* background color when turned off */
-.bg-off {
-  background-color: #8C783A;
-}
-
-.small-button-vacuum {
-  border-radius: 10px 0px 0px 10px;
-  font-size: 12px;
-}
 
 
-.small-button-mop {
-  padding: 5px 8px;
-  font-size: 12px;
-  border-radius: 0px 10px 10px 0px;
-
-}
 
 .card-title{
   color: #1C4035; /* Change the color to your desired value */
   white-space: nowrap;
   overflow: hidden;
-  margin-left: -10px;
+}
+.v-btn:hover .card-title {
+    color: #19642d;
 }
 
 .small-button-save {
@@ -397,9 +356,11 @@ const openDeleteDialog = () => {
   border-radius: 10px;
   background-color: #1C4035;
   box-shadow: 0 2px 4px rgba(24, 15, 15, 0.589);
-
 }
-
+.rounded-toolbar {
+  border-radius: 20px;
+  background-color: transparent;
+}
 .on-button:active {
   color: #631414;
 }

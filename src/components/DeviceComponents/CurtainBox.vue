@@ -29,7 +29,7 @@ const props = defineProps({
 
   const tempDeviceName = ref(deviceName.value);
   const rules = {
-    minLength: value => value.length >= 1 || 'Min 1 characters',
+    minLength: value => value.length >= 3 || 'Min 3 characters',
     maxLength: value => value.length <= 15 || 'Max 15 characters',
   };
 
@@ -76,7 +76,7 @@ const props = defineProps({
     tempDeviceName.value = deviceName.value;
   };
   const saveSettings = () => {
-    if(tempDeviceName.value.length < 1 || tempDeviceName.value.length > 15) {
+    if(tempDeviceName.value.length < 3 || tempDeviceName.value.length > 15) {
         return;
     }
     deviceName.value = tempDeviceName.value;
@@ -332,14 +332,9 @@ const openDeleteDialog = () => {
 .card-title{
   color: #1C4035; /* Change the color to your desired value */
 }
-.card-title{
-  color: #1C4035; /* Change the color to your desired value */
-  white-space: nowrap;
-  overflow: hidden;
-  margin-left: -10px;
-
+.v-btn:hover .card-title {
+    color: #19642d;
 }
-
 
 .on-button:active {
   color: #631414;

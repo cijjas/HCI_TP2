@@ -172,6 +172,11 @@
     background-size: cover;
     background-position: 0px -70px;
     height: 654px;
+    transition:  transform .3s ease-in-out;
+  }
+  .card-style:hover{
+     transform: scale3d(1.01, 1.01, 1.01);
+    
   }
   .v-card__title {
     padding: 0;

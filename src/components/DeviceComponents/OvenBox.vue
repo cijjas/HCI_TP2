@@ -60,7 +60,7 @@
   });
   
   const rules = {
-    minLength: value => value.length >= 3 || 'Min 1 characters',
+    minLength: value => value.length >= 3 || 'Min 3 characters',
     maxLength: value => value.length <= 15 || 'Max 15 characters',
   };
   
