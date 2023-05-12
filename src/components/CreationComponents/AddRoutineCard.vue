@@ -7,7 +7,7 @@ const store = useAppStore();
 const isCreateDialogOpen = ref(false);
 const actionCounter = ref(0);
 
-onMounted(async () => {             
+onMounted(async () => {
   try {
     await store.getAllDevicesAPI();
     await store.getDeviceActionsAPI();
@@ -50,7 +50,7 @@ const rules = {
     notRepeated: (value) => !store.getRoutinesNames.includes(value) || 'Routine already exists',
     isNumber: (value) => !isNaN(value) || 'Must be a number',
     isAcceptableNumber: (value, minValue, maxValue) => ((!isNaN(value) && value >= minValue && value <= maxValue)) || `Must be a number between ${minValue} and ${maxValue}`,
-}; 
+};
 
 
 function updateActions(selection){
@@ -59,9 +59,9 @@ function updateActions(selection){
     actionsArr.value = store.getTypeActionsNames(deviceObj2.value.type.name)
 }
 function updateParams(selection){
+  selectedParams.value = [];
   selectedAction.value = selection;
   paramsArr.value = store.getActionParameters(deviceObj2.value.type.name,selectedAction.value);
-  console.log(paramsArr.value)
 }
 function updateParamValue(selection, index){
     selectedParams.value[index] = selection
@@ -71,7 +71,7 @@ function addAction(){
 }
 const submitRoutine = () => {
   if(routineName.value && routineActions.value.length > 0){
-    store.createARoutine(routineName.value, routineActions.value); 
+    store.createARoutine(routineName.value, routineActions.value);
     routineName.value = ""
     routineActions.value = []
     openCreateDialog();
@@ -88,6 +88,7 @@ const submitAction = () => { // si se quiere hacer feo, se puede aca
     selectedDevice.value = ""
     selectedAction.value = ""
     selectedParams.value = []
+
   }
 }
 const isFormValid = ref(false);
@@ -105,18 +106,19 @@ const submitButtonDisabled = computed(() => {
         <v-col cols="12" >
             <v-row >
                 <v-toolbar-title class="font-weight-bold text-h4 title-style mt-16 ml-8">Build Routine</v-toolbar-title>
-                
+
                 <v-toolbar-title class="font-weight-bold text-h4 title-style mt-16 ml-8">Actions</v-toolbar-title>
             </v-row>
         </v-col>
       </v-toolbar>
       <!-- lado izquierdo DE LA CARD -->
-      
+
       <v-row>
         <v-col cols="6">
-          <v-form @submit.prevent="submitAction" v-model="isFormValid"> 
+          <v-form @submit.prevent="submitAction" v-model="isFormValid">
 
-            <v-select 
+            <v-select
+
               @update:modelValue = "updateActions"
               :rules="[rules.required]"
               :items="store.getDevicesNames"
@@ -126,7 +128,7 @@ const submitButtonDisabled = computed(() => {
               base-color="primary"
               color="verdatim"
             ></v-select>
-            
+
             <v-select v-if="selectedDevice"
                 @update:modelValue = "updateParams($event, index)"
                 label="Select An Action"
@@ -137,8 +139,8 @@ const submitButtonDisabled = computed(() => {
                 base-color="primary"
                 color="verdatim"
             ></v-select>
-                  
-                  
+
+
               <v-card-text v-for="(param, index) in paramsArr" >
 
                     <v-select v-if="param.type == 'string' && param.name != 'roomId'"
@@ -177,18 +179,18 @@ const submitButtonDisabled = computed(() => {
                     color="verdatim"
                   ></v-text-field>
 
-                  
+
                 </v-card-text>
                 <v-row class="pr-10">
                   <v-spacer></v-spacer>
-                  <v-btn 
-                  type="submit" 
-                  color="m1" 
+                  <v-btn
+                  type="submit"
+                  color="m1"
                   class="ml-8"
                   :disabled="submitButtonDisabled"
                   >
                   <v-icon>mdi-plus</v-icon>
-                  Add Action 
+                  Add Action
                   </v-btn>
 
                 </v-row>
@@ -214,10 +216,10 @@ const submitButtonDisabled = computed(() => {
       <v-form @submit.prevent="submitRoutine">
         <v-card-actions class="actions-style" style="height: 100px;  "  >
             <v-btn color="white" @click="handleReset" class="ml-8">Clear</v-btn>
-            
+
             <v-spacer></v-spacer>
-            <v-text-field 
-              :rules="[rules.required, rules.notRepeated]"  
+            <v-text-field
+              :rules="[rules.required, rules.notRepeated]"
               v-model="routineName"
               label="Routine's Name"
               variant="outlined"
@@ -227,8 +229,8 @@ const submitButtonDisabled = computed(() => {
               clearable="true"
               clear-icon="mdi-close-circle-outline"
               />
-            <v-btn 
-            type="submit" 
+            <v-btn
+            type="submit"
             class="small-button-add mr-12"
             color="white"
             >Create Routine</v-btn>
@@ -244,10 +246,10 @@ const submitButtonDisabled = computed(() => {
               </div>
           </v-card>
       </v-dialog>
-                
+
     </v-card>
 </template>
-  
+
 <style scoped>
 
   .bg-color-1 {
@@ -294,7 +296,7 @@ const submitButtonDisabled = computed(() => {
     right: 0;
     background-color:#795454;
   }
-  
+
   .title-style {
     color:#1C4035;
   }
@@ -309,7 +311,6 @@ const submitButtonDisabled = computed(() => {
   }
   .card-style:hover{
      transform: scale3d(1.01, 1.01, 1.01);
-    
+
   }
 </style>
-  

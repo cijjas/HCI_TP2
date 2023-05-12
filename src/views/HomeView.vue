@@ -14,6 +14,15 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
     // pido el update de los datos
       await store.getAllRoomsAPI();
       await store.getAllDevicesAPI();
+      // polling infinito
+      /* const intervalId = setInterval(async () => {
+        for ( let i = 0; i < store.devices.length; i++ ){
+          if ( store.devices[i].type.name == 'speaker' || store.devices[i].type.name == 'blinds'){ //es un elemento polleable
+            console.log(await store.getDeviceStateAPI(store.devices[i].id))
+          }
+        }
+        console.log("Updating pollings...");
+      }, 1000); */
     } catch (error) {
       console.error(error);
     }
@@ -35,13 +44,13 @@ function getComponent(file) {
           <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Home</v-card-title>
           <v-divider color="gris"></v-divider>
         </v-row>
-      
+
         <v-row>
           <v-col md="3" class="add-card-column">
             <AddDeviceCard></AddDeviceCard>
           </v-col>
 
-          
+
           <v-col md="9">
             <v-row>
               <template v-for="(device, index) in store.devices" :key="device.id">
