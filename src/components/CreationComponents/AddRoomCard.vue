@@ -62,7 +62,7 @@ const submit = handleSubmit(values => {
                 <v-text-field 
                 v-model="roomName.value.value"
                 :error-messages="roomName.errorMessage.value"
-                :counter="20"
+                :counter="15"
                 label="Select a Room Name" 
                 variant="outlined" 
                 clearable="true"

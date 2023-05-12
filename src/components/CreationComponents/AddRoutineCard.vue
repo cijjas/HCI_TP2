@@ -24,9 +24,6 @@ const openCreateDialog = () => {
     }, 1250);
   };
 
-
-
-
 /* ------------------- CREAR RUTINA ------------------ */
 const deviceObj2 = ref({});
 
@@ -107,7 +104,7 @@ const submitButtonDisabled = computed(() => {
             <v-row >
                 <v-toolbar-title class="font-weight-bold text-h4 title-style mt-16 ml-8">Build Routine</v-toolbar-title>
 
-                <v-toolbar-title class="font-weight-bold text-h4 title-style mt-16 ml-8">Actions</v-toolbar-title>
+                <v-toolbar-title class="font-weight-bold text-h6 title-style mt-16 ">Actions</v-toolbar-title>
             </v-row>
         </v-col>
       </v-toolbar>
@@ -197,8 +194,8 @@ const submitButtonDisabled = computed(() => {
           </v-form>
         </v-col>
         <!-- lado derecho -->
-        <v-col cols="6" >
-          <v-card v-if="routineActions.length == 0" color="transparent">
+        <v-col cols="6" style="padding-right: 30px;">
+          <v-card v-if="routineActions.length == 0" color="transparent" >
             <v-card-text >No Actions Added</v-card-text>
           </v-card>
           <v-card v-if="routineActions.length != 0"  color="transparent" >
