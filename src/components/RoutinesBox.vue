@@ -1,3 +1,66 @@
+
+<script setup>
+import { ref, defineProps } from 'vue';
+import { onMounted } from '@vue/runtime-core';
+import { useAppStore } from '@/store/app';
+const store = useAppStore();
+
+const props = defineProps(['routineName', 'routineId', 'actionsCount']);
+
+const routineId = ref(props.routineId);
+const actions = store.getARoutine(routineId.value).actions;
+
+const tempRoutineName = ref('');
+const nameRoutine = ref(props.routineName);
+const isDialogOpen = ref(false);
+const isDeleteDialogOpen = ref(false);
+const isActionsDialogOpen = ref(false);
+
+
+onMounted(async () => {             // cuando se monta la pagina pido los datos
+  try {
+  // pido el update de los datos
+    await store.getAllRoomsAPI();
+    await store.getAllDevicesAPI();
+    await store.getAllRoutinesAPI();
+  } catch (error) {
+    console.error(error);
+  }
+  }); 
+
+const saveName = () => {
+  if (tempRoutineName.value !== '') {
+      nameRoutine.value = tempRoutineName.value; // Update the routineName variable with the new value
+      store.updateARoutineName(routineId.value, nameRoutine.value);
+  }
+  isDialogOpen.value = !isDialogOpen.value;
+  clearVar();
+};
+const openEditDialog = () => {
+  isDialogOpen.value = !isDialogOpen.value;
+};
+
+const openDeleteDialog = () => {
+  isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
+};
+const deleteRoutine = () => {
+  // BORRAR LA RUTINA
+  store.deleteARoutine(routineId.value);
+  isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
+  isDialogOpen.value = !isDialogOpen.value;
+};
+
+function clearVar(){
+  tempRoutineName.value = "";
+}
+function openActionsDialog(){
+  isActionsDialogOpen.value = true;
+}
+function closeActionsDialog(){
+  isActionsDialogOpen.value = false;
+}
+</script>
+
 <template>
     <v-card :class="bg-on" class="toggle-card"  @click="toggleCard" >
     
@@ -22,8 +85,10 @@
             <v-btn variant="text" color="brown" class=" ml-10" @click="openEditDialog">Edit Routine</v-btn>
             <v-spacer></v-spacer>
             <router-link :to="{ name: 'routineview', params: { routineName: nameRoutine } }">
-              <v-btn class="view-actions-btn mr-10" color="primary">View Actions</v-btn>
+              <v-btn class="view-actions-btn mr-10" color="primary" >View Actions</v-btn>
+            
             </router-link>
+              <v-btn class="view-actions-btn mr-10" color="primary" @click="openActionsDialog">View Actions</v-btn>
           </v-row>
         </v-card-actions>
         
@@ -55,64 +120,35 @@
         </v-card>
       </v-dialog>
 
+      <v-dialog v-model="isActionsDialogOpen" width="1024">
+        <v-card class="toggle-card-popup">
+          <v-card-title class="headline">Actions in '{{ nameRoutine }}'</v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col >
+                <v-text class="text--white" >Actions in Routine: </v-text>
+                <span class="text--white font-weight-bold text-body mb-0"> {{ actions.length }}</span>
+              </v-col>
+            </v-row>
+            <v-card >
+              <v-row>
+              <v-col>
+                <v-text class="text--white" >Actions in Routine: </v-text>
+                <span class="text--white font-weight-bold text-body mb-0"> {{ actions.length }}</span>
+              </v-col>
+              </v-row>
+            </v-card> 
+          
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="primary" @click="closeActionsDialog">Cancel</v-btn>
+          </v-card-actions>
+        </v-card>
+      
+      </v-dialog>
 
     </v-card>
-  </template>
-  
-  <script setup>
-  import { ref, defineProps } from 'vue';
-  import { onMounted } from '@vue/runtime-core';
-  import { useAppStore } from '@/store/app';
-  const store = useAppStore();
-  
-  const props = defineProps(['routineName', 'routineId', 'actionsCount']);
-  
-  const routineId = ref(props.routineId);
-  const actionsCount = ref(props.actionCount);
-  const actions = store.getARoutine(routineId.value).actions;
-
-  const tempRoutineName = ref('');
-  const nameRoutine = ref(props.routineName);
-  const isDialogOpen = ref(false);
-  const isDeleteDialogOpen = ref(false);
-
-  onMounted(async () => {             // cuando se monta la pagina pido los datos
-    try {
-    // pido el update de los datos
-    await store.getAllRoomsAPI();
-    await store.getAllDevicesAPI();
-    await store.getAllRoutinesAPI();
-    } catch (error) {
-    console.error(error);
-    }
-    }); 
-  
-  const saveName = () => {
-    if (tempRoutineName.value !== '') {
-        nameRoutine.value = tempRoutineName.value; // Update the routineName variable with the new value
-        store.updateARoutineName(routineId.value, nameRoutine.value);
-    }
-    isDialogOpen.value = !isDialogOpen.value;
-    clearVar();
-  };
-  const openEditDialog = () => {
-    isDialogOpen.value = !isDialogOpen.value;
-  };
-
-  const openDeleteDialog = () => {
-    isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
-  };
-  const deleteRoutine = () => {
-    // BORRAR LA RUTINA
-    store.deleteARoutine(routineId.value);
-    isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
-    isDialogOpen.value = !isDialogOpen.value;
-  };
-
-  function clearVar(){
-    tempRoutineName.value = "";
-}
-  </script>
+</template>
   
 <style scoped>
 .run-btn{
@@ -170,7 +206,6 @@
 .toggle-card-popup {
   padding: 30px;
   border-radius: 15px !important;
-  background-image: url("./DeviceAssets/fuego.png");
   background-position-x: 50%;
   background-position-y: -100px ;
   background-size: 1200px;

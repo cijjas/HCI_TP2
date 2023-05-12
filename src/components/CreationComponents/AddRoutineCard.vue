@@ -196,7 +196,10 @@ const submitButtonDisabled = computed(() => {
         </v-col>
         <!-- lado derecho -->
         <v-col cols="6" >
-          <v-card v-if="routineActions.length != 0" flat >
+          <v-card v-if="routineActions.length == 0" color="transparent">
+            <v-card-text >No Actions Added</v-card-text>
+          </v-card>
+          <v-card v-if="routineActions.length != 0"  color="transparent" >
             <v-list rounded style="max-height: 434px; overflow-y: auto;">
               <v-list-item v-for="(routineAction, index) in routineActions" :key="index" :class="index % 2 === 0 ? 'bg-color-1' : 'bg-color-2'" >
                 {{ routineAction.actionName }} {{ routineAction.params }}
