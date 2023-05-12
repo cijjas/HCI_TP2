@@ -3,7 +3,7 @@
   import { useAppStore } from '@/store/app';
   const store = useAppStore();
 
-const props = defineProps({
+  const props = defineProps({
   componentName: {
     type: String,
     required: true
@@ -11,10 +11,15 @@ const props = defineProps({
   componentId: {
     type: String,
     required: true
+  },
+  componentRoom: {
+    type: String,
+    required: true
   }
 })
   // const props = defineProps(['roomName', 'devicesCount']);
   const componentId = ref(props.componentId);
+  const componentRoom = ref(props.componentRoom);
   const isOn = ref(false);
   const isDialogOpen = ref(false);
   const isDeleteDialogOpen = ref(false);
@@ -117,7 +122,7 @@ const openDeleteDialog = () => {
             <v-btn icon class="primary">
               <v-icon>mdi-map-marker</v-icon>
             </v-btn>
-            <v-subheader class="ml-4">Ubicación</v-subheader>
+            <v-subheader class="ml-4">{{componentRoom}}</v-subheader>
           </v-col>
         </v-row>
               
@@ -275,7 +280,7 @@ const openDeleteDialog = () => {
 .toggle-card {
   cursor: pointer;
   padding: 16px;  
-  border-radius: 10px;
+  border-radius: 20px;
   background-color: #F4CF6D;
   transition: all .2s ease-in-out;
   height: 300px;

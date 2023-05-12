@@ -23,11 +23,10 @@
     isCreateDialogOpen.value = true;
     setTimeout(() => {
       isCreateDialogOpen.value = false;
-    }, 2000);
+    }, 1250);
   };
 
-
-
+  
   const {handleSubmit, handleReset} = useForm(
     {
       validationSchema: {
@@ -39,9 +38,17 @@
           if(value) return true
           return 'Select a device type.'
         },
-        name(value){
-          if (value?.length >= 3 && value?.length <= 15) return true
-          return 'Name must be between 3 and 15 characters long.'
+        name(value){ // agregar testeo de si ya existe el nombre
+          const repeated = store.getADeviceByName(value) ? true : false;
+          if(repeated) {
+            return 'Name already in use.'
+          }
+          const tooLong = value?.length > 15 ? true : false;
+          const tooShort = value?.length < 3 ? true : false;
+          if(tooLong || tooShort) {
+            return 'Name must be between 3 and 15 characters long.'
+          }
+          return true
         }
       },
     }
@@ -51,9 +58,10 @@
   const type= useField('type');
 
   const submit = handleSubmit(values => {
-          store.createADevice(values.room, values.name, values.type);
-          handleReset();
-          openCreateDialog();
+    console.log(values);
+    store.createADevice(values.room, values.name, values.type);
+    handleReset();
+    openCreateDialog();
   })
 </script>
 
@@ -104,7 +112,7 @@
                     ></v-text-field>
                     
                 <v-card-actions class="actions-style" style="height: 100px; ">
-                  <v-btn @click="handleReset" class="ml-8">Clear</v-btn>
+                  <v-btn color="white" @click="handleReset" class="ml-8">Clear</v-btn>
                   <v-spacer></v-spacer>
                   <v-btn 
                   class="small-button-add mr-12"

@@ -221,6 +221,16 @@ export const useAppStore = defineStore('app', {
         console.error(error);
       }
     },
+    transferDevice(deviceId ,oldRoomId, newRoomId){
+      for ( let i = 0 ; i < this.rooms; i++ ){
+        if ( this.rooms[i].id === newRoomId ){
+          this.rooms[i].meta.devices.push(deviceId)
+        }
+        if ( this.rooms[i].id === oldRoomId ){
+          removeItemFromArray(this.rooms[i].meta.devices, deviceId);
+        }
+      }
+    },
 
 
 
@@ -231,7 +241,11 @@ export const useAppStore = defineStore('app', {
         var deviceObj = {
           id : id,
           name : newname,
+          meta: {
+            component : this.getADevice(id).meta.component
+          }
         }
+        console.log(deviceObj);
         var result = await DevicesApi.modify(deviceObj);
         // local
         this.devices.find( device => device.id == id).name = newname;
@@ -422,6 +436,7 @@ export const useAppStore = defineStore('app', {
       for ( let i = 0; i < this.rooms.length; i++ ){
         for ( let j = 0; j < this.rooms[i].meta.devices.length; j++){
           if ( this.rooms[i].meta.devices[j] == id ){
+            console.log(this.rooms[i].name);
             return this.rooms[i].name;
           }
         }
@@ -716,6 +731,13 @@ export const useAppStore = defineStore('app', {
           if ( actionsArr[i].name == actionName ){
             return actionsArr[i].params;
           }
+      },
+      getRoutineActions(routineName){
+        for ( let i = 0; i < this.routines.length; i++ ){
+          if ( this.routine[i].name == routineName ){
+            return this.routine[i];
+          }
+        }
       },
 
 

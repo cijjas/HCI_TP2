@@ -1,5 +1,6 @@
 <template>
-<v-card :class="{'bg-on': toggleValue, 'bg-off': !toggleValue}" class="toggle-card">    
+
+<v-card  class="toggle-card">    
       <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
         <v-btn text color="transparent">
           <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">
@@ -64,7 +65,7 @@
                 </v-card>
         </v-dialog>
     </v-card>
-  </template>
+</template>
   
 <script setup>
 import { ref, defineProps } from 'vue'
@@ -124,13 +125,13 @@ const props = defineProps({
 
   function clearVar(){
     tempRoomName.value = "";
-}
+  }
 
-  </script>
+</script>
 
 
-  <style scoped>
-  .delete-button {
+<style scoped>
+.delete-button {
   width: 150px;
   height: 40px;
   border-radius: 10px;
@@ -154,7 +155,7 @@ const props = defineProps({
 }
 .toggle-card-popup {
   cursor: pointer;
-  padding: 16px;
+  padding: 20px;
   border-radius: 15px;
   background-color: whitesmoke;
   transition: all .2s ease-in-out;
@@ -173,12 +174,9 @@ const props = defineProps({
 .toggle-card {
   cursor: pointer;
   padding: 16px;
-  margin-top: 30px;
-  margin-left: 30px;
-  margin-right: 30px;
-  border-radius: 10px;
-  background-color: #F4CF6D;
+  border-radius: 20px;
   transition: all .2s ease-in-out;
+  background-color: #98B891;
   height: 300px;
   width: 400px;
 }
@@ -192,13 +190,6 @@ const props = defineProps({
   background-color: transparent;
 }
 
-.bg-on {
-  background-color: #98B891;
-}
-
-.bg-off {
-  background-color: #8C783A;
-}
 .rounded-toolbar .text--white {
   color: #1C4035;
 }

@@ -33,7 +33,7 @@
     isCreateDialogOpen.value = true;
     setTimeout(() => {
       isCreateDialogOpen.value = false;
-    }, 2000);
+    }, 1250);
   };
 
 
@@ -50,8 +50,16 @@
           return 'Select a device type.'
         },
         name(value){
-          if (value?.length >= 3 && value?.length <= 15) return true
-          return 'Name must be between 3 and 15 characters long.'
+          const repeated = store.getADeviceByName(value) ? true : false;
+          if(repeated) {
+            return 'Device name already in use.'
+          }
+          const tooLong = value?.length > 15 ? true : false;
+          const tooShort = value?.length < 3 ? true : false;
+          if(tooLong || tooShort) {
+            return 'Name must be between 3 and 15 characters long.'
+          }
+          return true
         }
       },
     }

@@ -3,7 +3,7 @@
   import { useAppStore } from '@/store/app';
   const store = useAppStore();
 
-const props = defineProps({
+  const props = defineProps({
   componentName: {
     type: String,
     required: true
@@ -11,10 +11,15 @@ const props = defineProps({
   componentId: {
     type: String,
     required: true
+  },
+  componentRoom: {
+    type: String,
+    required: true
   }
 })
   // const props = defineProps(['roomName', 'devicesCount']);
   const componentId = ref(props.componentId);
+  const componentRoom = ref(props.componentRoom);
 
   const id = ref(0);
   const isDialogOpen = ref(false);
@@ -219,7 +224,7 @@ function flipState() {
     <!-- locations for-->
     <v-row no-gutters  style="padding-bottom: 15px">
       <v-col cols="6">
-        <v-subheader class="ml-1">Location</v-subheader>
+        <v-subheader class="ml-1">{{componentRoom}}</v-subheader>
       </v-col>
     </v-row>
     
@@ -433,8 +438,8 @@ function flipState() {
 .toggle-card-on {
   cursor: pointer;
   padding: 16px;
-  border-radius: 10px;
-  background-color: #F4CF6D;
+  border-radius: 20px;
+  background-color: #DBD0AF;
   background-image:url('./DeviceAssets/fuego.png');
   background-size: cover;
   background-position: center;
@@ -447,8 +452,8 @@ function flipState() {
   position: relative;
   cursor: pointer;
   padding: 16px;
-  border-radius: 10px;
-  background-color: #F4CF6D;
+  border-radius: 20px;
+  background-color: #DBD0AF;
   background-image: url('./DeviceAssets/fuego.png');
   background-size: cover;
   background-position: center;

@@ -10,8 +10,8 @@ export function getIdByName(array, name) {
 
     for (let i = 0; i < array.length; i++) {
         if (array[i].name === name) {
-        return array[i].id;
+            return array[i].id;
         }
     }
-    return "Room With that Name not FOund"; // room not found
+    return "Room With that Name not Found"; // room not found
 }

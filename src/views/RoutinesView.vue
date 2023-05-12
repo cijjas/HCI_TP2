@@ -11,9 +11,9 @@
     onMounted(async () => {             // cuando se monta la pagina pido los datos
     try {
     // pido el update de los datos
-    await store.getAllRoomsAPI();
-    await store.getAllDevicesAPI();
-    await store.getAllRoutinesAPI();
+        await store.getAllRoomsAPI();
+        await store.getAllDevicesAPI();
+        await store.getAllRoutinesAPI();
     } catch (error) {
     console.error(error);
     }
@@ -22,22 +22,73 @@
 
 <template>
     <main>
-        <AddRoutineCard></AddRoutineCard>
+      <div class="canvas">
         <v-card class="vcard elevation-0" color="transparent">
-            <v-row style="margin-top: 20px;">
-                <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Routines</v-card-title>
-                <v-divider color="gris"></v-divider>
-            </v-row>
+          <v-row style="margin-top: 20px;">
+            <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Routines</v-card-title>
+            <v-divider color="gris"></v-divider>
+          </v-row>
+        
+          <v-row>
+            <v-col md="6" class="mt-5">
+              <AddRoutineCard></AddRoutineCard>
+            </v-col>
+  
             
-            <v-row justify-end>
-                <v-col cols="5" v-for="routine in store.getAllRoutines()" :key="room">
-                    <RoutinesBox class="grid-item" :routineName="routine.name" :routineId="routine.id" :actionsCount="routine.actions.length"></RoutinesBox>
-                </v-col>
-            </v-row>  
+            <v-col md="6">
+              <v-row>
+                <template v-for="(routine, index) in store.getAllRoutines()">
+                  <template v-if="index < 4">
+                    <v-col xs="12" sm="12" md="6" lg="6" class="mt-5">
+                        <RoutinesBox :routineName="routine.name" :routineId="routine.id" :actionsCount="routine.actions.length"></RoutinesBox>
+                    </v-col>
+                  </template>
+                </template>
+              </v-row>
+            </v-col>
+  
+            <v-col>
+              <v-row>
+                <template v-for="(routine, index) in store.getAllRoutines()">
+                  <template v-if="index >= 4">
+                    <v-col xs="12" sm="6" md="4" lg="3" class="mt-5">
+                        <RoutinesBox :routineName="routine.name" :routineId="routine.id" :actionsCount="routine.actions.length"></RoutinesBox>
+                    </v-col>
+                  </template>
+                </template>
+              </v-row>
+            </v-col>
+  
+          </v-row>
         </v-card>
+      </div>
     </main>
 </template>
 
+<style scoped>
+
+
+.grid-item {
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin: 0;
+  padding: 0;
+  transition: box-shadow 0.2s ease;
+}
+
+
+.grid-item:hover {
+  transition: transform 0.3s ease-out;
+  transform: scale(1.01);
+}
+
+.v-layout {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+</style>
 
 <style scoped>
 

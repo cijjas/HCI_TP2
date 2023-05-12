@@ -48,7 +48,7 @@ function getComponent(file) {
                 <template v-if="index < 6">
                   <v-col xs="12" sm="12" md="6" lg="4">
                     <v-card class="grid-item" width="400">
-                      <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id"></component>
+                      <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id" :componentRoom="store.getDevicesRoom(device.id)"></component>
                     </v-card>
                   </v-col>
                 </template>
@@ -57,13 +57,11 @@ function getComponent(file) {
           </v-col>
 
           <v-col>
-            <v-row>
+            <v-row class="ml-1">
               <template v-for="(device, index) in store.devices" :key="device.id">
                 <template v-if="index >= 6">
                   <v-col xs="12" sm="6" md="4" lg="3">
-                    <v-card class="grid-item" width="400">
-                      <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id"></component>
-                    </v-card>
+                      <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id" :componentRoom="store.getDevicesRoom(device.id)"></component>
                   </v-col>
                 </template>
               </template>
@@ -84,12 +82,6 @@ function getComponent(file) {
   padding: 0;
   transition: box-shadow 0.2s ease;
   background-color: transparent;
-}
-
-
-.grid-item:hover {
-  transition: transform 0.3s ease-out;
-  transform: scale(1.01);
 }
 
 .v-layout {

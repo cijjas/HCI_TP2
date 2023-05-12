@@ -11,10 +11,15 @@ const props = defineProps({
   componentId: {
     type: String,
     required: true
+  },
+  componentRoom: {
+    type: String,
+    required: true
   }
 })
   // const props = defineProps(['roomName', 'devicesCount']);
   const componentId = ref(props.componentId);
+  const componentRoom = ref(props.componentRoom);
 
   const isOn = ref(false);
   const sliderValue = ref(10);
@@ -124,12 +129,24 @@ const openDeleteDialog = () => {
     <!-- locations for-->
     <v-row style="margin-bottom: 20px">
       <v-col cols="8">
-        <v-subheader class="ml-1">Ubicación</v-subheader>
+        <v-subheader class="ml-1">{{componentRoom}}</v-subheader>
       </v-col>
       
     </v-row>
     <v-row >
         <v-spacer>  </v-spacer>
+        <!-- ACA JOACO --> 
+        <v-text-field 
+          v-model="amountValue" 
+          type="number" 
+          label="Amount" 
+          variant="solo" 
+          :disabled="!isOn" 
+          :min="0"
+          :max="100"  
+          class="rounded-input green-text" 
+          bg-color='transparent' flat/>
+          
         <v-card-text class="font-weight-bold text-h2 slider-value">
           {{ sliderValue }}
         </v-card-text>
@@ -137,6 +154,17 @@ const openDeleteDialog = () => {
     </v-row>
 
     <v-row no-gutters class="mr-5 ml-5" style="margin-top: 40px">
+      <v-progress-linear
+        v-model="sliderValue"
+        color="darksecondary"
+        height="25"
+        rounded="true"
+        >
+        <template v-slot:default="{ value }">
+          <strong>{{ Math.ceil(value) }}%</strong>
+        </template>
+      </v-progress-linear>
+
       <v-slider
         color="primary"
         v-model="sliderValue"
@@ -171,7 +199,7 @@ const openDeleteDialog = () => {
           <v-btn class="small-button-save" color="white" @click="saveSettings">Save</v-btn>
         </v-card-actions>
 
-        <v-dialog v-model="isDeleteDialogOpen" width="1024" persistent>
+        <v-dialog v-model="isDeleteDialogOpen" width="1024" >
             <v-card class="toggle-card-popup">
                 <v-card-title class="headline">Are you sure you want to delete {{ deviceName }}?</v-card-title>
                 <v-card-actions>
@@ -194,7 +222,7 @@ const openDeleteDialog = () => {
 .toggle-card-on {
   cursor: pointer;
   padding: 16px;
-  border-radius: 10px;
+  border-radius: 20px;
   background-color: #F4CF6D;
   background-image: url("./DeviceAssets/del-cur-frame.png");
 
@@ -208,7 +236,7 @@ const openDeleteDialog = () => {
 .toggle-card-off{
   position: relative;
   padding: 16px;
-  border-radius: 10px;
+  border-radius: 20px;
   
   background-image: url('./DeviceAssets/del-cur-frame.png');
   background-size: cover;
@@ -226,7 +254,9 @@ const openDeleteDialog = () => {
 }
 
 
-
+.green-text {
+  color: #1C4035; /* Change the color to your desired value */
+}
 .toggle-card::before {
     content: "";
     position: absolute;
@@ -252,6 +282,13 @@ const openDeleteDialog = () => {
   white-space: nowrap;
   overflow: hidden;
   margin-left: -10px;
+}
+.rounded-input {
+  border-radius: 10px;
+  box-shadow: inset 3px 1px 2px rgba(0, 0, 0, 0.2), 
+              inset 0 -1px 3px rgba(240, 222, 162, 0.5);
+  background-color: transparent;
+  height: 60px;
 }
 .toggle-card-popup {
   padding: 30px;

@@ -3,7 +3,7 @@
   import { useAppStore } from '@/store/app';
   const store = useAppStore();
 
-const props = defineProps({
+  const props = defineProps({
   componentName: {
     type: String,
     required: true
@@ -11,8 +11,13 @@ const props = defineProps({
   componentId: {
     type: String,
     required: true
+  },
+  componentRoom: {
+    type: String,
+    required: true
   }
 })
+  const componentRoom = ref(props.componentRoom);
   // const props = defineProps(['roomName', 'devicesCount']);
   const componentId = ref(props.componentId);
 
@@ -157,7 +162,7 @@ async function changeState() {
 
         <v-row no-gutters style="padding-bottom: 0px">
           <v-col cols="6">
-            <v-subheader class="ml-4">Ubicación</v-subheader>
+            <v-subheader class="ml-4">{{componentRoom}}</v-subheader>
           </v-col>
         </v-row>
       </v-col>
