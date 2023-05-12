@@ -195,7 +195,6 @@ const submitName = () =>{
   border-radius: 15px !important;
   background-color: #f4e8c6ae;
   backdrop-filter: blur(7px);
-  background-image: url('./DeviceAssets/tap-wave.png');
   background-size: cover;
   backdrop-filter: blur(7px);
 }

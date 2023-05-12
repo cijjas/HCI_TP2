@@ -156,7 +156,7 @@ border-radius: 20px;
 background-color: transparent;
 }
 .text--white {
-color: #795454;
+color: #2c432e;
 }
 .toggle-card-popup {
 padding: 30px;
