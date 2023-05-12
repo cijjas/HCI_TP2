@@ -21,7 +21,6 @@ const props = defineProps({
   const componentId = ref(props.componentId);
   const componentRoom = ref(props.componentRoom);
 
-  const isOn = ref(false);
   const sliderValue = ref(10);
   const isDialogOpen = ref(false);
   const isDeleteDialogOpen = ref(false);
@@ -42,7 +41,7 @@ const props = defineProps({
     return `rgb(${color.join(',')})`;
   });
 
-  watch(
+  /* watch(
     () => sliderValue.value,
     (newValue) => {
       if (newValue <= 0) {
@@ -62,7 +61,7 @@ const props = defineProps({
         sliderValue.value = 0;
       }
     }
-  );
+  ); */
 
   const toggleCard = () => {
     /* IR A ASPIRADORA */
@@ -92,6 +91,83 @@ const props = defineProps({
 const openDeleteDialog = () => {
         isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
 };
+
+
+
+const deviceState = ref(store.getDeviceState(props.componentId));           // estas variables inicialmente son correctas ya que vienen del MOUNT
+const status = ref(store.getDeviceState(props.componentId).status)
+const moving = ref(false);
+const selectedLevel = ref("")
+const isOn = computed( ()=>{
+  return status.value == 'opened' || status.value == 'opening'
+})
+
+function changeStatus(){
+  console.log("Changing Status");
+  console.log("Previous Status " + status.value);
+  moving.value = true;
+
+  switch ( status.value ){
+    case 'closed':
+      status.value = "opening";
+      open();
+      break;
+    case 'opened':
+      status.value = "closing";
+      close();
+      break;
+    case 'closing':
+      status.value = "opening";
+      open();
+      break;
+    case 'opening':
+      status.value = "closing";
+      close();
+      break;
+    default :
+    console.log("CODE REDDDDDdd")
+  }
+
+  console.log("Proceding Status " + status.value + "[shouldnt be opening nor closing]");
+
+}
+
+
+async function open() {
+  await store.updateADeviceState(props.componentId, "open", []);        // le avisa la api que arranque a abrir, local storage "opened"
+  const intervalId = setInterval(async () => {
+    const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
+    deviceState.value = deviceStateRT;
+    console.log(deviceStateRT);
+    if (deviceStateRT.status !== 'opening') {
+      moving.value = false;
+      clearInterval(intervalId);
+      if ( status.value !== 'closing')
+        status.value = "opened";
+    }
+  }, 1000);
+}
+
+async function close() {
+  await store.updateADeviceState(props.componentId, "close", []);
+  const intervalId = setInterval(async () => {
+    const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
+    deviceState.value = deviceStateRT
+    console.log(deviceStateRT);
+    if (deviceStateRT.status !== 'closing') {
+      moving.value = false;
+      clearInterval(intervalId);
+      if ( status.value !== 'opening')
+        status.value = "closed";
+    }
+  }, 1000);
+}
+
+function setLevel(){
+  store.updateADeviceState(props.componentId, "setLevel", [selectedLevel.value]);
+  selectedLevel.value = "";
+}
+
 </script>
 
 <template>
@@ -115,12 +191,12 @@ const openDeleteDialog = () => {
           </v-btn>
         </v-col>
 
-       
+
       </v-row>
 
       <v-spacer></v-spacer>
 
-      <v-btn @click="isOn = !isOn" 
+      <v-btn @click="isOn = !isOn; changeStatus() "
             :class="{'on-button': isOn, 'off-button': !isOn}">
             {{ isOn ? 'CLOSE' : 'OPEN' }}
       </v-btn>
@@ -131,32 +207,36 @@ const openDeleteDialog = () => {
       <v-col cols="8">
         <v-subheader class="ml-1">{{componentRoom}}</v-subheader>
       </v-col>
-      
+
     </v-row>
     <v-row >
         <v-spacer>  </v-spacer>
-        <!-- ACA JOACO --> 
-        <v-text-field 
-          v-model="amountValue" 
-          type="number" 
-          label="Amount" 
-          variant="solo" 
-          :disabled="!isOn" 
+        <!-- ACA JOACO -->
+        <v-text-field
+          :disabled = "moving"
+          v-model="selectedLevel"
+          type="number"
+          label="Set Level"
+          variant="solo"
           :min="0"
-          :max="100"  
-          class="rounded-input green-text" 
+          :max="100"
+          class="rounded-input green-text"
           bg-color='transparent' flat/>
-          
         <v-card-text class="font-weight-bold text-h2 slider-value">
-          {{ sliderValue }}
+          <v-btn @click="setLevel()" >Set</v-btn>
         </v-card-text>
-     
+        <v-card-text>
+          current level :{{ deviceState.level }}
+        </v-card-text>
+
     </v-row>
 
     <v-row no-gutters class="mr-5 ml-5" style="margin-top: 40px">
-      <v-progress-linear
-        v-model="sliderValue"
-        color="darksecondary"
+      <v-col class="ml-10 mr-10">
+        <v-progress-linear
+
+        v-model="deviceState.currentLevel"
+        color="#FFE195"
         height="25"
         rounded="true"
         >
@@ -165,14 +245,17 @@ const openDeleteDialog = () => {
         </template>
       </v-progress-linear>
 
-      <v-slider
+      </v-col>
+
+
+      <!-- <v-slider
         color="primary"
         v-model="sliderValue"
         :ticks="true"
         :max="100"
         :min="0"
         :step="1"
-      ></v-slider>
+      ></v-slider> -->
     </v-row>
 
 
@@ -180,12 +263,12 @@ const openDeleteDialog = () => {
       <v-card class="toggle-card-popup">
 
         <v-card-title class="font-weight-bold text-h5 card-title">Blinds Settings</v-card-title>
-        
+
               <v-text-field
                 variant="outlined"
                 clearable
                 :clear-icon="!tempDeviceName ? '' : 'mdi-close-circle-outline'"
-                style="padding-top: 50px;"  
+                style="padding-top: 50px;"
                 label="Device Name"
                 v-model.string="tempDeviceName"
                 type="string"
@@ -237,7 +320,7 @@ const openDeleteDialog = () => {
   position: relative;
   padding: 16px;
   border-radius: 20px;
-  
+
   background-image: url('./DeviceAssets/del-cur-frame.png');
   background-size: cover;
   background-position: top;
@@ -285,7 +368,7 @@ const openDeleteDialog = () => {
 }
 .rounded-input {
   border-radius: 10px;
-  box-shadow: inset 3px 1px 2px rgba(0, 0, 0, 0.2), 
+  box-shadow: inset 3px 1px 2px rgba(0, 0, 0, 0.2),
               inset 0 -1px 3px rgba(240, 222, 162, 0.5);
   background-color: transparent;
   height: 60px;

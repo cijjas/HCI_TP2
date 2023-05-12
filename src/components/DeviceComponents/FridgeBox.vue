@@ -24,17 +24,22 @@
   const isDialogOpen = ref(false);
   const isDeleteDialogOpen = ref(false);
 
+  const freezerTemperature = ref(store.getDeviceState(props.componentId).freezerTemperature);
+  const fridgeTemperature = ref(store.getDeviceState(props.componentId).temperature);
+  const fridgeMode = ref(store.getDeviceState(props.componentId).mode);
+
 
   //real values
   const deviceName = ref(props.componentName);
-  const fridgeMode = ref(0);
+  // const fridgeMode = ref('default');
   const location = ref(0);
-  const fridgeTemperature = ref(2);
-  const freezerTemperature = ref(-8);
+  // const fridgeTemperature = ref(2);
+  // const freezerTemperature = ref(-8);
 
   //temp values
   const tempDeviceName = ref(deviceName.value);
-  const tempFridgeMode = ref(fridgeMode.value);
+  // const tempFridgeMode = ref(fridgeMode.value);
+  const auxMode = ref("");
   const tempLocation = ref(location.value);
   const tempFridgeTemperature = ref(fridgeTemperature.value);
   const tempFreezerTemperature = ref(freezerTemperature.value);
@@ -44,6 +49,8 @@
     maxLength: value => value.length <= 15 || 'Max 15 characters',
   };
   const openFridgeDialog = () => {
+    //me guardo el valor anterior por si apretan cancel
+    auxMode.value = ref(fridgeMode.value); 
     isDialogOpen.value = true;
   };
   const closeFridgeDialog = () => {
@@ -57,15 +64,20 @@
       return;
     }
     deviceName.value = tempDeviceName.value;
-    fridgeMode.value = tempFridgeMode.value;
+    // fridgeMode.value = tempFridgeMode.value;
     fridgeTemperature.value = tempFridgeTemperature.value;
     freezerTemperature.value = tempFreezerTemperature.value;
     location.value = tempLocation.value;
+    console.log("about to update temp: ");
+    console.log(fridgeMode.value);
+    // store.updateADeviceState(componentId.value, "setMode", ['default']);
+    changeState();
     closeFridgeDialog();
   };
   const cancelSettings = () => {
+    fridgeMode.value = auxMode.value;
     tempDeviceName.value = deviceName.value;
-    tempFridgeMode.value = fridgeMode.value;
+    // tempFridgeMode.value = fridgeMode.value;
     tempFridgeTemperature.value = fridgeTemperature.value;
     tempFreezerTemperature.value = freezerTemperature.value;
     tempLocation.value = location.value;
@@ -76,9 +88,6 @@
     /* IR A ASPIRADORA */ 
   };
 
-  const returnToBase = () => {
-    // Code to execute when button is clicked
-  };
 
   const deleteDevice = () => {
     store.deleteADeviceByName(deviceName.value);
@@ -90,6 +99,47 @@
 const openDeleteDialog = () => {
         isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
 };
+
+
+
+
+/* -------------------------------------- REFACTORING -------------------------------------- */
+const deviceState = ref(store.getDeviceState(props.componentId));           // estas variables inicialmente son correctas ya que vienen del MOUNT
+// const freezerTemperature = ref(store.getDeviceState(props.componentId).freezerTemperature);
+// const fridgeTemperature = ref(store.getDeviceState(props.componentId).temperature);
+// const fridgeMode = ref(store.getDeviceState(props.componentId).mode);
+
+async function changeState() {
+  console.log("Changing state");
+  console.log("incoming state: freeztemp: " + freezerTemperature.value + " temp: " + fridgeTemperature.value + " mode: |" + fridgeMode._value+"|");
+
+  await store.updateADeviceState(componentId.value, "setFreezerTemperature", [freezerTemperature.value]);
+  
+  await store.updateADeviceState(componentId.value, "setTemperature", [fridgeTemperature.value]);
+
+  //no cambian con el tiempo, es un valor como on/off -> puedo hacer el chequeo directamente aca
+  switch(fridgeMode.value) {
+    case 'default': 
+      console.log('entre a default'); 
+      await store.updateADeviceState(componentId.value, "setMode", ['default']); 
+      break;
+    case 'party': 
+      console.log('entre a party'); 
+      await store.updateADeviceState(componentId.value, "setMode", ['party']); 
+      break;
+    case 'vacation': 
+      console.log('entre a vacation'); 
+      await store.updateADeviceState(componentId.value, "setMode", ['vacation']); 
+      break;
+    default: console.log("fridge error switch var: " + fridgeMode.value);
+  }
+  // await store.updateADeviceState(componentId.value, "setMode", [fridgeMode._value]);
+  console.log("auxmode: " + auxMode.value + "  selectedfridgeMode: " + fridgeMode.value)  
+
+  console.log("se mando este value de mode: " + fridgeMode.value);
+  
+  
+}
 
   
 </script>
@@ -141,23 +191,23 @@ const openDeleteDialog = () => {
       <v-col cols="auto" class="ml-auto">
           <v-col cols="auto" >
 
-              <v-btn :color="!fridgeMode ? 'primary' : 'offcolor'" 
-              @click.stop="fridgeMode = 0" 
+              <v-btn :color="fridgeMode === 'default' ? 'primary' : 'offcolor'" 
+              @click="fridgeMode = 'default'; store.updateADeviceState(componentId, 'setMode', ['default']);" 
               class="secondary text-right small-button-left"
-                >Normal
+                >Default
               </v-btn>
             
               <v-btn 
-                :color="fridgeMode ===1 ? 'primary' : 'offcolor'"
-                @click.stop="fridgeMode = 1" 
+                :color="fridgeMode === 'party' ? 'primary' : 'offcolor'"
+                @click="fridgeMode = 'party'; store.updateADeviceState(componentId, 'setMode', ['party']);" 
                 class="text-right small-button-center"
-                >fiesta
+                >Party
               </v-btn>
               <v-btn 
-                :color="fridgeMode===2 ? 'primary' : 'offcolor'"
-                @click.stop="fridgeMode = 2" 
+                :color="fridgeMode ==='vacation' ? 'primary' : 'offcolor'"
+                @click="fridgeMode = 'vacation'; store.updateADeviceState(componentId, 'setMode', ['vacation']);" 
                 class="text-right small-button-right"
-                >Vacaciones
+                >Vacation
               </v-btn>
           </v-col>
       </v-col>
@@ -189,22 +239,22 @@ const openDeleteDialog = () => {
                   </v-card-text>
               </v-col>
               <v-col>
-                <v-btn :color="!tempFridgeMode ? 'primary' : 'offcolor'" 
-                @click.stop="tempFridgeMode = 0" 
+                <v-btn :color="fridgeMode === 'default' ? 'primary' : 'offcolor'" 
+                @click="fridgeMode = 'default'" 
                 class="secondary text-right temp-small-button-left"
-                  >Normal
+                  >Default
                 </v-btn>
                 <v-btn 
-                  :color="tempFridgeMode ===1 ? 'primary' : 'offcolor'"
-                  @click.stop="tempFridgeMode = 1" 
+                  :color="fridgeMode === 'party' ? 'primary' : 'offcolor'"
+                  @click="fridgeMode = 'party'" 
                   class="text-right temp-small-button-center"
-                  >fiesta
+                  >Party
                 </v-btn>
                 <v-btn 
-                  :color="tempFridgeMode===2 ? 'primary' : 'offcolor'"
-                  @click.stop="tempFridgeMode = 2" 
+                  :color="fridgeMode === 'vacation' ? 'primary' : 'offcolor'"
+                  @click="fridgeMode = 'vacation'" 
                   class="text-right temp-small-button-right"
-                  >Vacaciones
+                  >Vacation
                 </v-btn>
               </v-col>
             </v-row>

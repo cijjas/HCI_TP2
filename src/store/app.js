@@ -221,6 +221,16 @@ export const useAppStore = defineStore('app', {
         console.error(error);
       }
     },
+    transferDevice(deviceId ,oldRoomId, newRoomId){
+      for ( let i = 0 ; i < this.rooms; i++ ){
+        if ( this.rooms[i].id === newRoomId ){
+          this.rooms[i].meta.devices.push(deviceId)
+        }
+        if ( this.rooms[i].id === oldRoomId ){
+          removeItemFromArray(this.rooms[i].meta.devices, deviceId);
+        }
+      }
+    },
 
 
 
@@ -255,8 +265,9 @@ export const useAppStore = defineStore('app', {
     },
     async updateADeviceState(id, action, paramsArr ){
       // se ejecuta accion y se cambia el estado del device en la API
+      // console.log("id: " + )
       try{
-        var result = DevicesApi.executeAction(id, action, paramsArr)
+        var result = await DevicesApi.executeAction(id, action, paramsArr)
         this.updateADeviceStateLocal(id, action, paramsArr);
         return result;
       }catch(error){
@@ -303,7 +314,7 @@ export const useAppStore = defineStore('app', {
                   case 'close':
                     this.devices[i].state.status = 'closed';
                     break;
-                  case 'dipense':
+                  case 'dispense':
                     this.devices[i].state.status = 'opened';
                     break;
                   default:
@@ -437,9 +448,11 @@ export const useAppStore = defineStore('app', {
       var arr = [];
       console.log("getRoomDevices");
       console.log(idRoom);
-      var room = this.getARoomByName(idRoom);
-      for ( let i = 0; i < room.meta.devices ; i++ ){
-        arr.push(this.getADevice(room.meta.devices));
+      var room = this.getARoom(idRoom);
+      if ( room === undefined )
+        return [];
+      for ( let i = 0; i < room.meta.devices.length ; i++ ){
+        arr.push(this.getADevice(room.meta.devices[i]));
       }
       return arr;
     },
@@ -648,12 +661,22 @@ export const useAppStore = defineStore('app', {
       getRoomDevices(idRoom){
         var arr = [];
         var room = this.getARoom(idRoom);
+        if ( room === undefined )
+          return null;
         for ( let i = 0; i < room.meta.devices.length ; i++ ){
           arr.push(this.getADevice(room.meta.devices[i]));
         }
         return arr;
       },
 
+      async getDeviceStateAPI(id){
+        try {
+          var result = await DevicesApi.getState(id)
+          return result;
+        } catch (error) {
+          console.error(error);
+        }
+      },
       getDeviceState(deviceId){
         for ( let i = 0; i < this.devices.length; i++ ){
           if ( this.devices[i].id == deviceId ){
@@ -712,6 +735,13 @@ export const useAppStore = defineStore('app', {
           if ( actionsArr[i].name == actionName ){
             return actionsArr[i].params;
           }
+      },
+      getRoutineActions(routineName){
+        for ( let i = 0; i < this.routines.length; i++ ){
+          if ( this.routine[i].name == routineName ){
+            return this.routine[i];
+          }
+        }
       },
 
 

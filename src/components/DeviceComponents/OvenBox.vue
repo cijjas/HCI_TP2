@@ -21,22 +21,27 @@
   const componentId = ref(props.componentId);
   const componentRoom = ref(props.componentRoom);
 
-  const isOn = ref(false);
   const id = ref(0);
   const isDialogOpen = ref(false);
   const isDeleteDialogOpen = ref(false);
 
   // Real values
   const deviceName = ref(props.componentName);
-  const grillMode = ref(0);
-  const sourceMode = ref(0);
-  const convectionMode = ref(0);
-  const temperatureValue = ref(90);
+  // const grillMode = ref(0);
+  // const heatMode = ref(0);
+  // const convectionMode = ref(0);
+  // const temperatureValue = ref(90);
+  const state = ref(store.getDeviceState(props.componentId).state);
+  // const isOn = (state.value === 'on') ? ref(true) : ref(false);
+  const temperatureValue = ref(store.getDeviceState(props.componentId).temperature);
+  const heatMode = ref(store.getDeviceState(props.componentId).heat);
+  const grillMode = ref(store.getDeviceState(props.componentId).grill);
+  const convectionMode = ref(store.getDeviceState(props.componentId).convection);
   
   // Temporary values (popup)
   const tempDeviceName = ref(deviceName.value);
   const tempGrillMode = ref(grillMode.value);
-  const tempSourceMode = ref(sourceMode.value);
+  const tempheatMode = ref(heatMode.value);
   const tempConvectionMode = ref(convectionMode.value);
   const tempTemperatureValue = ref(temperatureValue.value);
   
@@ -44,7 +49,7 @@
     if (tempTemperatureValue.value ==90) { // if value is not defined
       return 'inset -5px 40px 90px rgba(0, 0, 0, 0), inset -10px -40px 40px rgba(0, 0, 0, 0)'; // return transparent shadow
     }
-    const color1 = isOn.value ? [244, 172, 109] : [140, 120, 58] ; 
+    const color1 = (state.value === 'on') ? [244, 172, 109] : [140, 120, 58] ; 
     const color2 = [236, 94, 63]; // RGB values for #EC5E3F
     const ratio = (tempTemperatureValue.value-90) / 50; // multiply ratio by 2 for more rapid increase
     const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
@@ -63,9 +68,13 @@
     minLength: value => value.length >= 3 || 'Min 3 characters',
     maxLength: value => value.length <= 15 || 'Max 15 characters',
   };
+
+  function isOn() {
+    return (state.value === 'on');
+  }
   
   watch(
-    () => isOn.value,
+    () => isOn,
     (newValue) => {
       if (newValue) {
         temperatureValue.value = 90;
@@ -80,7 +89,7 @@
     isDialogOpen.value = false;
     tempDeviceName.value = deviceName.value;
     tempGrillMode.value = grillMode.value;
-    tempSourceMode.value = sourceMode.value;
+    tempheatMode.value = heatMode.value;
     tempConvectionMode.value = convectionMode.value;
     tempTemperatureValue.value = temperatureValue.value;
   };
@@ -88,14 +97,21 @@
   const saveSettings = () => {
     if(tempDeviceName.value.length < 3 || tempDeviceName.value.length > 15) {
       return;
+      //idealmente pop up de error
+    }
+    if(tempTemperatureValue.value < 90 || tempTemperatureValue.value > 230) {
+      return;
+      //idealmente pop up de error
     }
     isDialogOpen.value = false;
     deviceName.value = tempDeviceName.value;
     grillMode.value = tempGrillMode.value;
-    sourceMode.value = tempSourceMode.value;
+    heatMode.value = tempheatMode.value;
     convectionMode.value = tempConvectionMode.value;
     temperatureValue.value = tempTemperatureValue.value;
-    isOn.value = true;
+    // isOn.value = true;
+    state.value = 'on';
+    changeState();
   };
 
   const assign = () => {
@@ -123,12 +139,56 @@ const openDeleteDialog = () => {
         isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
 };
 
+
+/* -------------------------------------- REFACTORING -------------------------------------- */
+// const deviceState = ref(store.getDeviceState(props.componentId));           // estas variables inicialmente son correctas ya que vienen del MOUNT
+
+
+async function changeState() {
+  console.log("Changing state");
+  console.log("new state: state: " + state.value + " temp: " + temperatureValue.value + " heat: " + heatMode.value+ " grill: " + grillMode.value + "convec: " + convectionMode.value);
+
+  //cuando me cambian datos dentro del popup y apretan save, se prende el horno
+  await turnOn();
+
+  console.log("setting grill: " + grillMode.value);
+  await store.updateADeviceState(componentId.value, "setGrill", [grillMode.value]);
+
+  console.log("setting grill: " + heatMode.value);
+  await store.updateADeviceState(componentId.value, "setHeat", [heatMode.value]);
+
+  console.log("setting grill: " + convectionMode.value);
+  await store.updateADeviceState(componentId.value, "setConvection", [convectionMode.value]);
+
+  console.log("setting grill: " + temperatureValue.value);
+  await store.updateADeviceState(componentId.value, "setTemperature", [temperatureValue.value]);
+  
+}
+
+async function turnOn() {
+  await store.updateADeviceState(componentId.value, "turnOn", []);
+}
+async function turnOff() {
+  await store.updateADeviceState(componentId.value, "turnOff", []);
+}
+
+function flipState() {
+  if(isOn()) {
+    state.value = 'off';
+    turnOff();
+  }
+  else {
+    state.value = 'on';
+    turnOn();
+  }
+}
+
 </script>
 
 
 <template>
   <v-card
-    :class="{'toggle-card-on': isOn, 'toggle-card-off': !isOn}"
+    :class="{'toggle-card-on': isOn(), 'toggle-card-off': !isOn()}"
     :style="{ boxShadow: computedShadow}"
     @mousover="grow"
     @mouseout="shrink"
@@ -154,10 +214,10 @@ const openDeleteDialog = () => {
       <v-spacer></v-spacer>
       <v-btn 
         icon 
-        @click="isOn = !isOn" 
-        :class="{'on-button': isOn, 'off-button': !isOn}"
+        @click="flipState()" 
+        :class="{'on-button': !isOn(), 'off-button': isOn()}"
         >
-        <v-icon>{{ isOn ? 'mdi-power' : 'mdi-power-standby' }}</v-icon>
+        <v-icon>{{ isOn() ? 'mdi-power' : 'mdi-power-standby' }}</v-icon>
       </v-btn>
     </v-toolbar>
 
@@ -187,7 +247,7 @@ const openDeleteDialog = () => {
         :max="230"
         :min="90"
         :step="1"
-        :disabled="!isOn"
+        :disabled="!isOn()"
         @mouseup="assign"
       ></v-slider>
     </v-row>
@@ -274,20 +334,20 @@ const openDeleteDialog = () => {
                     </v-card-text>
                   </v-col>
                   <v-col cols="auto" style="padding-top: 10px">
-                    <v-btn :color="(tempGrillMode==0 ? 'primary' : 'offcolor')" dark 
-                      :block="true" @click="tempGrillMode=0" class="secondary text-right small-button-left"
+                    <v-btn :color="(tempGrillMode=='off' ? 'primary' : 'offcolor')" dark 
+                      :block="true" @click="tempGrillMode='off'" class="secondary text-right small-button-left"
                       >Off
                     </v-btn>
                   </v-col>
                   <v-col cols="auto" style="padding-top: 10px">
-                    <v-btn :color="(tempGrillMode==1 ? 'primary' : 'offcolor')" dark 
-                      :block="true" @click="tempGrillMode=1" class="text-right small-button-center"
+                    <v-btn :color="(tempGrillMode=='eco' ? 'primary' : 'offcolor')" dark 
+                      :block="true" @click="tempGrillMode='eco'" class="text-right small-button-center"
                       >Economic
                     </v-btn>
                   </v-col>
                   <v-col cols="auto" style="padding-top: 10px">
-                    <v-btn :color="(tempGrillMode==2 ? 'primary' : 'offcolor')" dark 
-                      :block="true" @click="tempGrillMode=2" class="text-right small-button-right"
+                    <v-btn :color="(tempGrillMode=='large' ? 'primary' : 'offcolor')" dark 
+                      :block="true" @click="tempGrillMode='large'" class="text-right small-button-right"
                       >Complete
                     </v-btn>
                   </v-col>
@@ -299,20 +359,20 @@ const openDeleteDialog = () => {
                     </v-card-text>
                   </v-col>
                   <v-col cols="auto" style="padding-top: 10px">
-                    <v-btn :color="(tempConvectionMode==0 ? 'primary' : 'offcolor')" dark 
-                      :block="true" @click="tempConvectionMode=0" class="text-right small-button-left"
+                    <v-btn :color="(tempConvectionMode=='off' ? 'primary' : 'offcolor')" dark 
+                      :block="true" @click="tempConvectionMode='off'" class="text-right small-button-left"
                       >Off
                     </v-btn>
                   </v-col>
                   <v-col cols="auto" style="padding-top: 10px">
-                    <v-btn :color="(tempConvectionMode==1 ? 'primary' : 'offcolor')" dark 
-                      :block="true" @click="tempConvectionMode=1" class="text-right small-button-center"
+                    <v-btn :color="(tempConvectionMode=='eco' ? 'primary' : 'offcolor')" dark 
+                      :block="true" @click="tempConvectionMode='eco'" class="text-right small-button-center"
                       >Economic
                     </v-btn>
                   </v-col>
                   <v-col cols="auto" style="padding-top: 10px">
-                    <v-btn :color="(tempConvectionMode==2 ? 'primary' : 'offcolor')" dark 
-                      :block="true" @click="tempConvectionMode=2" class="text-right small-button-right"
+                    <v-btn :color="(tempConvectionMode=='normal' ? 'primary' : 'offcolor')" dark 
+                      :block="true" @click="tempConvectionMode='normal'" class="text-right small-button-right"
                       >Conventional
                     </v-btn>
                   </v-col>
@@ -324,20 +384,20 @@ const openDeleteDialog = () => {
                     </v-card-text>
                   </v-col>
                   <v-col cols="auto" style="padding-top: 10px">
-                    <v-btn :color="(tempSourceMode==0 ? 'primary' : 'offcolor')" dark 
-                      :block="true" @click="tempSourceMode=0" class="text-right small-button-left"
+                    <v-btn :color="(tempheatMode=='conventional' ? 'primary' : 'offcolor')" dark 
+                      :block="true" @click="tempheatMode='conventional'" class="text-right small-button-left"
                       >Conventional
                     </v-btn>
                   </v-col>
                   <v-col cols="auto" style="padding-top: 10px">
-                    <v-btn :color="(tempSourceMode==1 ? 'primary' : 'offcolor')" dark 
-                      :block="true" @click="tempSourceMode=1" class="text-right small-button-center"
+                    <v-btn :color="(tempheatMode=='top' ? 'primary' : 'offcolor')" dark 
+                      :block="true" @click="tempheatMode='top'" class="text-right small-button-center"
                       >Above
                     </v-btn>
                   </v-col>
                   <v-col cols="auto" style="padding-top: 10px">
-                    <v-btn :color="(tempSourceMode==2 ? 'primary' : 'offcolor')" dark 
-                      :block="true" @click="tempSourceMode=2" class="text-right small-button-right"
+                    <v-btn :color="(tempheatMode=='bottom' ? 'primary' : 'offcolor')" dark 
+                      :block="true" @click="tempheatMode='bottom'" class="text-right small-button-right"
                       >Below
                     </v-btn>
                   </v-col>
@@ -352,7 +412,7 @@ const openDeleteDialog = () => {
           <v-spacer></v-spacer>
           <v-btn   @click="cancelSettings">Cancel</v-btn>
           <v-btn class="small-button-save" color="white" @click="saveSettings">
-            {{ isOn ? 'Save' : 'Save And Start' }}
+            {{ isOn() ? 'Save' : 'Save And Start' }}
           </v-btn>
         </v-card-actions>
 
