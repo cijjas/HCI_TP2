@@ -87,6 +87,7 @@ const openDeleteDialog = () => {
 
 const isValidLevel = ref(false);
 const submitLevel = ()=>{
+  console.log("submitting level");
   setLevel();
 }
 /* --------------------------------------------- */
@@ -263,7 +264,7 @@ function changed (){
               <v-btn v-if="!(moving || !isValidLevel) && !clicked "
                   type="submit"
                   icon 
-                  @click="clicked=!clicked"
+                  @click="clicked=!clicked ; setLevel()"
                   style="color:rgb(19, 168, 71); background-color: transparent;"
                   flat
                   >
