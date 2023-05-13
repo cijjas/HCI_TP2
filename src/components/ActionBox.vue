@@ -73,6 +73,16 @@
                 </div>
             </v-card>
         </v-dialog>
+        <v-dialog v-model="isErrorDialogOpen" width="500" color="gris" >
+          <v-card class="toggle-card-popup">
+            <div class="text-center">
+              <v-icon icon="mdi-alert-circle-outline" class="error-icon"></v-icon>
+              <v-card-title prepend-icon="mdi-check-circle-outline" class="font-weight-bold text-h5 card-title">Error Deleting Action</v-card-title>
+              <v-card-text>Routine cannot have 0 actions</v-card-text>
+              <v-card-text>If you wish, you can delete the routine</v-card-text>
+            </div>
+          </v-card>
+        </v-dialog>
     </v-card>
 </template>
 
@@ -81,6 +91,8 @@
     import { onMounted } from '@vue/runtime-core';
     import { useAppStore } from '@/store/app';
     const store = useAppStore();
+
+    const isErrorDialogOpen = ref(false);
 
     onMounted(async () => {             // cuando se monta la pagina pido los datos
       try {
@@ -113,6 +125,17 @@
       return store.getADevice(props.action.device.id)
     })
 
+    const routineActionsLength = computed(()=>{
+      console.log("number of actions: " + store.getARoutine(props.routineId).actions.length)
+      return store.getARoutine(props.routineId).actions.length;
+    })
+
+    const openErrorDialog = () => {
+        isErrorDialogOpen.value = true;
+        setTimeout(() => {
+          isErrorDialogOpen.value = false;
+        }, 2000);
+      };
    /*  const actionName = computed(()=>{
       return props.actionName
     })
@@ -193,9 +216,14 @@
 
       const deleteAction = () => {
         // DELETE AN ACTION !!!!
+        if(routineActionsLength.value == 1) {
+          //si solo queda una accion en la rutina, no dejamos borrar
+          openErrorDialog();
+          return;
+        }
         deleteActionFromAPI();
         openDeleteDialog();
-        openEditDialog();
+        // openEditDialog();
       };
 
       function clearVar(){
@@ -206,6 +234,10 @@
 
 
 <style scoped>
+.error-icon {
+  font-size: 3rem;
+  color: #ec0000;
+}  
 .row-style {
   margin-bottom: -5px;
   margin-top: -40px;
