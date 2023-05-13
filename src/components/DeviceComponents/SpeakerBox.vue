@@ -28,17 +28,11 @@
   }
 })
   // const props = defineProps(['roomName', 'devicesCount']);
-  const componentId = ref(props.componentId);
-  const componentRoom = ref(props.componentRoom);
+
   const isDialogOpen = ref(false);
   const isDeleteDialogOpen = ref(false);
   const volumeLevel = ref(store.getDeviceState(props.componentId).volume);
 
-  //real values
-  const deviceName = ref(props.componentName);
-
-  //temp values
-  const tempDeviceName = ref(deviceName.value);
 
   const rules = {
     minLength: value => value.length >= 3 || 'Min 3 characters',
@@ -137,15 +131,23 @@ function calculateProgress(songProgress, songDuration) {
   const integer = Math.round(progress);
   return integer
 }
+const componentId = computed( ()=> { return props.componentId });
+const componentRoom = computed( ()=> {return props.componentRoom });
+//real values
+const deviceName = computed( ()=> { return props.componentName });
+//temp values
+const tempDeviceName = ref(deviceName.value);
+
+
+const deviceState = computed( ()=> { return store.getDeviceState(props.componentId)});           // estas variables inicialmente son correctas ya que vienen del MOUNT
+const status = computed(()=> {return deviceState.value.status});
+const genre = computed(()=>{return deviceState.value.genre});
+const genres = ref(['clasical','country','pop','rock','dance','latina']);
 const progress = computed( ()=>{
+  if ( !deviceState.value.song   )
+    return
   return calculateProgress(deviceState.value.song.progress, deviceState.value.song.duration)
 })
-
-const deviceState = ref( store.getDeviceState(props.componentId));           // estas variables inicialmente son correctas ya que vienen del MOUNT
-const status = computed(()=> {return store.getDeviceState(props.componentId).status});
-const genre = computed(()=>{return store.getDeviceState(props.componentId).genre});
-const genres = ref(['clasical','country','pop','rock','dance','latina']);
-
 
 
 const isPlaying = computed( ()=>{
@@ -155,32 +157,32 @@ const isPlaying = computed( ()=>{
 // boton de play tiene tres funciones: play, resume, pause
 async function playButton(){
 
-  switch(status.value) {    // dummy value
+  switch(status.value) {
     case 'paused':
       status.value = "playing";
-      store.updateADeviceState(props.componentId, "resume", []);
+      await store.updateADeviceState(props.componentId, "resume", []);
         // polling para el tiempo de avance de la cancion
       var intervalId = setInterval(async () => {
         const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
         deviceState.value = deviceStateRT;
-        console.log(deviceStateRT)
-
-        console.log(deviceState.value.song.progress)
+        deviceState.value.song = deviceStateRT.song
+        console.log(deviceState.value)
         console.log(progress.value)
         if (deviceStateRT.status !== 'playing') {
-          clearInterval(intervalId);
+            clearInterval(intervalId);
         }
       }, 1000);
       break;
 
     case 'stopped':
       status.value = "playing";
-      store.updateADeviceState(props.componentId, "play", []);
+      await store.updateADeviceState(props.componentId, "play", []);
         // polling para el tiempo de avance de la cancion
       var intervalId = setInterval(async () => {
         const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
         deviceState.value = deviceStateRT;
-        // console.log(deviceStateRT);
+        console.log(deviceState.value)
+        console.log(progress.value)
         if (deviceStateRT.status !== 'playing') {
           clearInterval(intervalId);
         }
@@ -189,7 +191,7 @@ async function playButton(){
 
     case 'playing':
       status.value = "paused";
-      store.updateADeviceState(props.componentId, "pause", []);
+      await store.updateADeviceState(props.componentId, "pause", []);
       break;
     default:
       console.log("que ha pasao");
@@ -234,15 +236,15 @@ console.log(playlist.value); */
 // console.log(playlist[1].title);
 // console.log(playlist[2].title);
 
-function setVolume() {
-  store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value]);
+async function setVolume() {
+  await store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value]);
 }
-function decreaseVolume() {
-  store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value - 1]);
+async function decreaseVolume() {
+  await store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value - 1]);
   volumeLevel.value -= 1
 }
-function increaseVolume() {
-  store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value + 1]);
+async function increaseVolume() {
+  await store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value + 1]);
   volumeLevel.value += 1
 }
 
@@ -251,7 +253,7 @@ function increaseVolume() {
 <template>
   <v-card class="toggle-card">
     <!-- <v-card-text>{{   songTitle }}</v-card-text> -->
-  {{ deviceState.song.title }} - {{ deviceState.song.artist }}
+  <!-- {{ deviceState.song.title }} - {{ deviceState.song.artist }} -->
 
     <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
       <v-row >
