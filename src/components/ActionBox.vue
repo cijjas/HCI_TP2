@@ -4,18 +4,31 @@
                 <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">
                   {{ props.action.actionName }}
                 </v-toolbar-title>
-                <v-btn variant="text" color="primary" @click="openDeleteDialog">
+                <v-btn class="delete-button" variant="text" color="lightersecondary" @click="openDeleteDialog">
                   delete
                 </v-btn>
         </v-toolbar>
 
-        <v-card-actions class="actions-style" style="height: 140px;">
+        <v-card-text>
+          <v-row class="row-style mt-1">
+            <v-col>
+              <v-text class="text--white">Device: </v-text>
+              <span class="text--white font-weight-bold text-body mb-0">{{ device.name }}</span>
+            </v-col>
+          </v-row>
+
+          <v-row class="row-style mt-1">
+            <v-col>
+              <v-text v-if="props.action.params.length > 0" class="text--white">Settings: </v-text>
+              <template v-for="param in props.action.params" :key="device.id">
+                <span class="text--white font-weight-bold text-body mb-0">{{ param }}</span>
+              </template>
+            </v-col>
+          </v-row>
+
+
+        <v-card-actions class="actions-style" style="height: 100px;">
           <v-col>
-            <v-row class="row-style">
-              <v-col>
-                <v-card-text>Device: {{ device.name }}</v-card-text>
-              </v-col>
-            </v-row>
 
             <!-- <v-row class="row-style-settings">
               <v-col class="justify-end">
@@ -25,18 +38,11 @@
                 <v-card-text>Settings: </v-card-text>
               </v-col>
             </v-row> -->
-            <v-row class="row-style">
-              <!-- HACER FOR SOBRE LOS PARAMETROS PARA IMPRIMIRLOS -->
-              <v-card-text v-if="props.action.params.length>0">Settings:</v-card-text>
-              <template v-for="param in props.action.params" :key="device.id">
-                <v-col>
-                  <v-card-text>{{ param }}</v-card-text>
-                </v-col>
-              </template>
-            </v-row>
 
           </v-col>
         </v-card-actions>
+
+        </v-card-text>
 
         <v-dialog v-model="isDialogOpen" width="1024" persistent>
             <v-card class="toggle-card-popup">
@@ -254,11 +260,11 @@
   margin-top: -45px;
 }
 .delete-button {
-      width: 150px;
+      width: 70px;
       height: 40px;
       border-radius: 10px;
-      background-color: #d82602;
       box-shadow: 0 2px 4px rgba(24, 15, 15, 0.589);
+      background-color: #778da9;
 }
 
 .ok-button {
@@ -296,14 +302,11 @@
     }
     .toggle-card {
       cursor: pointer;
-      padding: 16px;
-      margin-top: 30px;
-      margin-left: 30px;
-      margin-right: 30px;
-      border-radius: 10px;
-      background-color: #F4CF6D;
+      padding: 20px;
+      border-radius: 20px;
+      background-color: #EFE5C5;
       transition: all .2s ease-in-out;
-      height:300px;
+      height: 300px;
       width: 400px;
     }
 
@@ -317,7 +320,7 @@
     }
 
     .bg-on {
-      background-color: #FEEBB1;
+      background-color: #EFE5C5;
     }
 
     .bg-off {
@@ -332,6 +335,6 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: #DBD0AF ;
+    background-color: #778da9 ;
   }
 </style>
