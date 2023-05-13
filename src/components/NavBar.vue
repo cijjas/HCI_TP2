@@ -27,10 +27,13 @@ export default {
           <!-- Aca falta un for que recorra las habitaciones vivas -->
 
         </v-col>
-        <v-col cols="4">
-          <v-btn to="/AddRoom" class="nav-btn">Add Room</v-btn>
-          <v-btn to="/AddRoutine" class="nav-btn">Add Routine</v-btn>
-          <v-btn to="/AddDevice" class="nav-btn">Add Device</v-btn>
+        <v-col cols="1" class="mr-10">
+          <v-btn to="/CreationView" class="nav-btn" color="white">
+            <v-icon class="white-text">mdi-plus</v-icon>
+            <span>create</span>
+          </v-btn>
+          <!-- <v-btn to="/AddRoutine" class="nav-btn">Add Routine</v-btn>
+          <v-btn to="/AddDevice" class="nav-btn">Add Device</v-btn> -->
 
         </v-col>
       </v-row>
@@ -89,12 +92,6 @@ export default {
                   <v-icon class="green-text" size="24">mdi-help-circle-outline</v-icon>
                 </template>
                 <span>About</span>
-              </v-list-item>
-              <v-list-item to="/Test" class="side-btn">
-                <template v-slot:prepend>
-                  <v-icon class="green-text" size="24">mdi-account-cowboy-hat-outline</v-icon>
-                </template>
-                <span>Test</span>
               </v-list-item>
               <v-list-item to="/CreationView" class="side-btn">
                 <template v-slot:prepend>

@@ -488,7 +488,7 @@ async function increaseVolume() {
         </v-card-title>
 
         <v-card class="mt-1" style="background-color: transparent; border-radius: 20px">
-          <v-list style="background-color: transparent; overflow-y: auto; max-height: 500px;">
+          <v-list style="background-color: transparent; overflow-y: auto; max-height: 400px;">
             <v-list-item v-for="(song, index) in store.playlist" :key="index" >
              <v-row>
                <v-col cols="1" class="mt-3">
@@ -505,16 +505,16 @@ async function increaseVolume() {
               </v-col>
              </v-row>
 
-            <v-divider class="mt-2" v-if="index!=4"></v-divider>
+            <v-divider class="mt-2" v-if="index != store.playlist.length-1 "></v-divider>
             </v-list-item>
           </v-list>
         </v-card>
 
 
-        <v-card-actions class="actions-style" style="height: 50px;">
+        <v-card-actions class="actions-style ml-n4" style="height: 50px;" >
           <v-spacer></v-spacer>
           <v-btn
-          style="background-color: #f1edcd;margin: 10px"
+          style="background-color: #f1edcd;  "
           color="primary"
           text
           @click="isPlaylistDialogOpen= false"
@@ -573,7 +573,7 @@ async function increaseVolume() {
   border-radius: 15px !important;
   background-color: #f4e8c6ae;
   backdrop-filter: blur(8px);
-  height: 500px
+  height: 550px
 }
 .toggle-card-popup::before {
   content: "";

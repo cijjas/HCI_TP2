@@ -107,14 +107,14 @@ import { computed } from 'vue';
 
                     ></v-text-field>
                     
-                <v-card-actions class="actions-style" style="height: 100px; ">
+                <v-card-actions class="actions-style" style="height:120px; ">
                   <v-btn @click="handleReset" class="ml-8">Clear</v-btn>
                   <v-spacer></v-spacer>
                   <v-btn 
                   class="small-button-add mr-12"
                   type="submit"
                   color="white"
-                  >ADD</v-btn>
+                  ><v-icon class="white-text">mdi-plus</v-icon>ADD</v-btn>
                 </v-card-actions>
 
                 <v-dialog v-model="isCreateDialogOpen" width="500" color="gris" >
