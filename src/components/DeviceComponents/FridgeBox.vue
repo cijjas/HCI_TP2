@@ -48,7 +48,7 @@
     minLength: value => value.length >= 3 || 'Min 3 characters',
     maxLength: value => value.length <= 15 || 'Max 15 characters',
     required : value => !!value || 'required',
-    unique : value => !store.getADeviceByName(value) || 'Name already in use.',
+    unique : value => !deviceNameRepeated(value) || 'Name already in use.',
     alphanumeric : value => isAlphanumeric(value) || 'Only alphanumeric characters'
   };
   const openFridgeDialog = () => {
@@ -63,6 +63,9 @@
     return /^[a-zA-Z0-9\s]+$/.test(value);
   };
   const deviceNameRepeated = () =>{
+    if(tempDeviceName.value == deviceName.value){
+      return false
+    }
     return store.getADeviceByName(tempDeviceName.value) ? true : false;
   }
   const deviceNameIsValid= () =>{
