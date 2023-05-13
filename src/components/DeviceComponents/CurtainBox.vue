@@ -267,7 +267,7 @@ function changed (){
                   @click="clicked=!clicked ; setLevel()"
                   style="color:rgb(19, 168, 71); background-color: transparent;"
                   flat
-                  >
+                  > 
                   <v-icon>mdi-check-circle-outline</v-icon>
                   <v-tooltip
                   activator="parent"

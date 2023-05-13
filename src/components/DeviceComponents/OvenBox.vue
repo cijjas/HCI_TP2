@@ -467,7 +467,7 @@ function flipState() {
   </v-card>
 </template>
 
-
+ 
 <style scoped>
 .toggle-card-on {
   cursor: pointer;

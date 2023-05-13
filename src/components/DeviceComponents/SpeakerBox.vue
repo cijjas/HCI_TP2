@@ -156,7 +156,7 @@ function calculateProgress(songProgress, songDuration) {
   const timeSeconds2 = timeArray2[0] * 60 + timeArray2[1];
   const progress = (timeSeconds1 / timeSeconds2) * 100;
   const integer = Math.round(progress);
-  return integer
+  return integer;
 }
 const componentId = computed( ()=> { return props.componentId });
 const componentRoom = computed( ()=> {return props.componentRoom });
@@ -305,6 +305,10 @@ async function increaseVolume() {
         <v-col class="text-center" cols="3" >
           <v-btn icon @click="stop" color="primary">
             <v-icon>mdi-stop</v-icon>
+            <v-tooltip
+                  activator="parent"
+                  location="right"
+                >Stop Music</v-tooltip>
           </v-btn>
         </v-col>
       </v-row>
@@ -312,8 +316,8 @@ async function increaseVolume() {
 
     <v-card-text>
 
-      <v-row  justify="center" style="margin-top: -20px;">
-        <v-col class="text-center" cols="4">
+      <v-row  justify="center" style="margin-top: -25px;">
+        <v-col class="text-center " cols="4">
           <!-- row de volumen -->
           <v-text-field
           v-model="volumeLevel"
@@ -330,6 +334,10 @@ async function increaseVolume() {
         <v-col cols="2">
           <v-btn icon  @click="setVolume" style="background-color:#f4e6bf; color: #1ed760"  flat>
             <v-icon>mdi-check-circle-outline</v-icon>
+            <v-tooltip
+                  activator="parent"
+                  location="right"
+                >Set Volume to {{ volumeLevel }}</v-tooltip>
           </v-btn>
         </v-col>
         <v-col cols="4">
@@ -338,10 +346,9 @@ async function increaseVolume() {
             @update:modelValue = "updateGenre($event)"
             :items="genres"
             label="Genre"
+            placeholder="pop"
             class="rounded-input"
             bg-color='transparent' flat/>
-
-
           </v-col>
         <v-col cols="2">
           <v-btn icon @click="openPlaylistDialog" style="background-color: transparent; color:#204516;" flat>
@@ -349,7 +356,7 @@ async function increaseVolume() {
             <v-tooltip
                   activator="parent"
                   location="right"
-                >See Playlist</v-tooltip>
+                >View Playlist</v-tooltip>
           </v-btn>
         </v-col>
 
