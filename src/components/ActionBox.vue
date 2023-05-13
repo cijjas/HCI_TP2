@@ -90,6 +90,8 @@
     import { ref, defineProps, computed } from 'vue'
     import { onMounted } from '@vue/runtime-core';
     import { useAppStore } from '@/store/app';
+    import { useRouter } from 'vue-router'
+
     const store = useAppStore();
 
     const isErrorDialogOpen = ref(false);
@@ -177,6 +179,8 @@
       const toggleValue = ref(true);
       const isConfirmationDialogOpen = ref(false);
 
+      const router = useRouter()
+
       const openCreateDialog = () => {
         isConfirmationDialogOpen.value = true;
         setTimeout(() => {
@@ -217,8 +221,10 @@
       const deleteAction = () => {
         // DELETE AN ACTION !!!!
         if(routineActionsLength.value == 1) {
-          //si solo queda una accion en la rutina, no dejamos borrar
-          openErrorDialog();
+          //si solo queda una accion en la rutina, borramos rutina entera
+          store.deleteARoutine(props.routineId);
+          router.push('/routines');
+          // openErrorDialog();
           return;
         }
         deleteActionFromAPI();
