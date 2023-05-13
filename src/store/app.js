@@ -585,14 +585,13 @@ export const useAppStore = defineStore('app', {
           actions : actions,
           meta : {}
         }
-        console.log(routineObj)
         var result = await RoutinesApi.modify(routineObj);
-        console.log(result)
 
         // update local
         for ( let i = 0; i < this.routines.length; i++ ){
-          if ( this.routines[i].id = id )
-            this.routines[i] = result;
+          if ( this.routines[i].id == id ){
+            this.routines[i].actions = actions;
+          }
         }
         return result;
       } catch (error) {

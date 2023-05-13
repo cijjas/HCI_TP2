@@ -1,8 +1,8 @@
 <template>
-    <v-card :class="{'bg-on': toggleValue, 'bg-off': !toggleValue}" class="toggle-card">    
+    <v-card :class="{'bg-on': toggleValue, 'bg-off': !toggleValue}" class="toggle-card">
         <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
                 <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">
-                  {{ deviceName }}
+                  {{ props.action.actionName }}
                 </v-toolbar-title>
                 <v-btn variant="text" color="primary" @click="openDeleteDialog">
                   delete
@@ -13,30 +13,31 @@
           <v-col>
             <v-row class="row-style">
               <v-col>
-                <v-card-text>Device: {{ deviceTypeName }}</v-card-text>
+                <v-card-text>Device: {{ device.name }}</v-card-text>
               </v-col>
             </v-row>
-            
-            <v-row class="row-style-settings">
+
+            <!-- <v-row class="row-style-settings">
               <v-col class="justify-end">
-                <v-card-text>Action: {{ actionName }}</v-card-text>
+
               </v-col>
-              <!-- <v-col>
+              <v-col>
                 <v-card-text>Settings: </v-card-text>
-              </v-col> -->
-            </v-row>
+              </v-col>
+            </v-row> -->
             <v-row class="row-style">
               <!-- HACER FOR SOBRE LOS PARAMETROS PARA IMPRIMIRLOS -->
-              <template v-for="param in params.value" :key="device.id">
+              <v-card-text>Settings:</v-card-text>
+              <template v-for="param in props.action.params" :key="device.id">
                 <v-col>
                   <v-card-text>{{ param }}</v-card-text>
-                </v-col>  
+                </v-col>
               </template>
             </v-row>
 
           </v-col>
         </v-card-actions>
-    
+
         <v-dialog v-model="isDialogOpen" width="1024" persistent>
             <v-card class="toggle-card-popup">
                 <v-card-title class="headline">Edit Action</v-card-title>
@@ -51,7 +52,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-    
+
         <v-dialog v-model="isDeleteDialogOpen" width="1024" persistent>
             <v-card class="toggle-card-popup">
                 <v-card-title class="headline">Are you sure you want to delete {{ actionName }}?</v-card-title>
@@ -62,7 +63,7 @@
               </v-card-actions>
             </v-card>
         </v-dialog>
-    
+
         <v-dialog v-model="isConfirmationDialogOpen" width="500" color="gris" persistent>
             <v-card class="toggle-card-popup">
                 <div class="text-center">
@@ -74,9 +75,9 @@
         </v-dialog>
     </v-card>
 </template>
-      
+
 <script setup>
-    import { ref, defineProps } from 'vue'
+    import { ref, defineProps, computed } from 'vue'
     import { onMounted } from '@vue/runtime-core';
     import { useAppStore } from '@/store/app';
     const store = useAppStore();
@@ -91,19 +92,11 @@
       } catch (error) {
       console.error(error);
       }
-    }); 
-    
+    });
+
     const props = defineProps({
-      deviceId: {
+      action: {
         type: String,
-        required: true
-      },
-      actionName: {
-        type: String,
-        required: true
-      },
-      params: {
-        type: Array,
         required: true
       },
       routineId: {
@@ -111,36 +104,63 @@
         required: true
       }
     })
-      
-      const deviceId = ref(props.deviceId);
-      const actionName = ref(props.actionName);
-      const params = ref(props.params);
-      
-      const routineId = ref(props.routineId);
-      const routine = store.getARoutine(routineId.value);
-      const routineName = routine.name;
-      const actions = routine.actions;
 
-      const device = store.getADevice(deviceId.value);
-      const deviceName = device.name; //ej: sony speaker, etc.
+    const params = computed(()=>{
+      return props.action.params
+    })
+
+    const device = computed(()=>{
+      return store.getADevice(props.action.device.id)
+    })
+
+   /*  const actionName = computed(()=>{
+      return props.actionName
+    })
+
+    const routineId = computed(()=>{
+      routine.value = store.getARoutine(props.routineId)
+      return props.routineId;
+      })
+
+
+    const routineName = computed(()=>{
+      return routine.value.name;
+    })
+    const actions = computed(()=>{
+      return routine.value.actions;
+    }) */
+      /* const routine = store.getARoutine(routineId.value);
+      const routineName = routine.name;
+      const actions = routine.actions; */
+
+/*       const device = computed( ()=> {
+        return store.getADevice(deviceId.value)
+      });
+      const deviceName = computed( ()=> {
+        return device.name;
+      }) //ej: sony speaker, etc.
       const deviceTypeId = device.type.id;
-      const deviceTypeName = device.type.name; //ej: refrigerator, oven, etc.
-      
+      const deviceTypeName = computed( ()=> {
+        if (!device){
+          return device.type.name; //ej: refrigerator, oven, etc.
+        }
+        return ""
+      }) */
       //const routineName = store.getARoutine(routineId.value).name;
-      
+
       const tempActionName = ref('');
       const isDialogOpen = ref(false);
       const isDeleteDialogOpen = ref(false);
       const toggleValue = ref(true);
       const isConfirmationDialogOpen = ref(false);
-    
+
       const openCreateDialog = () => {
         isConfirmationDialogOpen.value = true;
         setTimeout(() => {
           isConfirmationDialogOpen.value = false;
         }, 2000);
       };
-      
+
       const saveName = () => {
         if (tempActionName.value !== '') {
             actionName.value = tempActionName.value; // Update the roomName variable with the new value
@@ -153,38 +173,38 @@
         openEditDialog();
         clearVar();
       };
-    
+
       const openEditDialog = () => {
         isDialogOpen.value = !isDialogOpen.value;
       };
-    
+
       const openDeleteDialog = () => {
         isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
       };
 
       const deleteActionFromAPI = () => {
         //buscar en array de acciones de la rutina la accion que quiero borrar, la borro, hago updateARoutine con ese nuevo array
-        var index = actions.findIndex(action => action.actionName === actionName.value);
+        var index = store.getARoutine(props.routineId).actions.findIndex(action => action.actionName === props.action.actionName);
         if (index !== -1) {
-          actions.splice(index, 1);
+          store.getARoutine(props.routineId).actions.splice(index, 1);
         }
-        store.updateARoutine(routineId.value, routineName,actions);
+        store.updateARoutine(props.routineId, store.getARoutine(props.routineId).name,store.getARoutine(props.routineId).actions);
       }
-    
+
       const deleteAction = () => {
         // DELETE AN ACTION !!!!
         deleteActionFromAPI();
         openDeleteDialog();
         openEditDialog();
       };
-    
+
       function clearVar(){
         tempActionName.value = "";
     }
-    
+
 </script>
-    
-    
+
+
 <style scoped>
 .row-style {
   margin-bottom: -5px;
@@ -202,7 +222,7 @@
       background-color: #d82602;
       box-shadow: 0 2px 4px rgba(24, 15, 15, 0.589);
 }
-    
+
 .ok-button {
         width: 80px;
         color: #60d75a;
@@ -224,9 +244,9 @@
       background-color: #f4e8c6ae;
       backdrop-filter: blur(8px);
       transition: all .2s ease-in-out;
-    
+
     }
-    
+
     .toggle-card-popup::before {
       content: "";
       position: absolute;
@@ -248,20 +268,20 @@
       height:300px;
       width: 400px;
     }
-    
+
     .toggle-card:hover {
       box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
     }
-    
+
     .rounded-toolbar {
       border-radius: 20px;
       background-color: transparent;
     }
-    
+
     .bg-on {
       background-color: #FEEBB1;
     }
-    
+
     .bg-off {
       background-color: #8C783A;
     }
@@ -277,4 +297,3 @@
     background-color: #DBD0AF ;
   }
 </style>
-    

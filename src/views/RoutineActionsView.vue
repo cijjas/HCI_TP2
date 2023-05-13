@@ -16,8 +16,8 @@
     } catch (error) {
     console.error(error);
     }
-    }); 
-    
+    });
+
     const store = useAppStore();
     const props = defineProps({
     routineId: {
@@ -26,13 +26,13 @@
     }
   });
 
-    //uso el route para encontrar nombre de rutina -> uso nombre de rutina para conseguir ID y resto de los datos
-    const route = useRoute();
-    const routineName = route.params.routineName;
+   //uso el route para encontrar nombre de rutina -> uso nombre de rutina para conseguir ID y resto de los datos
+  const route = useRoute();
+  const routineName = route.params.routineName;
 
-    const routine = store.getARoutineByName(routineName);
-    const actions = routine.actions;
-       
+  const routine = computed(() => store.getARoutineByName(routineName));
+  const actions = computed(() => store.getARoutineByName(routineName).actions)
+
 </script>
 
 <template>
@@ -43,18 +43,18 @@
             <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">{{routineName}}</v-card-title>
             <v-divider color="gris"></v-divider>
           </v-row>
-        
+
           <v-row>
             <v-col>
               <v-row>
                 <template v-for="action in actions">
                     <v-col xs="12" sm="6" md="4" lg="3" class="mt-5">
-                        <ActionBox class="grid-item" :deviceId="action.device.id" :actionName="action.actionName" :params="action.params" :routineId="routine.id"></ActionBox>
+                        <ActionBox class="grid-item" :action="action" :routineId="routine.id"></ActionBox>
                     </v-col>
                 </template>
               </v-row>
             </v-col>
-  
+
           </v-row>
         </v-card>
       </div>

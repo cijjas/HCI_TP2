@@ -75,7 +75,9 @@ const routineId = computed(()=> {
 const actionsCount = computed( () => {
   return props.actionCount
 });
-const actions = store.getARoutine(routineId.value).actions;
+const actions = computed( () => {
+  return store.getARoutine(routineId.value).actions;
+});
 const tempRoutineName = ref('');
 const nameRoutine = computed(()=> {
   return props.routineName
@@ -97,10 +99,10 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
   }
   });
 
-const saveName = () => {
+async function saveName()  {
   if (tempRoutineName.value !== '') {
       nameRoutine.value = tempRoutineName.value; // Update the routineName variable with the new value
-      store.updateARoutineName(routineId.value, nameRoutine.value);
+      await store.updateARoutineName(routineId.value, tempRoutineName.value);
   }
   isDialogOpen.value = !isDialogOpen.value;
   clearVar();
