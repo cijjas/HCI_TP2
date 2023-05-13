@@ -170,7 +170,7 @@ const deviceState = computed( ()=> { return store.getDeviceState(props.component
 const status = computed(()=> {return deviceState.value.status});
 
 const genre = computed(()=>{return deviceState.value.genre});
-const genres = ref(['clasical','country','pop','rock','dance','latina']);
+const genres = ref(['classical','country','pop','rock','dance','latina']);
 const progress = computed( ()=>{
   if ( !deviceState.value.song )
     return 1
@@ -273,16 +273,33 @@ async function setVolume() {
   await store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value]);
 }
 async function decreaseVolume() {
+  if(!volumeLevelOK.value ){
+    return  
+  }
   await store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value - 1]);
-  volumeLevel.value -= 1
+  volumeLevel.value = parseInt(volumeLevel.value) - 1;
 }
+const volumeLevelOK = computed( ()=> {
+  if (volumeLevel.value >= 0 && volumeLevel.value <= 10)
+    return true
+  return false
+})
 async function increaseVolume() {
+  if(!volumeLevelOK.value ){
+    return  
+  }
   await store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value + 1]);
-  volumeLevel.value += 1
+  console.log("volumeLevel.value " + volumeLevel.value)
+  volumeLevel.value = parseInt(volumeLevel.value) + 1;
+
+  console.log("volumeLevel.value " + volumeLevel.value)
+
 }
-
+function changed (){
+  clicked.value = false;
+}
 // falopa
-
+const clicked= ref(false);
 
 
 </script>
@@ -294,7 +311,7 @@ async function increaseVolume() {
       <v-row >
         <v-col cols="9">
           <v-btn @click="openSpeakerSettings" text color="transparent">
-            <v-card-title class="font-weight-bold text-h4  card-title">{{ deviceName }}</v-card-title>
+            <v-card-title class="font-weight-bold text-h4 ml-n2 card-title">{{ deviceName }}</v-card-title>
             <v-tooltip
                   activator="parent"
                   location="right"
@@ -317,31 +334,42 @@ async function increaseVolume() {
     <v-card-text>
 
       <v-row  justify="center" style="margin-top: -25px;">
-        <v-col class="text-center " cols="4">
+        <v-col class="text-center " style="padding-left: 0px; padding-right: 0px">
           <!-- row de volumen -->
           <v-text-field
-          v-model="volumeLevel"
-          type="number"
-          label="Volume"
-          :rules="[rules.acceptableVolumeLevel]"
-          :min="0"
-          :max="10"
-          class="rounded-input "
-          bg-color='transparent'
-          variant="solo"
-          flat/>
-        </v-col>
-        <v-col cols="2">
-          <v-btn icon  @click="setVolume" style="background-color:#f4e6bf; color: #1ed760"  flat>
-            <v-icon>mdi-check-circle-outline</v-icon>
-            <v-tooltip
-                  activator="parent"
-                  location="right"
-                >Set Volume to {{ volumeLevel }}</v-tooltip>
-          </v-btn>
-        </v-col>
-        <v-col cols="4">
+            v-model="volumeLevel"
+            style="width: 80px;"
+            type="number"
+            label="Volume"
+            :rules="[rules.acceptableVolumeLevel]"
+            :min="0"
+            :max="10"
+            class="rounded-input "
+            bg-color='transparent'
+            variant="solo"
+            @update:model-value="changed($event)"
+            flat/>
+          </v-col>
+          <v-col cols="2" style="padding-left: 0px; padding-right: 0px">
+            <v-btn 
+            icon v-if="volumeLevel >= 0 && volumeLevel <=10 && !clicked" 
+            @click="clicked=!clicked ;setVolume()" 
+            style="background-color:#f4e6bf; 
+            color: #1ed760 ;
+            margin-left: -30px; 
+            margin-top:5px"  
+            flat>
+
+              <v-icon size="20px" >mdi-check-circle-outline</v-icon>
+              <v-tooltip
+                    activator="parent"
+                    location="right"
+                  >Set Volume to {{ volumeLevel }}</v-tooltip>
+            </v-btn>
+          </v-col>
+        <v-col cols="4" style="padding-left: 0px; padding-right: 0px">
             <v-select
+            style="width: 120px;"
             variant="solo"
             @update:modelValue = "updateGenre($event)"
             :items="genres"
@@ -350,7 +378,7 @@ async function increaseVolume() {
             class="rounded-input"
             bg-color='transparent' flat/>
           </v-col>
-        <v-col cols="2">
+        <v-col cols="2" style="padding-left: 0px; padding-right: 0px">
           <v-btn icon @click="openPlaylistDialog" style="background-color: transparent; color:#204516;" flat>
             <v-icon>mdi-playlist-music</v-icon>
             <v-tooltip
@@ -573,7 +601,10 @@ async function increaseVolume() {
   height: 300px;
   width: 400px;
   color: #1C4035; /* Change the color to your desired value */
-
+  transition: all .5s ease-in-out;
+}
+.toggle-card:hover{
+     transform: scale3d(1.01, 1.01, 1.01);
 }
 .toggle-card-popup {
   padding: 30px;

@@ -249,7 +249,7 @@ function flipState() {
       <v-btn 
         icon 
         @click="flipState()" 
-        :class="{'on-button': !isOn(), 'off-button': isOn()}"
+        :class="{'on-button': isOn(), 'off-button': !isOn()}"
         >
         <v-icon>{{ isOn() ? 'mdi-power' : 'mdi-power-standby' }}</v-icon>
       </v-btn>
@@ -480,7 +480,10 @@ function flipState() {
   transition: all .2s ease-in-out;
   height: 300px;
   width: 400px;
-  
+  transition: all .5s ease-in-out;
+}
+.toggle-card-on:hover{
+     transform: scale3d(1.01, 1.01, 1.01);
 }
 .toggle-card-off {
   position: relative;

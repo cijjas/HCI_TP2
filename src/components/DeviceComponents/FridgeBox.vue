@@ -417,9 +417,11 @@ async function changeState() {
   transition: all .2s ease-in-out;
   height: 300px;
   width: 400px;
-
+  transition: all .5s ease-in-out;
 }
-
+.toggle-card:hover{
+     transform: scale3d(1.01, 1.01, 1.01);
+}
 .toggle-card::before {
     content: "";
     position: absolute;

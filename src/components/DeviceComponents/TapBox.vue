@@ -66,7 +66,7 @@
   }
 
   const resetValues = () => {
-    amountValue.value = 0;
+    amountValue.value = 1;
     selectedUnit.value = null;
     disabledFields.value = false;
   }
@@ -184,7 +184,11 @@ async function dispense() {
               :class="{'on-button': isOn, 'off-button': !isOn}"
               >
               <v-icon>{{ !isOn ? 'mdi-water-pump-off' : 'mdi-water-pump' }}</v-icon>
-        </v-btn>
+              <v-tooltip 
+                activator="parent"
+                location="right"
+              >{{isOn ? 'Turn Off' : 'Turn On'}}</v-tooltip>
+            </v-btn>
         
       </v-toolbar>
 
@@ -288,6 +292,10 @@ async function dispense() {
   transition: all .2s ease-in-out;
   height: 300px;
   width: 400px;
+  transition: all .5s ease-in-out;
+}
+.toggle-card-on:hover{
+     transform: scale3d(1.01, 1.01, 1.01);
 }
 .toggle-card-off {
   cursor: pointer;

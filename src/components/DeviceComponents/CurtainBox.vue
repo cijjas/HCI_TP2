@@ -285,16 +285,21 @@ function changed (){
       <v-card-actions class="actions-style" style="height: 80px;">
         <v-row class="ml-2 mr-2">
           <v-col >
-            <v-progress-linear
+
+            <v-progress-linear 
               v-model="deviceState.currentLevel"
               color="#FFE195"
               height="25"
               rounded="true"
               >
-              <template v-slot:default="{ value }">
+              <template v-slot:default="{ value }" v-if="deviceState.status == 'closing' || deviceState.status == 'closed'">
                 <strong>{{ Math.round(value) }}% {{ deviceState.status }}</strong>
               </template>
+              <template v-slot:default="{ value }" v-if="deviceState.status == 'opening' || deviceState.status == 'opened'">
+                <strong>{{ 100-Math.round(value) }}% {{ deviceState.status }}</strong>
+              </template>
             </v-progress-linear>
+
           </v-col>
           <!-- <v-slider
             color="primary"
@@ -381,8 +386,11 @@ function changed (){
   background-position: top;
   height: 300px;
   width: 400px;
+  transition: all .5s ease-in-out;
 }
-
+.toggle-card:hover{
+     transform: scale3d(1.01, 1.01, 1.01);
+}
 
 
 .green-text {
@@ -479,5 +487,6 @@ function changed (){
 .on-button:hover{
   color: #631414;
 }
+
 
 </style>
