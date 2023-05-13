@@ -120,10 +120,6 @@ const saveButtonDisabled = computed(() => {
 //getPlaylist[],
 
 /* -------------------------------------- REFACTORING -------------------------------------- */
-const deviceState = ref(store.getDeviceState(props.componentId));           // estas variables inicialmente son correctas ya que vienen del MOUNT
-const status = ref(store.getDeviceState(props.componentId).status);
-const genre = ref(store.getDeviceState(props.componentId).genre);
-const genres = ref(['clasical','country','pop','rock','dance','latina']);
 
 
 // const songTitle = ref(store.getDeviceState(props.componentId).song.title);
@@ -139,18 +135,17 @@ function calculateProgress(songProgress, songDuration) {
   const timeSeconds2 = timeArray2[0] * 60 + timeArray2[1];
   const progress = (timeSeconds1 / timeSeconds2) * 100;
   const integer = Math.round(progress);
-  return integer || 0
+  return integer
 }
-
-const progress = computed( ()=> {
-  // console.log(deviceState.value);
-  if(deviceState.value) {
-    // console.log("dentro del if");
-    // console.log(calculateProgress(deviceState.value.song.progress, deviceState.value.song.duration));
-    return calculateProgress(deviceState.value.song.progress, deviceState.value.song.duration);
-  }
-  return 0;
+const progress = computed( ()=>{
+  return calculateProgress(deviceState.value.song.progress, deviceState.value.song.duration)
 })
+
+const deviceState = ref( store.getDeviceState(props.componentId));           // estas variables inicialmente son correctas ya que vienen del MOUNT
+const status = computed(()=> {return store.getDeviceState(props.componentId).status});
+const genre = computed(()=>{return store.getDeviceState(props.componentId).genre});
+const genres = ref(['clasical','country','pop','rock','dance','latina']);
+
 
 
 const isPlaying = computed( ()=>{
@@ -158,7 +153,7 @@ const isPlaying = computed( ()=>{
 })
 
 // boton de play tiene tres funciones: play, resume, pause
-function playButton(){
+async function playButton(){
 
   switch(status.value) {    // dummy value
     case 'paused':
@@ -168,7 +163,10 @@ function playButton(){
       var intervalId = setInterval(async () => {
         const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
         deviceState.value = deviceStateRT;
-        console.log(deviceStateRT);
+        console.log(deviceStateRT)
+
+        console.log(deviceState.value.song.progress)
+        console.log(progress.value)
         if (deviceStateRT.status !== 'playing') {
           clearInterval(intervalId);
         }
@@ -200,17 +198,17 @@ function playButton(){
 
 }
 
-function stop(){
+async function stop(){
   status.value = "stopped"
-  store.updateADeviceState(props.componentId, "stop", []);
+  await store.updateADeviceState(props.componentId, "stop", []);
 }
 
 
-function nextSong(){
-  store.updateADeviceState(props.componentId, "nextSong", []);
+async function nextSong(){
+  await store.updateADeviceState(props.componentId, "nextSong", []);
 }
-function previousSong(){
-  store.updateADeviceState(props.componentId, "previousSong", []);
+async function previousSong(){
+  await store.updateADeviceState(props.componentId, "previousSong", []);
 }
 
 
@@ -253,6 +251,8 @@ function increaseVolume() {
 <template>
   <v-card class="toggle-card">
     <!-- <v-card-text>{{   songTitle }}</v-card-text> -->
+  {{ deviceState.song.title }} - {{ deviceState.song.artist }}
+
     <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
       <v-row >
         <v-col cols="9">

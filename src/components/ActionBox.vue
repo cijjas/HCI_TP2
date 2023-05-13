@@ -27,7 +27,7 @@
             </v-row> -->
             <v-row class="row-style">
               <!-- HACER FOR SOBRE LOS PARAMETROS PARA IMPRIMIRLOS -->
-              <v-card-text>Settings:</v-card-text>
+              <v-card-text v-if="props.action.params.length>0">Settings:</v-card-text>
               <template v-for="param in props.action.params" :key="device.id">
                 <v-col>
                   <v-card-text>{{ param }}</v-card-text>
