@@ -126,6 +126,11 @@ const saveButtonDisabled = computed(() => {
 
 
 function calculateProgress(songProgress, songDuration) {
+  if (!songProgress || !songDuration)
+    return 0;
+  console.log("songProgress " + songProgress)
+  console.log("songDuration " + songDuration)
+
   const timeArray1 = songProgress.split(':').map(Number);
   const timeSeconds1 = timeArray1[0] * 60 + timeArray1[1];
   const timeArray2 = songDuration.split(':').map(Number);
@@ -144,11 +149,12 @@ const tempDeviceName = ref(deviceName.value);
 
 const deviceState = computed( ()=> { return store.getDeviceState(props.componentId)});           // estas variables inicialmente son correctas ya que vienen del MOUNT
 const status = computed(()=> {return deviceState.value.status});
+
 const genre = computed(()=>{return deviceState.value.genre});
 const genres = ref(['clasical','country','pop','rock','dance','latina']);
 const progress = computed( ()=>{
-  if ( !deviceState.value.song   )
-    return
+  if ( !deviceState.value.song )
+    return 1
   return calculateProgress(deviceState.value.song.progress, deviceState.value.song.duration)
 })
 
@@ -169,7 +175,7 @@ async function playButton(){
         const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
         deviceState.value = deviceStateRT;
         deviceState.value.song = deviceStateRT.song
-        console.log(deviceState.value)
+        console.log(deviceStateRT)
         console.log(progress.value)
         if (deviceStateRT.status !== 'playing') {
             clearInterval(intervalId);
@@ -184,6 +190,8 @@ async function playButton(){
       var intervalId = setInterval(async () => {
         const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
         deviceState.value = deviceStateRT;
+        deviceState.value.song = deviceStateRT.song
+
         console.log(deviceState.value)
         console.log(progress.value)
         if (deviceStateRT.status !== 'playing') {
@@ -211,14 +219,17 @@ async function stop(){
 
 async function nextSong(){
   await store.updateADeviceState(props.componentId, "nextSong", []);
+
 }
 async function previousSong(){
   await store.updateADeviceState(props.componentId, "previousSong", []);
+
 }
 
 
 async function updateGenre(selection){
   await store.updateADeviceState(props.componentId, "setGenre", [selection]);
+
   //nuevo genero -> nueva playlist
   await store.getPlaylistAPI(props.componentId);
 }
@@ -254,10 +265,8 @@ async function increaseVolume() {
 </script>
 
 <template>
-  <v-card class="toggle-card">
-    <!-- <v-card-text>{{   songTitle }}</v-card-text> -->
-  <!-- {{ deviceState.song.title }} - {{ deviceState.song.artist }} -->
 
+  <v-card class="toggle-card">
     <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
       <v-row >
         <v-col cols="9">
