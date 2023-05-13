@@ -89,9 +89,7 @@ const submitAddDevice = () =>{
                         </v-list-item>
                     </v-list>
                     </v-card>
-                        <v-card-text>{{ store.devices }}</v-card-text>
-                        <v-card-text>{{ store.deviceActions }}</v-card-text>
-
+                        
                 </v-card>
 
                 <!-- CREATE A DEVICE -->
