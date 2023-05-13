@@ -13,7 +13,7 @@ export default {
 
 <template>
   <nav>
-    <v-app-bar app   height="100" class="app-bars" >
+    <v-app-bar app   height="100" class="app-bar" style="background-image: url('https://i.imgur.com/Q96xVwS.png'); background-size: cover; color: whitesmoke">
       <v-row justify="space-between">
         <v-col cols="6">
           <v-btn to="/" size="x-large" text color="transparent" style="padding-left: 40px;">
@@ -110,12 +110,9 @@ export default {
     </nav>
 </template>
 
-<style scoped>
+<style >
 
-.app-bars{
-  background-image: url('./ComponentsAssets/background.png');
-  background-size: cover;
-}
+
 .nav-btn {
   margin: 10px;
   transition: all .2s ease-in-out;
@@ -159,8 +156,6 @@ export default {
   color: #F4CF6D;
 }
 .green-text {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: bold;
   color: #054619;
 }
 
@@ -170,7 +165,12 @@ export default {
   color: #F4CF6D;
 }
 
-
+nav a {
+  color: #fff;
+  text-decoration: none;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
 
 
 </style>
