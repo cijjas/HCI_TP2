@@ -56,9 +56,7 @@ function getComponent(file) {
                 <template v-if="index < 6">
                   <v-col class="mt-5" xs="12" sm="12" md="6" lg="4">
                     <v-fade-transition>
-                      <v-motion-slide-visible-once-right>
-                        <component  :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id" :componentRoom="store.getDevicesRoom(device.id)"></component>
-                      </v-motion-slide-visible-once-right>
+                      <component  :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id" :componentRoom="store.getDevicesRoom(device.id)"></component>
                     </v-fade-transition>
                   </v-col>
                 </template>

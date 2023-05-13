@@ -273,27 +273,19 @@ async function setVolume() {
   await store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value]);
 }
 async function decreaseVolume() {
-  if(!volumeLevelOK.value ){
+  if(!(volumeLevel.value > 0) ){
     return  
   }
   await store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value - 1]);
   volumeLevel.value = parseInt(volumeLevel.value) - 1;
 }
-const volumeLevelOK = computed( ()=> {
-  if (volumeLevel.value >= 0 && volumeLevel.value <= 10)
-    return true
-  return false
-})
+
 async function increaseVolume() {
-  if(!volumeLevelOK.value ){
+  if(!(volumeLevel.value < 10) ){
     return  
   }
   await store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value + 1]);
-  console.log("volumeLevel.value " + volumeLevel.value)
   volumeLevel.value = parseInt(volumeLevel.value) + 1;
-
-  console.log("volumeLevel.value " + volumeLevel.value)
-
 }
 function changed (){
   clicked.value = false;
@@ -380,7 +372,7 @@ const clicked= ref(false);
           </v-col>
         <v-col cols="2" style="padding-left: 0px; padding-right: 0px">
           <v-btn icon @click="openPlaylistDialog" style="background-color: transparent; color:#204516;" flat>
-            <v-icon>mdi-playlist-music</v-icon>
+            <v-icon color="primary">mdi-playlist-music</v-icon>
             <v-tooltip
                   activator="parent"
                   location="right"
@@ -403,7 +395,14 @@ const clicked= ref(false);
 
         <v-row justify="center" style="margin-top: -20px;">
           <v-col cols="3">
-            <v-btn icon @click="decreaseVolume"  style="background-color: #0000000b; color:#f1edcd; margin-left: 30px; margin-top: 10px;"  flat>
+            <v-btn :disabled="volumeLevel <=0  || volumeLevel > 10" 
+            icon
+             @click="decreaseVolume"  
+             style="background-color: #0000000b; 
+             color:#f1edcd; 
+             margin-left: 30px; 
+             margin-top: 10px;"  
+             flat>
               <v-icon>mdi-volume-minus</v-icon>
             </v-btn>
             <v-row>
@@ -447,7 +446,13 @@ const clicked= ref(false);
             </v-row>
           </v-col>
           <v-col cols="3">
-            <v-btn icon @click="increaseVolume" style="background-color: #0000000b; color:#f1edcd; margin-top: 10px;" flat>
+            <v-btn :disabled="volumeLevel >=10 || volumeLevel < 0"
+            icon 
+            @click="increaseVolume" 
+            style="background-color: #0000000b; 
+            color:#f1edcd; 
+            margin-top: 10px;" 
+            flat>
               <v-icon>mdi-volume-plus</v-icon>
             </v-btn>
             <v-row>

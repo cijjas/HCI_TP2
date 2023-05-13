@@ -1,7 +1,9 @@
 <script setup>
   import { ref, computed, watch, defineProps } from 'vue';
   import { useAppStore } from '@/store/app';
-import { alphaNum } from '@vuelidate/validators';
+  import { alphaNum } from '@vuelidate/validators';
+  import {MotionPlugin} from '@vueuse/motion'
+
   const store = useAppStore();
 
 const props = defineProps({
@@ -199,7 +201,7 @@ function changed (){
 </script>
 
 <template>
-  <v-card
+  <v-card 
     :class="{'toggle-card-on': isOn, 'toggle-card-off': !isOn}"
     :style="{ backgroundColor: computedBackgroundColor , backgroundPositionX: isOn ? '40%' : '100%'}"
     class="toggle-card"

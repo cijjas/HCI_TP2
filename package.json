@@ -12,6 +12,7 @@
     "@mdi/font": "^7.2.96",
     "@vuelidate/core": "^2.0.2",
     "@vuelidate/validators": "^2.0.2",
+    "@vueuse/motion": "^2.0.0-beta.12",
     "@websanova/vue-knob": "^0.4.2",
     "core-js": "^3.29.0",
     "pinia": "^2.0.0",
