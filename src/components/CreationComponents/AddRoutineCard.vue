@@ -202,7 +202,7 @@ const submitButtonDisabled = computed(() => {
           <v-card v-if="routineActions.length != 0"  color="transparent" >
             <v-list rounded style="max-height: 434px; overflow-y: auto;">
               <v-list-item v-for="(routineAction, index) in routineActions" :key="index" :class="index % 2 === 0 ? 'bg-color-1' : 'bg-color-2'" >
-                {{ routineAction.actionName }} {{ routineAction.params }}
+                {{ routineAction.meta.name }}{{ routineAction.actionName }} {{ routineAction.params }}
               </v-list-item>
             </v-list>
           </v-card>

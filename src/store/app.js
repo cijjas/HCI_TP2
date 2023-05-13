@@ -669,7 +669,9 @@ export const useAppStore = defineStore('app', {
         },
         actionName : actionName,
         params : params,
-        meta :{}
+        meta :{
+          name : this.getADevice(deviceId).name
+        }
       }
       return action;
     },
