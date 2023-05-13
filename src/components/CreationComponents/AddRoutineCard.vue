@@ -75,7 +75,7 @@ const submitRoutine = () => {
     openCreateDialog();
   }
 }
-const submitAction = () => { // si se quiere hacer feo, se puede aca
+const submitAction = () => { 
   if(selectedDevice.value && selectedAction.value ){
     console.log(selectedDevice.value)
     console.log(selectedAction.value)
@@ -94,6 +94,62 @@ const isFormValid = ref(false);
 const submitButtonDisabled = computed(() => {
   return !isFormValid.value;
 });
+function parseParams(params) {
+  if (!params || params.length === 0) {
+    return '';
+  }
+  if (params.length === 1) {
+    return params[0];
+  }
+  return params[0] + params[1];
+}
+
+function parseAction(action) {
+  switch (action) {
+    case "open":
+    case "close":
+    case "dispense":
+    case "play":
+    case "stop":
+    case "pause":
+    case "resume":
+    case "getPlaylist":
+      return action;
+
+    case "setLevel":
+      return "set level to";
+
+    case "turnOn":
+      return "turn on";
+
+    case "turnOff":
+      return "turn off";
+
+    case "setTemperature":
+    case "setFreezerTemperature":
+      return "set temperature to";
+
+    case "setHeat":
+    case "setGrill":
+    case "setConvection":
+      return "set heat mode to";
+
+    case "setVolume":
+      return "set volume to";
+
+    case "nextSong":
+      return "play next song";
+
+    case "previousSong":
+      return "play previous song";
+
+    case "setGenre":
+      return "set genre to";
+
+    default:
+      return action;
+  }
+}
 
 </script>
 
@@ -105,7 +161,10 @@ const submitButtonDisabled = computed(() => {
             <v-row >
                 <v-toolbar-title class="font-weight-bold text-h4 title-style mt-16 ml-8">Build Routine</v-toolbar-title>
 
-                <v-toolbar-title class="font-weight-bold text-h6 title-style mt-16 ">Actions</v-toolbar-title>
+                <v-toolbar-title class="font-weight-bold text-h6 title-style mt-16 ">
+                  Actions
+                  <v-icon class="ml-2">mdi-menu-down</v-icon>
+                </v-toolbar-title>
             </v-row>
         </v-col>
       </v-toolbar>
@@ -187,8 +246,8 @@ const submitButtonDisabled = computed(() => {
                   class="ml-8"
                   :disabled="submitButtonDisabled"
                   >
-                  <v-icon>mdi-plus</v-icon>
                   Add Action
+                  <v-icon>mdi-arrow-right</v-icon>
                   </v-btn>
 
                 </v-row>
@@ -202,8 +261,9 @@ const submitButtonDisabled = computed(() => {
           <v-card v-if="routineActions.length != 0"  color="transparent" >
             <v-list rounded style="max-height: 434px; overflow-y: auto;">
               <v-list-item v-for="(routineAction, index) in routineActions" :key="index" :class="index % 2 === 0 ? 'bg-color-1' : 'bg-color-2'" >
-                {{ routineAction.meta.name }}{{ routineAction.actionName }} {{ routineAction.params }}
+                <span style="color: rgb(148, 133, 73);">{{ routineAction.meta.name }} will {{ parseAction(routineAction.actionName) }} {{ parseParams(routineAction.params) }}</span>
               </v-list-item>
+
             </v-list>
           </v-card>
         </v-col>
@@ -307,8 +367,5 @@ const submitButtonDisabled = computed(() => {
     height: 646px;
     transition:  transform .3s ease-in-out;
   }
-  .card-style:hover{
-     transform: scale3d(1.01, 1.01, 1.01);
-
-  }
+  
 </style>

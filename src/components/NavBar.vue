@@ -13,7 +13,7 @@ export default {
 
 <template>
   <nav>
-    <v-app-bar app   height="100"  style="background-image: url('https://i.imgur.com/Q96xVwS.png'); background-size: cover; color: whitesmoke">
+    <v-app-bar app   height="100" class="app-bar" style="background-image: url('https://i.imgur.com/Q96xVwS.png'); background-size: cover; color: whitesmoke">
       <v-row justify="space-between">
         <v-col cols="6">
           <v-btn to="/" size="x-large" text color="transparent" style="padding-left: 40px;">
@@ -44,7 +44,6 @@ export default {
       expand-on-hover
       rail 
       image='./ComponentsAssets/nav.png'
-
       >
       
       <v-list>

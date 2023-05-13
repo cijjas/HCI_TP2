@@ -52,7 +52,6 @@ const openCreateDialog = () => {
             <v-card v-else flat>
 
                 <!-- ROOMS -->
-                <v-card-text class="text-h4 font-weight-bold ">{{ store.routines}} </v-card-text>
                 <v-card class="mb-4 pr-8" color="lightersecondary"  elevation="0">
                     <v-card-title>
                         <v-card-text class="text-h4 font-weight-bold ">Existing Rooms </v-card-text>
@@ -65,7 +64,6 @@ const openCreateDialog = () => {
                         </v-list-item>
                     </v-list>
                     </v-card>
-                        <v-card-text>{{ store.rooms }}</v-card-text>
                 </v-card>
 
                 <!-- CREATE A ROOM -->
