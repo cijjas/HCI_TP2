@@ -91,7 +91,9 @@ const submitLevel = ()=>{
 const deviceState = ref(store.getDeviceState(props.componentId) );           // estas variables inicialmente son correctas ya que vienen del MOUNT
 const status = ref(store.getDeviceState(props.componentId).status)
 const moving = ref(false);
-const selectedLevel = ref("")
+const selectedLevel = ref("");
+const changedlevel = ref(false);
+
 const isOn = computed( ()=>{
   return deviceState.value.status == 'opened' || deviceState.value.status == 'opening'
 })
@@ -174,7 +176,7 @@ async function setLevel(){
   console.log("LALAL");
   console.log(deviceState.value);
 }
-const check=ref(false);
+const clicked=ref(false);
 
 
 const computedBackgroundColor = computed(() => {
@@ -185,6 +187,11 @@ const computedBackgroundColor = computed(() => {
     const color = color1.map((c1, i) => Math.round(c1 + ratio * (color2[i] - c1)));
     return `rgb(${color.join(',')})`;
   });
+
+function changed (){
+  clicked.value = false;
+}
+
 </script>
 
 <template>
@@ -231,66 +238,70 @@ const computedBackgroundColor = computed(() => {
       <!-- ACA JOACO -->
       <v-form @submit.prevent="submitLevel" v-model="isValidLevel">
         <v-row justify="center">
+          
           <v-col cols="6">
             <v-text-field
             :rules="[rules.validateLevel, rules.required]"
             :disabled = "moving"
             v-model="selectedLevel"
             type="number"
-            label="Set Level"
+            label="Level"
             variant="solo"
             :min="0"
             :max="100"
             class="rounded-input green-text"
-            bg-color='transparent' flat/>
+            bg-color='transparent' flat
+            @update:model-value="changed($event)"
+            />
           </v-col>
+
           <v-col cols="6">
-            <v-card-text class="slider-value " style="margin-left: -10px; margin-top: -10px;">
-              <v-btn 
-    icon 
-    :disabled="moving || !isValidLevel" 
-    type="submit"
-    @click="check=!check"
-    :disable-background-color="true"
-    style="color:rgb(19, 168, 71); background-color: transparent;"
-    flat
->
-    <v-icon>{{check ? 'mdi-check-circle': 'mdi-check-circle-outline'}}</v-icon>
-</v-btn>
-              
+            <v-card-text class="slider-value " style="margin-left: -30px; margin-top: -10px;">
+              <v-btn v-if="!(moving || !isValidLevel) && !clicked "
+                  type="submit"
+                  icon 
+                  @click="clicked=!clicked"
+                  style="color:rgb(19, 168, 71); background-color: transparent;"
+                  flat
+                  >
+                  <v-icon>mdi-check-circle-outline</v-icon>
+                  <v-tooltip
+                  activator="parent"
+                  location="right"
+                  >Set Level</v-tooltip>
+              </v-btn>
             </v-card-text>
           </v-col>
+
         </v-row>
+
       </v-form>
 
 
-
-    <v-row no-gutters class="mr-2 ml-2" style="margin-top: 40px">
-      <v-col >
-        <v-progress-linear
-
-        v-model="deviceState.currentLevel"
-        color="#FFE195"
-        height="25"
-        rounded="true"
-        >
-        <template v-slot:default="{ value }">
-          <strong>{{ Math.round(value) }}% {{ deviceState.status }}</strong>
-        </template>
-      </v-progress-linear>
-
-      </v-col>
-
-
-      <!-- <v-slider
-        color="primary"
-        v-model="sliderValue"
-        :ticks="true"
-        :max="100"
-        :min="0"
-        :step="1"
-      ></v-slider> -->
-    </v-row>
+      <v-card-actions class="actions-style" style="height: 80px;">
+        <v-row class="ml-2 mr-2">
+          <v-col >
+            <v-progress-linear
+              v-model="deviceState.currentLevel"
+              color="#FFE195"
+              height="25"
+              rounded="true"
+              >
+              <template v-slot:default="{ value }">
+                <strong>{{ Math.round(value) }}% {{ deviceState.status }}</strong>
+              </template>
+            </v-progress-linear>
+          </v-col>
+          <!-- <v-slider
+            color="primary"
+            v-model="sliderValue"
+            :ticks="true"
+            :max="100"
+            :min="0"
+            :step="1"
+          ></v-slider> -->
+        </v-row>
+      </v-card-actions>
 
 
     <v-dialog v-model="isDialogOpen" width="700"  @click:outside="cancelSettings">
@@ -348,7 +359,14 @@ const computedBackgroundColor = computed(() => {
   height: 300px;
   width: 400px;
 }
-
+.actions-style {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color:#857f6923;
+    
+  }
 
 .toggle-card-off{
   position: relative;

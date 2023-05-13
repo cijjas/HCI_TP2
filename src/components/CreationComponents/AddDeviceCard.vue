@@ -41,7 +41,7 @@
         name(value){ // agregar testeo de si ya existe el nombre
           const repeated = store.getADeviceByName(value) ? true : false;
           if(repeated) {
-            return 'Name already in use.'
+            return 'Name already in use.' ;
           }
           const tooLong = value?.length > 15 ? true : false;
           const tooShort = value?.length < 3 ? true : false;
