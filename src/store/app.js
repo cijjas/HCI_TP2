@@ -414,9 +414,11 @@ export const useAppStore = defineStore('app', {
         // UPDATE DE ROOMS
         // update local
         var room = this.getARoomByName(this.getDevicesRoom(id));                        // room es el cuarto que tiene el dispositivo con id
-        var index = room.meta.devices.findIndex(dId => dId === id);   // el index del dispositivo dentro de room que tiene el id que busco
-        if (index !== -1) {
-          room.meta.devices.splice(index, 1);                         // lo extraigo
+        if ( room ){
+          var index = room.meta.devices.findIndex(dId => dId === id);   // el index del dispositivo dentro de room que tiene el id que busco
+          if (index !== -1) {
+            room.meta.devices.splice(index, 1);                         // lo extraigo
+          }
         }
         // update remoto
         this.updateARoom(room.id, room.name);
@@ -471,14 +473,17 @@ export const useAppStore = defineStore('app', {
       }
       return arr;
     },
-    deleteRoomDevices(idRoom) {
+    async deleteRoomDevices(idRoom) {
       var room = this.getARoom(idRoom);
       console.log("room entero: " + room);
+      console.log("DEVICES ;");
+      console.log(room.meta.devices);
       if ( room === undefined )
         return;
       for ( let i = 0; i < room.meta.devices.length ; i++ ){
         console.log("deleting device: " + room.meta.devices[i]);
-        this.deleteADevice(room.meta.devices[i]);
+        removeItemFromArray(this.devices, room.meta.devices[i] );
+        await DevicesApi.remove(room.meta.devices[i]);
       }
     },
 
