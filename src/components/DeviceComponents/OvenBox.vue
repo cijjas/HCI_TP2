@@ -68,7 +68,7 @@
     minLength: value => value.length >= 3 || 'Min 3 characters',
     maxLength: value => value.length <= 15 || 'Max 15 characters',
     required : value => !!value || 'required',
-    unique : value => !store.getADeviceByName(value) || 'Name already in use.',
+    unique : value => !deviceNameRepeated(value) || 'Name already in use.',
     alphanumeric : value => isAlphanumeric(value) || 'Only alphanumeric characters'
   };
   const isAlphanumeric = (value) => {
@@ -78,6 +78,9 @@
     return (state.value === 'on');
   }
   const deviceNameRepeated = () =>{
+    if(tempDeviceName.value == deviceName.value){
+      return false
+    }
     return store.getADeviceByName(tempDeviceName.value) ? true : false;
   }
   // const isOn = computed( ()=>{
@@ -95,8 +98,12 @@
     }
   );
   const deviceNameIsValid= () =>{
-    return tempDeviceName.value.length >= 3 && tempDeviceName.value.length <= 15 && !deviceNameRepeated() && isAlphanumeric(tempDeviceName.value);
+    return tempDeviceName.value.length >= 3 
+      && tempDeviceName.value.length <= 15 
+      && !deviceNameRepeated() 
+      && isAlphanumeric(tempDeviceName.value);
   }  
+
   const cancelSettings = () => {
     isDialogOpen.value = false;
     tempDeviceName.value = deviceName.value;
@@ -107,7 +114,9 @@
   };
 
   const saveSettings = () => {
+
     if(!deviceNameIsValid()) {
+        console.log('invalid');
         return;
     }
     if(tempTemperatureValue.value < 90 || tempTemperatureValue.value > 230) {

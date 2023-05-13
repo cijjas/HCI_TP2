@@ -39,7 +39,7 @@
     minLength: value => value.length >= 3 || 'Min 3 characters',
     maxLength: value => value.length <= 15 || 'Max 15 characters',
     required : value => !!value || 'required',
-    unique : value => !store.getADeviceByName(value) || 'Name already in use.',
+    unique : value => !deviceNameRepeated(value) || 'Name already in use.',
     alphanumeric : value => isAlphanumeric(value) || 'Only alphanumeric characters',
     validAmount : value => value >= 1 && value <= 100 || 'Min 1 max 100'
   };
@@ -51,6 +51,9 @@
     disabledFields.value = !disabledFields.value;
   }
   const deviceNameRepeated = () =>{
+    if(tempDeviceName.value == deviceName.value){
+      return false
+    }
     return store.getADeviceByName(tempDeviceName.value) ? true : false;
   }
   const deviceNameIsValid= () =>{

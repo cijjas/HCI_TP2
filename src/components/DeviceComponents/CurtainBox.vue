@@ -32,7 +32,7 @@ const props = defineProps({
     maxLength: value => value.length <= 15 || 'Max 15 characters',
     validateLevel : value => value >= 0 && value <= 100 || 'Min : 0 Max : 100',
     required : value => !!value || 'required',
-    unique : value => !store.getADeviceByName(value) || 'Name already in use.',
+    unique : value => !deviceNameRepeated(value) || 'Name already in use.',
     alphanumeric : value => isAlphanumeric(value) || 'Only alphanumeric characters'
   };
 
@@ -61,6 +61,9 @@ const props = defineProps({
   }
 
   const deviceNameRepeated = () =>{
+    if(tempDeviceName.value == deviceName.value){
+      return false
+    }
     return store.getADeviceByName(tempDeviceName.value) ? true : false;
   }
 
