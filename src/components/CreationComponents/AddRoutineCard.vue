@@ -303,17 +303,16 @@ const submitRoutineDisabled = computed(() => {
             <v-card-text >No Actions Added</v-card-text>
           </v-card>
           <v-card v-if="routineActions.length != 0"  color="transparent" >
-            <v-list rounded style="max-height: 434px; overflow-y: auto;">
+            <v-list rounded style="max-height: 420px; overflow-y: auto;">
               <v-list-item v-for="(routineAction, index) in routineActions" :key="index" :class="index % 2 === 0 ? 'bg-color-1' : 'bg-color-2'" >
                 <span style="color: rgb(148, 133, 73);">{{ routineAction.meta.name }} will {{ parseAction(routineAction.actionName) }} {{ parseParams(routineAction.params) }}</span>
               </v-list-item>
-
             </v-list>
           </v-card>
         </v-col>
 
 
-      </v-row>
+      </v-row> 
 
       <v-form @submit.prevent="submitRoutine" v-model="isRoutineValid">
         <v-card-actions class="actions-style" style="height: 120px;  "  >

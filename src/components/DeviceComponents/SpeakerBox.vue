@@ -470,18 +470,36 @@ async function increaseVolume() {
       <v-card class="toggle-card-popup">
         <v-card-title>
           <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
-            <v-card-title class="font-weight-bold text-h5 card-title">
+            <v-card-title class="font-weight-bold text-h4 card-title">
               Songs in {{ genre }}
             </v-card-title>
           </v-toolbar>
         </v-card-title>
-        <v-card-text class="mt-n10">
-          <v-list>
-            <v-list-item v-for="song in store.playlist">
-              <v-list-item-title> {{ song.title }} -- {{ song.artist }}</v-list-item-title>
+
+        <v-card class="mt-1" style="background-color: transparent; border-radius: 20px">
+          <v-list style="background-color: transparent; overflow-y: auto; max-height: 500px;">
+            <v-list-item v-for="(song, index) in store.playlist" :key="index" >
+             <v-row>
+               <v-col cols="1" class="mt-3">
+                <span>
+                  {{ index+1 }}  
+                </span>  
+              </v-col>
+              <v-col cols="11" class="mt-7">
+                <v-row></v-row> 
+                <span>
+                     {{ song.title }}  
+                </span>
+                <v-list-item-subtitle> {{ song.artist  }}</v-list-item-subtitle>
+              </v-col>
+             </v-row> 
+
+            <v-divider class="mt-2" v-if="index!=4"></v-divider>
             </v-list-item>
           </v-list>
-        </v-card-text>
+        </v-card>
+
+
         <v-card-actions class="actions-style" style="height: 50px;">
           <v-spacer></v-spacer>
           <v-btn
@@ -501,6 +519,9 @@ async function increaseVolume() {
 
 
 <style scoped>
+
+
+
 .text-container {
   display: inline-block;
   overflow: hidden;
@@ -535,7 +556,7 @@ async function increaseVolume() {
   border-radius: 15px !important;
   background-color: #f4e8c6ae;
   backdrop-filter: blur(8px);
-  height: 400px
+  height: 500px
 }
 .toggle-card-popup::before {
   content: "";
