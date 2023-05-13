@@ -7,7 +7,19 @@
       <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">
           {{ nameRoutine }}
       </v-toolbar-title>
-      <v-btn  class="run-btn" @click="store.executeARoutine(routineId);" color="lightersecondary">
+      
+      <v-btn 
+    icon 
+    :disabled="moving || !isValidLevel" 
+    type="submit"
+    :disable-background-color="true"
+    style="color:rgb(19, 168, 71); background-color: transparent;"
+    flat
+>
+    <v-icon>{{check ? 'mdi-check-circle': 'mdi-check-circle-outline'}}</v-icon>
+</v-btn>
+
+      <v-btn  class="run-btn" @click="run();" @mouseenter="check=false" color="lightersecondary">
           RUN
         </v-btn>
     </v-toolbar>
@@ -121,6 +133,13 @@ const deleteRoutine = () => {
 };
 function clearVar(){
   tempRoutineName.value = "";
+}
+
+const check= ref(false);
+
+function run(){
+  store.executeARoutine(routineId.value);
+  check.value =!check.value;
 }
 
 </script>
