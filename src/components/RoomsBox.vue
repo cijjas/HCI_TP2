@@ -16,8 +16,11 @@ roomId: {
 }
 })
 // const props = defineProps(['roomName', 'devicesCount']);
-const roomId = ref(props.roomId);
-const nameRoom = ref(props.roomName);
+const roomId = computed( ()=>{
+  return props.roomId
+});
+const nameRoom = computed(()=> {
+  return props.roomName});
 const tempRoomName = ref('');
 const isDialogOpen = ref(false);
 const isDeleteDialogOpen = ref(false);
@@ -51,9 +54,9 @@ const openDeleteDialog = () => {
   isDeleteDialogOpen.value = !isDeleteDialogOpen.value;
 };
 
-const deleteRoom = () => {
+const deleteRoom = async () => {
   // BORRAR EL CUARTO
-  store.deleteARoom(roomId.value);
+  await store.deleteARoom(roomId.value);
   openDeleteDialog();
   openEditDialog();
 };
@@ -78,7 +81,7 @@ const submitName = () =>{
 
 <template>
 
-<v-card  class="toggle-card">  
+<v-card  class="toggle-card">
 
       <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
         <v-btn text color="transparent">
@@ -97,10 +100,10 @@ const submitName = () =>{
       </v-row>
       </v-card-text>
 
-      <v-card-actions class="actions-style" style="height:100px"> 
+      <v-card-actions class="actions-style" style="height:100px">
         <v-row class="justify-center ml-3"  >
           <v-btn color="primary"  @click="openEditDialog">Edit Room</v-btn>
-          <v-spacer></v-spacer> 
+          <v-spacer></v-spacer>
           <!-- acceso a la pagina de ese cuarto especifico, donde estaran sus devices -->
           <router-link :to="{ name: 'roomview', params: { roomName: nameRoom } }">
             <v-btn style="background-color: #1C4035;" color="lightersecondary" class="mr-5">View Devices</v-btn>
@@ -114,9 +117,9 @@ const submitName = () =>{
           <v-form v-model="isValidName">
 
             <v-card-text>
-              <v-text-field 
-              label="New Room Name" 
-              v-model="tempRoomName" 
+              <v-text-field
+              label="New Room Name"
+              v-model="tempRoomName"
               :placeholder="nameRoom"
               :rules="[rules.notRepeated, rules.minLength, rules.maxLength]"
               variant="outlined"
@@ -129,8 +132,8 @@ const submitName = () =>{
             <!-- <v-btn color="primary" @click="openDeleteDialog" variant="outlined">Delete Room</v-btn> -->
             <v-spacer></v-spacer>
             <v-btn color="primary" @click="openEditDialog">Cancel</v-btn>
-            <v-btn 
-              color="primary" 
+            <v-btn
+              color="primary"
               variant="flat"
               :disabled="!isValidName"
               @click="submitName"
