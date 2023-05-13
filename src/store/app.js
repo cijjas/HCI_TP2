@@ -202,12 +202,11 @@ export const useAppStore = defineStore('app', {
             console.log(`${type} should be one of these : blinds, faucet, refrigerator, oven, speaker `);
         }
 
-        console.log(deviceObj);
 
         // UPDATE DE DEVICE
         // remoto
         var result = await DevicesApi.add(deviceObj);
-        console.log(result);
+
         // local
         this.devices.push(result);
         // UPDATE DE ROOMS
@@ -246,7 +245,6 @@ export const useAppStore = defineStore('app', {
             component : this.getADevice(id).meta.component
           }
         }
-        console.log(deviceObj);
         var result = await DevicesApi.modify(deviceObj);
         // local
         this.devices.find( device => device.id == id).name = newname;
@@ -266,7 +264,6 @@ export const useAppStore = defineStore('app', {
     },
     async updateADeviceState(id, action, paramsArr ){
       // se ejecuta accion y se cambia el estado del device en la API
-      // console.log("id: " + )
       try{
         var result = await DevicesApi.executeAction(id, action, paramsArr)
         this.updateADeviceStateLocal(id, action, paramsArr);
@@ -291,7 +288,6 @@ export const useAppStore = defineStore('app', {
             deviceType = this.devices[i].type.name
             switch (deviceType) {
               case 'blinds':
-                console.log("BLINDS LOCALLY UPDATED");
                 switch(action){
                   case 'open':
                     this.devices[i].state.status = 'opened';
@@ -307,7 +303,6 @@ export const useAppStore = defineStore('app', {
                 }
                 break;
               case 'faucet':
-                console.log("FAUCET LOCALLY UPDATED");
                 switch(action){
                   case 'open':
                     this.devices[i].state.status = 'opened';
@@ -323,7 +318,6 @@ export const useAppStore = defineStore('app', {
                 }
                 break;
               case 'refrigerator':
-                console.log("REFRIGERATOR LOCALLY UPDATED");
                 switch(action){
                   case 'setFreezerTemperature':
                     this.devices[i].state.freezerTemperature = paramsArr[0];
@@ -339,7 +333,6 @@ export const useAppStore = defineStore('app', {
                 }
                 break;
               case 'oven':
-                console.log("OVEN LOCALLY UPDATED");
                 switch(action){
                   case 'turnOn':
                     this.devices[i].state.status = 'on';
@@ -361,7 +354,6 @@ export const useAppStore = defineStore('app', {
                 }
                 break;
               case 'speaker':
-                console.log("SPEAKER LOCALLY UPDATED");
                 /* Estas funcionalidades son freestyle */
                 switch(action){
                   case 'setVolume':
@@ -453,7 +445,6 @@ export const useAppStore = defineStore('app', {
       for ( let i = 0; i < this.rooms.length; i++ ){
         for ( let j = 0; j < this.rooms[i].meta.devices.length; j++){
           if ( this.rooms[i].meta.devices[j] == id ){
-            console.log(this.rooms[i].name);
             return this.rooms[i].name;
           }
         }
@@ -463,8 +454,6 @@ export const useAppStore = defineStore('app', {
     // no testeada
     getRoomDevices(idRoom){
       var arr = [];
-      console.log("getRoomDevices");
-      console.log(idRoom);
       var room = this.getARoom(idRoom);
       if ( room === undefined )
         return [];
@@ -475,13 +464,9 @@ export const useAppStore = defineStore('app', {
     },
     async deleteRoomDevices(idRoom) {
       var room = this.getARoom(idRoom);
-      console.log("room entero: " + room);
-      console.log("DEVICES ;");
-      console.log(room.meta.devices);
       if ( room === undefined )
         return;
       for ( let i = 0; i < room.meta.devices.length ; i++ ){
-        console.log("deleting device: " + room.meta.devices[i]);
         removeItemFromArray(this.devices, room.meta.devices[i] );
         await DevicesApi.remove(room.meta.devices[i]);
       }
@@ -536,7 +521,6 @@ export const useAppStore = defineStore('app', {
     // que ser un array de objetos
     async createARoutine(routineName, actionsArr){
       try {
-        console.log("Im here");
         var routineObj = {
           name : routineName,
           actions : actionsArr,
@@ -573,11 +557,9 @@ export const useAppStore = defineStore('app', {
       // local
 
 
-      console.log(this.routines);
     },
 
     async updateARoutine(id, newname, actions){
-      console.log("UPDATING A ROUTINE NOOOOOOT BY NAME")
       try {
         var routineObj = {
           id : id,
@@ -648,9 +630,7 @@ export const useAppStore = defineStore('app', {
     },
 
     async executeARoutine(routineId){
-      console.log("received routineId" + routineId);
-      var result = RoutinesApi.execute(routineId);
-      console.log("routine executed");
+      var result = await RoutinesApi.execute(routineId);
     },
 
     /* -------------------------------------------------- ACTIONS -------------------------------------------------- */
@@ -782,9 +762,7 @@ export const useAppStore = defineStore('app', {
         }
       },
       async getPlaylistAPI(deviceId){
-        console.log("FUI LLAMADO");
         this.playlist = await this.updateADeviceState(deviceId, "getPlaylist", []);
-        console.log(this.playlist)
         return this.playlist
       },
 

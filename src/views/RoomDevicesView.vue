@@ -20,7 +20,6 @@
     await store.getAllDevicesAPI();
     await store.getAllRoutinesAPI();
     setTimeout(() => {
-        console.log("TRANSITION")
         transition.value = true;
       }, 500);
     } catch (error) {

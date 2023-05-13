@@ -42,11 +42,6 @@ const router = createRouter({
       component: () => import('../views/ProfileView.vue')
     },
     {
-      path: '/todo',
-      name: 'todo',
-      component: () => import('../views/TodoView.vue')
-    },
-    {
       path: '/AddRoom',
       name: 'AddRoom',
       component: () => import('../views/AddRoomView.vue')
@@ -62,14 +57,14 @@ const router = createRouter({
       component: () => import('../views/AddDeviceView.vue')
     },
     {
+      path: '/Contact', 
+      name: 'ContactView',
+      component: () => import('../views/ContactView.vue')
+    },
+    {
       path: '/CreationView', // pruebas
       name: 'CreationView',
       component: () => import('../views/CreationView.vue')
-    },
-    {
-      path: '/test',
-      name: 'test',
-      component: () => import('../views/TestView.vue')
     },
     /* Este routing deberia ser dinamico o sea que segun cuantos rooms tiene deberia poder acceder a la view general de cada uno */
     {

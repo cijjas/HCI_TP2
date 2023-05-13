@@ -75,9 +75,6 @@ const submitRoutine = () => {
 }
 const submitAction = () => { 
   if(selectedDevice.value && selectedAction.value ){
-    console.log(selectedDevice.value)
-    console.log(selectedAction.value)
-    console.log(selectedParams.value)
     addAction();
     actionsArr.value = []
     paramsArr.value = []
@@ -153,7 +150,6 @@ function parseAction(action) {
 }
 
 function handleReset(){
-  console.log("reset")
   selectedDevice.value = ""
   selectedAction.value = ""
   selectedParams.value = []
@@ -163,7 +159,6 @@ function handleReset(){
   routineName.value=''
 }
 function change(){
-  console.log("change")
   selectedDevice.value = ''
   selectedAction.value = ""
   selectedParams.value = []

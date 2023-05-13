@@ -60,7 +60,6 @@
   const type= useField('type');
 
   const submit = handleSubmit(values => {
-    console.log(values);
     store.createADevice(values.room, values.name, values.type);
     handleReset();
     openCreateDialog();

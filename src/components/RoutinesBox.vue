@@ -102,9 +102,6 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
   await store.getAllRoomsAPI();
   await store.getAllDevicesAPI();
   await store.getAllRoutinesAPI();
-  console.log("this is the routine name" + props.routineName);
-  console.log("this is the actions count" + props.actionsCount);
-  console.log("this is the routine routineID" + props.routineId);
   routineId.value = props.routineId
   } catch (error) {
   console.error(error);

@@ -147,8 +147,6 @@ const durationTime = computed( ()=>{
 function calculateProgress(songProgress, songDuration) {
   if (!songProgress || !songDuration)
     return 0;
-  console.log("songProgress " + songProgress)
-  console.log("songDuration " + songDuration)
 
   const timeArray1 = songProgress.split(':').map(Number);
   const timeSeconds1 = timeArray1[0] * 60 + timeArray1[1];
@@ -194,8 +192,6 @@ async function playButton(){
         const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
         deviceState.value = deviceStateRT;
         deviceState.value.song = deviceStateRT.song
-        console.log(deviceStateRT)
-        console.log(progress.value)
         if (deviceStateRT.status !== 'playing') {
             clearInterval(intervalId);
         }s
@@ -210,8 +206,6 @@ async function playButton(){
         const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
         deviceState.value = deviceStateRT;
         deviceState.value.song = deviceStateRT.song
-        console.log(deviceState.value)
-        console.log(progress.value)
         if (deviceStateRT.status !== 'playing') {
           clearInterval(intervalId);
         }
@@ -223,7 +217,7 @@ async function playButton(){
       await store.updateADeviceState(props.componentId, "pause", []);
       break;
     default:
-      console.log("que ha pasao");
+      console.log("error");
       break;
   }
 
@@ -253,21 +247,6 @@ async function updateGenre(selection){
   await store.getPlaylistAPI(props.componentId);
 }
 
-// async function getPlaylist() {
-//   var res = await store.updateADeviceState(props.componentId, "getPlaylist", []);
-//   return res;
-// }
-
-/* const playlist = ref(store.updateADeviceState(props.componentId, "getPlaylist", []));
-console.log(playlist.value); */
-
-// const playlist = computed( ()=> {
-//   return store.updateADeviceState(props.componentId, "getPlaylist", []);
-// })
-
-// console.log(playlist[0].title);
-// console.log(playlist[1].title);
-// console.log(playlist[2].title);
 
 async function setVolume() {
   await store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value]);

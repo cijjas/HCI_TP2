@@ -22,11 +22,15 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
         }
         console.log("Updating pollings...");
       }, 1000); */
+      setTimeout(() => {
+        transition.value = true;
+      }, 500);
     } catch (error) {
       console.error(error);
     }
 });
 
+const transition = ref(false)
 import { defineAsyncComponent } from 'vue';
 
 function getComponent(file) {

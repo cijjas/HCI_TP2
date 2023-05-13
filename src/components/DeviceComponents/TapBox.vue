@@ -60,8 +60,6 @@
     return tempDeviceName.value.length >= 3 && tempDeviceName.value.length <= 15 && !deviceNameRepeated() && isAlphanumeric(tempDeviceName.value);
   }
   const handleButtonClick = () => {
-    console.log(`Dispensing ${amountValue.value} ${selectedUnit.value}...`);
-    
     resetValues();
   }
 
@@ -83,15 +81,12 @@
         return;
     }
     deviceName.value = tempDeviceName.value;
-    console.log("new name" + deviceName.value + " id: " + componentId.value);
-    // store.updateADevice(componentId.value, deviceName.value);
     isDialogOpen.value = false;
   };
   const deleteDevice = () => {
     store.deleteADeviceByName(deviceName.value);
     openDeleteDialog();
     cancelSettings();
-    router.push('/');
 };
 
 const openDeleteDialog = () => {
@@ -106,10 +101,6 @@ const isOn = computed( ()=>{
 })
 
 function changeStatus(){
-  console.log("Changing Status");
-  console.log("Previous Status " + status.value);
-  // moving.value = true;
-
   //faucet solo tiene 2 estados: opened o closed
   switch ( status.value ){
     case 'closed':
@@ -121,11 +112,8 @@ function changeStatus(){
       close();
       break;
     default :
-    console.log("CODE REDDDDDdd")
+    console.log("switch error")
   }
-
-  console.log("Proceding Status " + status.value);
-  // moving.value = false;
 }
 
 async function open() {
@@ -142,7 +130,6 @@ async function dispense() {
     return;
   }
   
-  console.log(`Dispensing ${amountValue.value} ${selectedUnit.value}...`);
   status.value = "opened";
   await store.updateADeviceState(props.componentId, "dispense", [amountValue.value, selectedUnit.value]);        // le avisa la api que arranque a abrir, local storage "opened"
 
@@ -150,7 +137,6 @@ async function dispense() {
   const intervalId = setInterval(async () => {
     const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
     deviceState.value = deviceStateRT;
-    console.log(deviceStateRT);
 
     //cuando se dispensó todo, el state es 'closed' -> termino el polling
     if (deviceStateRT.status == 'closed') {

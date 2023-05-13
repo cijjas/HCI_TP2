@@ -19,9 +19,7 @@ const isCreateDialogOpen = ref(false);
 const tempName = ref("");
 
 const openCreateDialog = () => {
-    console.log(selectedDeviceName.value);
   isCreateDialogOpen.value = true;
-  console.log(selectedDeviceName.value);
   setTimeout(() => {
     isCreateDialogOpen.value = false;
   }, 1250);

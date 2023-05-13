@@ -76,20 +76,15 @@
         return;
     }
     deviceName.value = tempDeviceName.value;
-    // fridgeMode.value = tempFridgeMode.value;
     fridgeTemperature.value = tempFridgeTemperature.value;
     freezerTemperature.value = tempFreezerTemperature.value;
     location.value = tempLocation.value;
-    console.log("about to update temp: ");
-    console.log(fridgeMode.value);
-    // store.updateADeviceState(componentId.value, "setMode", ['default']);
     changeState();
     closeFridgeDialog();
   };
   const cancelSettings = () => {
     fridgeMode.value = auxMode.value;
     tempDeviceName.value = deviceName.value;
-    // tempFridgeMode.value = fridgeMode.value;
     tempFridgeTemperature.value = fridgeTemperature.value;
     tempFreezerTemperature.value = freezerTemperature.value;
     tempLocation.value = location.value;
@@ -105,7 +100,6 @@
     store.deleteADeviceByName(deviceName.value);
     openDeleteDialog();
     cancelSettings();
-    router.push('/');
 };
 
 const openDeleteDialog = () => {
@@ -122,8 +116,6 @@ const deviceState = ref(store.getDeviceState(props.componentId));           // e
 // const fridgeMode = ref(store.getDeviceState(props.componentId).mode);
 
 async function changeState() {
-  console.log("Changing state");
-  console.log("incoming state: freeztemp: " + freezerTemperature.value + " temp: " + fridgeTemperature.value + " mode: |" + fridgeMode._value+"|");
 
   await store.updateADeviceState(componentId.value, "setFreezerTemperature", [freezerTemperature.value]);
   
@@ -132,24 +124,16 @@ async function changeState() {
   //no cambian con el tiempo, es un valor como on/off -> puedo hacer el chequeo directamente aca
   switch(fridgeMode.value) {
     case 'default': 
-      console.log('entre a default'); 
       await store.updateADeviceState(componentId.value, "setMode", ['default']); 
       break;
     case 'party': 
-      console.log('entre a party'); 
       await store.updateADeviceState(componentId.value, "setMode", ['party']); 
       break;
     case 'vacation': 
-      console.log('entre a vacation'); 
       await store.updateADeviceState(componentId.value, "setMode", ['vacation']); 
       break;
     default: console.log("fridge error switch var: " + fridgeMode.value);
   }
-  // await store.updateADeviceState(componentId.value, "setMode", [fridgeMode._value]);
-  console.log("auxmode: " + auxMode.value + "  selectedfridgeMode: " + fridgeMode.value)  
-
-  console.log("se mando este value de mode: " + fridgeMode.value);
-  
   
 }
 

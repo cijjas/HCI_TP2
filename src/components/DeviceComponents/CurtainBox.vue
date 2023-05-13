@@ -89,7 +89,6 @@ const openDeleteDialog = () => {
 
 const isValidLevel = ref(false);
 const submitLevel = ()=>{
-  console.log("submitting level");
   setLevel();
 }
 /* --------------------------------------------- */
@@ -105,38 +104,31 @@ const isOn = computed( ()=>{
 })
 
 function changeStatus(){
-  console.log("Changing Status");
-  console.log("Previous Status " + status.value);
 
   switch ( status.value ){
     case 'closed':
-      console.log("executing open");
       status.value = "opening";
       open();
       break;
     case 'opened':
-    console.log("executing close");
 
       status.value = "closing";
       close();
       break;
     case 'closing':
-    console.log("executing open");
 
       status.value = "opening";
       open();
       break;
     case 'opening':
-    console.log("executing close");
 
       status.value = "closing";
       close();
       break;
     default :
-    console.log("CODE REDDDDDdd")
+    console.log("error curtain")
   }
 
-  console.log("Proceding Status " + status.value );
 
 }
 
@@ -147,7 +139,6 @@ async function open() {
     moving.value = true;
     const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
     deviceState.value = deviceStateRT;
-    console.log(deviceStateRT);
     if (deviceStateRT.status !== 'opening') {
       clearInterval(intervalId);
       if ( status.value !== 'closing'){
@@ -164,7 +155,6 @@ async function close() {
     moving.value = true;
     const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
     deviceState.value = deviceStateRT
-    console.log(deviceStateRT);
     if (deviceStateRT.status !== 'closing') {
       clearInterval(intervalId);
       if ( status.value !== 'opening'){
@@ -179,14 +169,11 @@ async function setLevel(){
   await store.updateADeviceState(props.componentId, "setLevel", [selectedLevel.value]);
   var deviceStateRT = await store.getDeviceStateAPI(props.componentId);
   deviceState.value = deviceStateRT;
-  console.log("LALAL");
-  console.log(deviceState.value);
 }
 const clicked=ref(false);
 
 
 const computedBackgroundColor = computed(() => {
-    console.log(deviceState.value.currentLevel);
     const color2 = [140, 120, 58]; // RGB values for #8C783A
     const color1 = [244, 207, 109]; // RGB values for #EECC66
     const ratio = deviceState.value.currentLevel / 100 || 0;

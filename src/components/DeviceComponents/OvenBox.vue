@@ -136,7 +136,6 @@
 
   async function assign() {
     temperatureValue.value = tempTemperatureValue.value;
-    console.log("outer temp: " + temperatureValue.value);
     await store.updateADeviceState(componentId.value, "setTemperature", [tempTemperatureValue.value]);
   };
 
@@ -166,37 +165,17 @@ const openDeleteDialog = () => {
 
 
 async function changeState() {
-  console.log("Changing state");
-  console.log("new state: state: " + state.value + " temp: " + temperatureValue.value + " heat: " + heatMode.value+ " grill: " + grillMode.value + "convec: " + convectionMode.value);
-
   //cuando me cambian datos dentro del popup y apretan save, se prende el horno
   await turnOn();
 
-  console.log("setting grill: " + grillMode.value);
   await store.updateADeviceState(componentId.value, "setGrill", [tempGrillMode.value]);
 
-  console.log("setting grill: " + heatMode.value);
   await store.updateADeviceState(componentId.value, "setHeat", [tempheatMode.value]);
 
-  console.log("setting grill: " + convectionMode.value);
   await store.updateADeviceState(componentId.value, "setConvection", [tempConvectionMode.value]);
 
-  console.log("setting grill: " + temperatureValue.value);
   await store.updateADeviceState(componentId.value, "setTemperature", [tempTemperatureValue.value]);
 
-
-  // console.log("setting grill: " + grillMode.value);
-  // await store.updateADeviceState(componentId.value, "setGrill", [grillMode.value]);
-
-  // console.log("setting grill: " + heatMode.value);
-  // await store.updateADeviceState(componentId.value, "setHeat", [heatMode.value]);
-
-  // console.log("setting grill: " + convectionMode.value);
-  // await store.updateADeviceState(componentId.value, "setConvection", [convectionMode.value]);
-
-  // console.log("setting grill: " + temperatureValue.value);
-  // await store.updateADeviceState(componentId.value, "setTemperature", [temperatureValue.value]);
-  
 }
 
 async function turnOn() {
