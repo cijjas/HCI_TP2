@@ -538,7 +538,13 @@ export const useAppStore = defineStore('app', {
           meta : {}
         }
         var result = await RoutinesApi.add(routineObj);
-        this.routines.push(routineObj);
+        var routineObj2 = {
+          id : result.id,
+          name : routineName,
+          actions : actionsArr,
+          meta : {}
+        }
+        this.routines.push(routineObj2);
         return result;
       } catch (error) {
         console.error(error);
@@ -638,6 +644,7 @@ export const useAppStore = defineStore('app', {
     },
 
     async executeARoutine(routineId){
+      console.log("received routineId" + routineId);
       var result = RoutinesApi.execute(routineId);
       console.log("routine executed");
     },

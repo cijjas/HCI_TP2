@@ -17,7 +17,7 @@
     } catch (error) {
     console.error(error);
     }
-    }); 
+    });
 </script>
 
 <template>
@@ -28,16 +28,16 @@
             <v-card-title class="text-h6 text-md-h5 text-lg-h4 font-weight-bold text-secondary">Routines</v-card-title>
             <v-divider color="gris"></v-divider>
           </v-row>
-        
+
           <v-row>
             <v-col md="6" class="mt-5">
               <AddRoutineCard></AddRoutineCard>
             </v-col>
-  
-            
+
+
             <v-col md="6">
               <v-row>
-                <template v-for="(routine, index) in store.getAllRoutines()">
+                <template v-for="(routine, index) in store.routines">
                   <template v-if="index < 4">
                     <v-col xs="12" sm="12" md="6" lg="6" class="mt-5">
                         <RoutinesBox :routineName="routine.name" :routineId="routine.id" :actionsCount="routine.actions.length"></RoutinesBox>
@@ -46,7 +46,7 @@
                 </template>
               </v-row>
             </v-col>
-  
+
             <v-col>
               <v-row>
                 <template v-for="(routine, index) in store.getAllRoutines()">
@@ -58,7 +58,7 @@
                 </template>
               </v-row>
             </v-col>
-  
+
           </v-row>
         </v-card>
       </div>

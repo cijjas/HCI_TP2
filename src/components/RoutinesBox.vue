@@ -1,6 +1,8 @@
+
+
+
 <template>
   <v-card :class="bg-on" class="toggle-card"  @click="toggleCard" >
-  
     <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
       <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">
           {{ nameRoutine }}
@@ -26,7 +28,7 @@
           </router-link>
         </v-row>
       </v-card-actions>
-      
+
     </v-card-text>
 
     <v-dialog v-model="isDialogOpen" width="1024" persistent>
@@ -60,18 +62,24 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue';
+import { ref, defineProps, computed } from 'vue';
 import { onMounted } from '@vue/runtime-core';
 import { useAppStore } from '@/store/app';
 const store = useAppStore();
 
 const props = defineProps(['routineName', 'routineId', 'actionsCount']);
 
-const routineId = ref(props.routineId);
-const actionsCount = ref(props.actionCount);
+const routineId = computed(()=> {
+  return props.routineId
+});
+const actionsCount = computed( () => {
+  return props.actionCount
+});
 const actions = store.getARoutine(routineId.value).actions;
 const tempRoutineName = ref('');
-const nameRoutine = ref(props.routineName);
+const nameRoutine = computed(()=> {
+  return props.routineName
+});;
 const isDialogOpen = ref(false);
 const isDeleteDialogOpen = ref(false);
 onMounted(async () => {             // cuando se monta la pagina pido los datos
@@ -80,10 +88,14 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
   await store.getAllRoomsAPI();
   await store.getAllDevicesAPI();
   await store.getAllRoutinesAPI();
+  console.log("this is the routine name" + props.routineName);
+  console.log("this is the actions count" + props.actionsCount);
+  console.log("this is the routine routineID" + props.routineId);
+  routineId.value = props.routineId
   } catch (error) {
   console.error(error);
   }
-  }); 
+  });
 
 const saveName = () => {
   if (tempRoutineName.value !== '') {

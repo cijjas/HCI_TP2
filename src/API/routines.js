@@ -21,6 +21,8 @@ class RoutinesApi{
         return Api.get(RoutinesApi.getUrl());
     }
     static execute(id){
+        console.log(id);
+        console.log(RoutinesApi.getUrl(id+'/execute'));
         return Api.put(RoutinesApi.getUrl(id+'/execute'));
     }
 }
