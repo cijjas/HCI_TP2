@@ -19,10 +19,15 @@
     await store.getAllRoomsAPI();
     await store.getAllDevicesAPI();
     await store.getAllRoutinesAPI();
+    setTimeout(() => {
+        console.log("TRANSITION")
+        transition.value = true;
+      }, 500);
     } catch (error) {
     console.error(error);
     }
     });
+    const transition = ref(false);
 
     const route = useRoute();
     const roomName = route.params.roomName;
@@ -56,8 +61,10 @@
               <template v-for="(device, index) in roomDevices" :key="device.id">
                 <template v-if="index < 6">
                   <v-col class="mt-5" xs="12" sm="12" md="6" lg="4">
-                      <component :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id" :componentRoom="store.getDevicesRoom(device.id)"></component>
-                  </v-col>
+                    <v-fade-transition>
+                      <component v-if="transition" :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id" :componentRoom="store.getDevicesRoom(device.id)"></component>
+                    </v-fade-transition>
+                    </v-col>
                 </template>
               </template>
             </v-row>
@@ -68,7 +75,9 @@
               <template v-for="(device, index) in roomDevices" :key="device.id">
                 <template v-if="index >= 6">
                   <v-col class="mt-5" xs="12" sm="6" md="4" lg="3">
-                      <component   :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id" :componentRoom="store.getDevicesRoom(device.id)"></component>
+                    <v-fade-transition>
+                      <component v-if="transition"  :is="getComponent(device.meta.component.__file)" :componentName="device.name" :componentId="device.id" :componentRoom="store.getDevicesRoom(device.id)"></component>
+                    </v-fade-transition>
                   </v-col>
                 </template>
               </template>

@@ -210,7 +210,6 @@ async function playButton(){
         const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
         deviceState.value = deviceStateRT;
         deviceState.value.song = deviceStateRT.song
-
         console.log(deviceState.value)
         console.log(progress.value)
         if (deviceStateRT.status !== 'playing') {
@@ -232,7 +231,8 @@ async function playButton(){
 
 async function stop(){
   status.value = "stopped"
-  await store.updateADeviceState(props.componentId, "stop", []);
+  const deviceStateRT = await store.updateADeviceState(props.componentId, "stop", []);
+  deviceState.value.song = deviceStateRT.song
 }
 
 
@@ -365,7 +365,7 @@ async function increaseVolume() {
             </div>
           </v-col>
         </v-row>
-        
+
         <v-row justify="center" style="margin-top: -20px;">
           <v-col cols="3">
             <v-btn icon @click="decreaseVolume"  style="background-color: #0000000b; color:#f1edcd; margin-left: 30px; margin-top: 10px;"  flat>
@@ -378,7 +378,7 @@ async function increaseVolume() {
             </v-row>
           </v-col>
           <v-col cols="6">
-            
+
             <!-- row de play -->
             <v-row  justify="center">
               <v-col class="text-center" cols="12">
@@ -393,9 +393,9 @@ async function increaseVolume() {
                 </v-btn>
               </v-col>
             </v-row>
-  
+
             <!-- mostrador de tiempo de cancion -->
-  
+
             <v-row >
               <v-col cols="2">
               </v-col>
@@ -493,17 +493,17 @@ async function increaseVolume() {
              <v-row>
                <v-col cols="1" class="mt-3">
                 <span>
-                  {{ index+1 }}  
-                </span>  
+                  {{ index+1 }}
+                </span>
               </v-col>
               <v-col cols="11" class="mt-7">
-                <v-row></v-row> 
+                <v-row></v-row>
                 <span>
-                     {{ song.title }}  
+                     {{ song.title }}
                 </span>
                 <v-list-item-subtitle> {{ song.artist  }}</v-list-item-subtitle>
               </v-col>
-             </v-row> 
+             </v-row>
 
             <v-divider class="mt-2" v-if="index!=4"></v-divider>
             </v-list-item>
