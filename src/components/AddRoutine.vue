@@ -106,19 +106,17 @@ function updateRoutineId( selection ){
                         <v-card-text class="text-h4 font-weight-bold text-uppercase ">Routines </v-card-text>
                     </v-card-title>
                     <v-card class="ml-10" v-if="store.routines.length !=0" flat>
-                    <v-list rounded  bg-color="secondary" >
+                    <v-list rounded  bg-color="secondary">
                         <v-list-item  v-for="routine in store.routines" >
                             {{ routine.name }}
                             <v-divider></v-divider>
                         </v-list-item>
                     </v-list>
                     </v-card>
-                        <v-card-text>{{ store.routines }}</v-card-text>
                 </v-card>
 
                 <!-- CREATE A ROUTINES -->
                 <v-card color ="gris">
-                <v-card-title >Routines Testing</v-card-title>
                 <v-card-title>Routine Name</v-card-title>
                 <v-text-field label="Enter a Routine Name" v-model="routineName"></v-text-field>
 
@@ -127,7 +125,7 @@ function updateRoutineId( selection ){
                         <v-card-text class="text-h4 font-weight-bold ">Actions: </v-card-text>
                     </v-card-title>
                     <v-card class="ml-10" v-if="routineActions.length !=0" flat>
-                    <v-list rounded  bg-color="secondary" >
+                    <v-list rounded  bg-color="secondary" class="mb-5">
                         <v-list-item  v-for="routineAction in routineActions" >
                             {{ routineAction.actionName }} {{ routineAction.params }}
                             <v-divider></v-divider>
@@ -199,7 +197,7 @@ function updateRoutineId( selection ){
                     ></v-select>
                     <v-text-field class="pa-8" label="New Name" v-model="newRoutineName"></v-text-field>
                     <v-btn elevation="0" color="secondary" class="ml-8 mb-8"
-                    @click="() => { store.updateARoutineName(oldRoutineId, newRoutineName); clearVar(); }" > CONFIRM ESTE BOTON TE JURO</v-btn>
+                    @click="() => { store.updateARoutineName(oldRoutineId, newRoutineName); clearVar(); }" > CONFIRM </v-btn>
                 </v-card>
 
                 <!-- DELETE A ROUTINES -->
