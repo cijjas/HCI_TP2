@@ -179,7 +179,7 @@ function parseAction(action) {
               @update:modelValue = "updateActions"
               :rules="[rules.required]"
               :items="store.getDevicesNames"
-              label="Device"
+              label="Select A Device to Perform an Action"
               variant="outlined"
               class="pl-8  pr-8"
               base-color="primary"
@@ -188,7 +188,7 @@ function parseAction(action) {
 
             <v-select v-if="selectedDevice"
                 @update:modelValue = "updateParams($event, index)"
-                label="Select An Action"
+                label="Select the Action to Perform"
                 :rules="[rules.required]"
                 :items="actionsArr"
                 variant="outlined"
@@ -291,7 +291,10 @@ function parseAction(action) {
             type="submit"
             class="small-button-add mr-12"
             color="white"
-            >Create Routine</v-btn>
+            >
+            <v-icon>mdi-plus</v-icon>  
+            Add Routine
+          </v-btn>
         </v-card-actions>
       </v-form>
 

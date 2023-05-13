@@ -27,7 +27,7 @@
   const disabledFields = ref(false);
 
   const deviceName = ref(props.componentName);
-  const amountValue = ref(0);
+  const amountValue = ref(1);
   const selectedUnit = ref(null);
   const unit = ref(['litres', 'gallons', 'mililitres', 'ounces']);
   const dispensing = ref(false);
@@ -40,8 +40,10 @@
     maxLength: value => value.length <= 15 || 'Max 15 characters',
     required : value => !!value || 'required',
     unique : value => !store.getADeviceByName(value) || 'Name already in use.',
-    alphanumeric : value => isAlphanumeric(value) || 'Only alphanumeric characters'
+    alphanumeric : value => isAlphanumeric(value) || 'Only alphanumeric characters',
+    validAmount : value => value >= 1 && value <= 100 || 'Min 1 max 100'
   };
+
   const isAlphanumeric = (value) => {
     return /^[a-zA-Z0-9\s]+$/.test(value);
   };
@@ -132,12 +134,12 @@ async function close() {
 }
 
 async function dispense() {
-  console.log(`Dispensing ${amountValue.value} ${selectedUnit.value}...`);
-  if(amountValue.value < 1 || amountValue.value > 100 || selectedUnit.value == null) {
+  if(amountValue.value < 1 || amountValue.value > 100 || selectedUnit.value == null ) {
     //mal la cantidad
     return;
   }
   
+  console.log(`Dispensing ${amountValue.value} ${selectedUnit.value}...`);
   status.value = "opened";
   await store.updateADeviceState(props.componentId, "dispense", [amountValue.value, selectedUnit.value]);        // le avisa la api que arranque a abrir, local storage "opened"
 
@@ -165,7 +167,7 @@ async function dispense() {
 
       <v-toolbar :rounded="true" class="rounded-toolbar" @click:outside="cancelSettings">
         <v-btn @click="openTapDialog" text color="transparent">
-          <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">{{deviceName}}</v-toolbar-title>
+          <v-toolbar-title class="text--white font-weight-bold text-h4 ">{{deviceName}}</v-toolbar-title>
           <v-tooltip
                 activator="parent"
                 location="right"
@@ -202,6 +204,7 @@ async function dispense() {
                     :min="0"
                     :max="100"  
                     class="rounded-input green-text" 
+                    :rules="[rules.validAmount, rules.required]"
                     bg-color='transparent' flat/>
             </v-col>
             <v-col >
@@ -211,7 +214,7 @@ async function dispense() {
                   :items="unit" 
                   label="Unit" 
                   variant="solo" 
-                  class="rounded-select green-text"   
+                  class="rounded-select green-text"  
                   bg-color='transparent' flat />
             </v-col>
             <v-col >
