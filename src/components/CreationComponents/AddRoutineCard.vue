@@ -5,7 +5,6 @@ import { ref, computed } from 'vue';
 
 const store = useAppStore();
 const isCreateDialogOpen = ref(false);
-const actionCounter = ref(0);
 
 onMounted(async () => {
   try {
@@ -43,15 +42,14 @@ const routineActions = ref([]);
 const rules = {
     required: value => !!value || 'Required.',
     min: (value) => value.length >= 1 || 'Min 1 characters',
-    max: (value) => value.length <= 20 || 'Max 20 characters',
+    max: (value) => value.length <= 15 || 'Max 15 characters',
     notRepeated: (value) => !store.getRoutinesNames.includes(value) || 'Routine already exists',
     isNumber: (value) => !isNaN(value) || 'Must be a number',
     isAcceptableNumber: (value, minValue, maxValue) => ((!isNaN(value) && value >= minValue && value <= maxValue)) || `Must be a number between ${minValue} and ${maxValue}`,
     alphanumeric : value => /^[a-zA-Z0-9\s]+$/.test(value) || 'Only alphanumeric characters'
 };
-
-
 function updateActions(selection){
+  change();
     selectedDevice.value = selection;
     deviceObj2.value = store.getADeviceByName(selectedDevice.value)
     actionsArr.value = store.getTypeActionsNames(deviceObj2.value.type.name)
@@ -92,6 +90,9 @@ const submitAction = () => {
 const isFormValid = ref(false);
 
 const submitButtonDisabled = computed(() => {
+  if(!selectedDevice.value){
+    return true;
+  }
   return !isFormValid.value;
 });
 function parseParams(params) {
@@ -151,6 +152,33 @@ function parseAction(action) {
   }
 }
 
+function handleReset(){
+  console.log("reset")
+  selectedDevice.value = ""
+  selectedAction.value = ""
+  selectedParams.value = []
+  actionsArr.value = []
+  paramsArr.value = []
+  routineActions.value = []
+  routineName.value=''
+}
+function change(){
+  console.log("change")
+  selectedDevice.value = ''
+  selectedAction.value = ""
+  selectedParams.value = []
+  paramsArr.value = []
+}
+
+const isRoutineValid = ref(false);
+const submitRoutineDisabled = computed(() => {
+  if(store.getRoutinesNames.includes(routineName.value)){
+   return true; 
+  }
+  return !isRoutineValid.value;
+});
+
+
 </script>
 
 
@@ -161,10 +189,22 @@ function parseAction(action) {
             <v-row >
                 <v-toolbar-title class="font-weight-bold text-h4 title-style mt-16 ml-8">Build Routine</v-toolbar-title>
 
-                <v-toolbar-title class="font-weight-bold text-h6 title-style mt-16 ">
+                <v-toolbar-title class="font-weight-bold text-h6 title-style mt-16 ml-16">
                   Actions
                   <v-icon class="ml-2">mdi-menu-down</v-icon>
                 </v-toolbar-title>
+                <v-btn icon class="mt-16 mr-10">
+                  <v-icon color="primary">mdi-information-outline</v-icon>
+                  <v-tooltip
+                    activator="parent"
+                    location="right"
+                  > To create a routine, there has to be at <br>
+                    least one action added to the routine. <br>
+                    You can add actions by selecting a <br> 
+                    device and an action from the dropdowns <br>
+                    below. 
+                </v-tooltip>
+                </v-btn>
             </v-row>
         </v-col>
       </v-toolbar>
@@ -172,13 +212,14 @@ function parseAction(action) {
 
       <v-row>
         <v-col cols="6">
-          <v-form @submit.prevent="submitAction" v-model="isFormValid">
+          <v-form  @submit.prevent="submitAction" v-model="isFormValid">
 
             <v-select
-
+              validate-on='blur'
+              v-model="selectedDevice"
               @update:modelValue = "updateActions"
-              :rules="[rules.required]"
               :items="store.getDevicesNames"
+              :rules="[rules.required]"
               label="Select A Device to Perform an Action"
               variant="outlined"
               class="pl-8  pr-8"
@@ -186,7 +227,9 @@ function parseAction(action) {
               color="verdatim"
             ></v-select>
 
-            <v-select v-if="selectedDevice"
+            <v-select v-if="selectedDevice != ''"
+            validate-on='input'
+                v-model="selectedAction"
                 @update:modelValue = "updateParams($event, index)"
                 label="Select the Action to Perform"
                 :rules="[rules.required]"
@@ -201,6 +244,7 @@ function parseAction(action) {
               <v-card-text v-for="(param, index) in paramsArr" >
 
                     <v-select v-if="param.type == 'string' && param.name != 'roomId'"
+                      v-model="selectedParams[index]"
                       @update:modelValue="updateParamValue($event, index)"
                       label="Select An Option"
                       :rules="[rules.required]"
@@ -271,30 +315,34 @@ function parseAction(action) {
 
       </v-row>
 
-      <v-form @submit.prevent="submitRoutine">
-        <v-card-actions class="actions-style" style="height: 100px;  "  >
+      <v-form @submit.prevent="submitRoutine" v-model="isRoutineValid">
+        <v-card-actions class="actions-style" style="height: 120px;  "  >
             <v-btn color="white" @click="handleReset" class="ml-8">Clear</v-btn>
-
+            
             <v-spacer></v-spacer>
-            <v-text-field
-              :rules="[rules.required, rules.notRepeated, rules.alphanumeric]"
-              v-model="routineName"
-              label="Routine's Name"
-              variant="outlined"
-              class="pl-8 mt-6 pr-8"
-              base-color="g1"
-              color="g1"
-              clearable="true"
-              clear-icon="mdi-close-circle-outline"
-              />
-            <v-btn
-            type="submit"
-            class="small-button-add mr-12"
-            color="white"
-            >
-            <v-icon>mdi-plus</v-icon>  
-            Add Routine
-          </v-btn>
+                <v-text-field
+                  validate-on="input"
+                  placeholder="Routine's Name"
+                  :rules="[rules.required, rules.notRepeated, rules.alphanumeric, rules.min, rules.max]"
+                  v-model="routineName"
+                  label="Routine's Name"
+                  class="pl-8 mt-6 pr-8 form-input"
+                  base-color="primary"
+                  color="primary"
+                  bg-color="g1"
+                  clearable="true"
+                  clear-icon="mdi-close-circle-outline"/>
+                
+                <v-btn
+                  type="submit"
+                  class="small-button-add mr-12"
+                  color="white"
+                  :disabled="submitRoutineDisabled">
+                  <v-icon>mdi-plus</v-icon>  
+                  Add Routine
+                  
+                </v-btn>
+                
         </v-card-actions>
       </v-form>
 
@@ -313,7 +361,8 @@ function parseAction(action) {
 
 <style scoped>
 
-  .bg-color-1 {
+
+.bg-color-1 {
     background-color: #DBD0AF; /* light gray */
     margin-top: -10px;
     margin-bottom: -10px;
