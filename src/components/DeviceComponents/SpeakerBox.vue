@@ -49,7 +49,6 @@
     store.deleteADeviceByName(deviceName.value);
     openDeleteDialog();
     cancelSettings();
-    router.push('/');
 };
 const deviceNameRepeated = () =>{
     if(tempDeviceName.value == deviceName.value){
@@ -449,6 +448,7 @@ async function increaseVolume() {
             </v-row>
           </v-card-text>
           <v-card-actions class="actions-style">
+            <v-btn class="delete-button" color="white" @click="openDeleteDialog();"> Delete Device </v-btn>
             <v-spacer></v-spacer>
             <v-btn color="common2" text @click="cancelSettings">Cancel</v-btn>
             <v-btn
@@ -463,6 +463,17 @@ async function increaseVolume() {
         </v-form>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="isDeleteDialogOpen" width="1024" persistent>
+            <v-card class="delete-popup">
+                <v-card-title class="headline">Are you sure you want to delete {{ deviceName }}?</v-card-title>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="routinedarkred" variant="plain" @click="deleteDevice();">Delete</v-btn>
+                    <v-btn color="primary" @click="openDeleteDialog">Cancel</v-btn>
+              </v-card-actions>
+            </v-card>
+        </v-dialog>
 
 
     <!-- dialog de playlist -->
@@ -518,6 +529,12 @@ async function increaseVolume() {
 }
 
 
+.delete-popup {
+  padding: 30px;
+  border-radius: 15px !important;
+  background-color: #f4e8c6ae;
+  backdrop-filter: blur(8px);
+}
 
 .toggle-card {
   cursor: pointer;
@@ -565,7 +582,7 @@ async function increaseVolume() {
     background-color:#1ed760;
   }
 .delete-button {
-  width: 200px;
+  width: 150px;
   height: 40px;
   border-radius: 10px;
   background-color: #d82602;
