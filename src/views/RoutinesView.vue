@@ -14,10 +14,16 @@
         await store.getAllRoomsAPI();
         await store.getAllDevicesAPI();
         await store.getAllRoutinesAPI();
+        setTimeout(() => {
+        console.log("TRANSITION")
+        transition.value = true;
+      }, 500);
     } catch (error) {
     console.error(error);
     }
     });
+const transition = ref(false);
+
 </script>
 
 <template>
@@ -40,7 +46,9 @@
                 <template v-for="(routine, index) in store.routines">
                   <template v-if="index < 4">
                     <v-col xs="12" sm="12" md="6" lg="6" class="mt-5">
-                        <RoutinesBox :routineName="routine.name" :routineId="routine.id" :actionsCount="routine.actions.length"></RoutinesBox>
+                      <v-fade-transition>
+                        <RoutinesBox v-if="transition" :routineName="routine.name" :routineId="routine.id" :actionsCount="routine.actions.length"></RoutinesBox>
+                      </v-fade-transition>
                     </v-col>
                   </template>
                 </template>
@@ -52,7 +60,9 @@
                 <template v-for="(routine, index) in store.getAllRoutines()">
                   <template v-if="index >= 4">
                     <v-col xs="12" sm="6" md="4" lg="3" class="mt-5">
-                        <RoutinesBox :routineName="routine.name" :routineId="routine.id" :actionsCount="routine.actions.length"></RoutinesBox>
+                      <v-fade-transition>
+                        <RoutinesBox v-if="transition" :routineName="routine.name" :routineId="routine.id" :actionsCount="routine.actions.length"></RoutinesBox>
+                      </v-fade-transition>
                     </v-col>
                   </template>
                 </template>

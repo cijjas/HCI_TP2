@@ -30,11 +30,6 @@ const router = createRouter({
       path: '/routines/:routineName',
       name: 'routineview',
       component: () => import('../views/RoutineActionsView.vue')
-    },    
-    {
-      path: '/scenes',
-      name: 'scenes',
-      component: () => import('../views/ScenesView.vue')
     },
     {
       path: '/Settings',

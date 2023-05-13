@@ -114,6 +114,13 @@ function executioner(){
 }
 
 
+/* ----------------------- shower-------------------- */
+
+const expand = ref(false)
+function shower(){
+    show.value = true
+}
+
 </script>
 
 <template>
@@ -253,6 +260,25 @@ function executioner(){
                 <v-btn @click="store.createARoutine(routineName, routineActions)" elevation="0" color="secondary" class="ml-8 mb-8">Create Routine</v-btn> <!-- Crea la rutina con el nombre y el array de acciones que se construyo -->
             </v-card>
         </v-card>
+
+        <v-col class="shrink">
+      <v-btn
+        class="ma-2"
+        color="primary"
+        @click="expand = !expand"
+      >
+        Expand Transition
+      </v-btn>
+
+      <v-expand-transition>
+        <v-card
+          v-show="expand"
+          height="100"
+          width="100"
+          class="mx-auto bg-secondary"
+        ></v-card>
+      </v-expand-transition>
+    </v-col>
 
     </main>
 </template>
