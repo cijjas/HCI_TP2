@@ -134,8 +134,10 @@
     changeState();
   };
 
-  const assign = () => {
+  async function assign() {
     temperatureValue.value = tempTemperatureValue.value;
+    console.log("outer temp: " + temperatureValue.value);
+    await store.updateADeviceState(componentId.value, "setTemperature", [tempTemperatureValue.value]);
   };
 
   const toggleCard = () => {
@@ -171,16 +173,29 @@ async function changeState() {
   await turnOn();
 
   console.log("setting grill: " + grillMode.value);
-  await store.updateADeviceState(componentId.value, "setGrill", [grillMode.value]);
+  await store.updateADeviceState(componentId.value, "setGrill", [tempGrillMode.value]);
 
   console.log("setting grill: " + heatMode.value);
-  await store.updateADeviceState(componentId.value, "setHeat", [heatMode.value]);
+  await store.updateADeviceState(componentId.value, "setHeat", [tempheatMode.value]);
 
   console.log("setting grill: " + convectionMode.value);
-  await store.updateADeviceState(componentId.value, "setConvection", [convectionMode.value]);
+  await store.updateADeviceState(componentId.value, "setConvection", [tempConvectionMode.value]);
 
   console.log("setting grill: " + temperatureValue.value);
-  await store.updateADeviceState(componentId.value, "setTemperature", [temperatureValue.value]);
+  await store.updateADeviceState(componentId.value, "setTemperature", [tempTemperatureValue.value]);
+
+
+  // console.log("setting grill: " + grillMode.value);
+  // await store.updateADeviceState(componentId.value, "setGrill", [grillMode.value]);
+
+  // console.log("setting grill: " + heatMode.value);
+  // await store.updateADeviceState(componentId.value, "setHeat", [heatMode.value]);
+
+  // console.log("setting grill: " + convectionMode.value);
+  // await store.updateADeviceState(componentId.value, "setConvection", [convectionMode.value]);
+
+  // console.log("setting grill: " + temperatureValue.value);
+  // await store.updateADeviceState(componentId.value, "setTemperature", [temperatureValue.value]);
   
 }
 
