@@ -5,13 +5,13 @@
   import { onMounted } from '@vue/runtime-core';
 
   const store = useAppStore();
-  // onMounted(async () => {             // cuando se monta la pagina pido los datos
-  //   try {
-  //     await store.getPlaylistAPI(props.componentId);
-  //   } catch (error) {
-  //   console.error(error);
-  //   }
-  //   });
+   onMounted(async () => {             // cuando se monta la pagina pido los datos
+    try {
+      await store.getPlaylistAPI(props.componentId);
+    } catch (error) {
+    console.error(error);
+    }
+  });
 
   const props = defineProps({
   componentName: {
@@ -115,9 +115,9 @@ const saveButtonDisabled = computed(() => {
 
 
 
-//setVolume[num], play[], stop[], pause[], resume[], nextSong[], previousSong[], 
-//setGenre[classical/country/dance/latina/pop/rock], 
-//getPlaylist[], 
+//setVolume[num], play[], stop[], pause[], resume[], nextSong[], previousSong[],
+//setGenre[classical/country/dance/latina/pop/rock],
+//getPlaylist[],
 
 /* -------------------------------------- REFACTORING -------------------------------------- */
 const deviceState = ref(store.getDeviceState(props.componentId));           // estas variables inicialmente son correctas ya que vienen del MOUNT
@@ -139,16 +139,16 @@ function calculateProgress(songProgress, songDuration) {
   const timeSeconds2 = timeArray2[0] * 60 + timeArray2[1];
   const progress = (timeSeconds1 / timeSeconds2) * 100;
   const integer = Math.round(progress);
-  return integer
+  return integer || 0
 }
 
 const progress = computed( ()=> {
   // console.log(deviceState.value);
-  /* if(deviceState.value) {
+  if(deviceState.value) {
     // console.log("dentro del if");
     // console.log(calculateProgress(deviceState.value.song.progress, deviceState.value.song.duration));
     return calculateProgress(deviceState.value.song.progress, deviceState.value.song.duration);
-  } */
+  }
   return 0;
 })
 
@@ -159,7 +159,7 @@ const isPlaying = computed( ()=>{
 
 // boton de play tiene tres funciones: play, resume, pause
 function playButton(){
-  
+
   switch(status.value) {    // dummy value
     case 'paused':
       status.value = "playing";
@@ -168,7 +168,7 @@ function playButton(){
       var intervalId = setInterval(async () => {
         const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
         deviceState.value = deviceStateRT;
-        // console.log(deviceStateRT);
+        console.log(deviceStateRT);
         if (deviceStateRT.status !== 'playing') {
           clearInterval(intervalId);
         }
@@ -193,7 +193,7 @@ function playButton(){
       status.value = "paused";
       store.updateADeviceState(props.componentId, "pause", []);
       break;
-    default: 
+    default:
       console.log("que ha pasao");
       break;
   }
@@ -209,7 +209,7 @@ function stop(){
 function nextSong(){
   store.updateADeviceState(props.componentId, "nextSong", []);
 }
-function previousSong(){ 
+function previousSong(){
   store.updateADeviceState(props.componentId, "previousSong", []);
 }
 
@@ -279,14 +279,14 @@ function increaseVolume() {
         <v-col class="text-center" cols="4">
           <!-- row de volumen -->
           <v-text-field
-          v-model="volumeLevel" 
-          type="number" 
-          label="Volume" 
+          v-model="volumeLevel"
+          type="number"
+          label="Volume"
           :rules="[rules.acceptableVolumeLevel]"
           :min="0"
-          :max="10"  
-          class="rounded-input " 
-          bg-color='transparent' 
+          :max="10"
+          class="rounded-input "
+          bg-color='transparent'
           variant="solo"
           flat/>
         </v-col>
@@ -303,8 +303,8 @@ function increaseVolume() {
             label="Genre"
             class="rounded-input"
             bg-color='transparent' flat/>
-  
-            
+
+
           </v-col>
         <v-col cols="2">
           <v-btn icon @click="openPlaylistDialog" style="background-color: transparent; color:#204516;" flat>
@@ -327,7 +327,7 @@ function increaseVolume() {
           </v-btn>
         </v-col>
         <v-col cols="6">
-  
+
           <!-- row de play -->
           <v-row  justify="center">
             <v-col class="text-center" cols="12">
@@ -342,9 +342,9 @@ function increaseVolume() {
               </v-btn>
             </v-col>
           </v-row>
-  
+
           <!-- mostrador de tiempo de cancion -->
-          
+
           <v-row >
             <v-col cols="2">
             </v-col>
@@ -371,7 +371,7 @@ function increaseVolume() {
 
     <!-- dialog de cambiar nombre (settings) -->
     <v-dialog v-model="isDialogOpen" width="700px" >
-      <v-card class="toggle-card-popup"> 
+      <v-card class="toggle-card-popup">
         <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
           <v-card-title class="font-weight-bold text-h5 card-title">{{ deviceName }} Settings</v-card-title>
         </v-toolbar>
@@ -387,18 +387,18 @@ function increaseVolume() {
               type="string"
               :rules="[rules.maxLength, rules.minLength, rules.unique, rules.alphanumeric]"
             ></v-text-field>
-  
+
             </v-row>
           </v-card-text>
           <v-card-actions class="actions-style">
             <v-spacer></v-spacer>
             <v-btn color="common2" text @click="cancelSettings">Cancel</v-btn>
-            <v-btn 
+            <v-btn
               :disabled="!isFormValid"
               type="submit"
-              style="background-color: #f1edcd;margin: 10px" 
-              color="primary" 
-              text 
+              style="background-color: #f1edcd;margin: 10px"
+              color="primary"
+              text
               >Save</v-btn>
           </v-card-actions>
 
@@ -426,10 +426,10 @@ function increaseVolume() {
         </v-card-text>
         <v-card-actions class="actions-style" style="height: 50px;">
           <v-spacer></v-spacer>
-          <v-btn 
-          style="background-color: #f1edcd;margin: 10px" 
-          color="primary" 
-          text 
+          <v-btn
+          style="background-color: #f1edcd;margin: 10px"
+          color="primary"
+          text
           @click="isPlaylistDialogOpen= false"
           >Close</v-btn>
         </v-card-actions>
@@ -445,14 +445,14 @@ function increaseVolume() {
 <style scoped>
 .toggle-card {
   cursor: pointer;
-  padding: 16px;  
+  padding: 16px;
   border-radius: 20px;
   background-color: #f4e6bf;
   transition: all .2s ease-in-out;
   height: 300px;
   width: 400px;
   color: #1C4035; /* Change the color to your desired value */
-  
+
 }
 .toggle-card-popup {
   padding: 30px;
@@ -474,7 +474,7 @@ function increaseVolume() {
 }
 .rounded-input {
   border-radius: 10px;
-  box-shadow: inset 3px 1px 2px rgba(0, 0, 0, 0.2), 
+  box-shadow: inset 3px 1px 2px rgba(0, 0, 0, 0.2),
               inset 0 -1px 3px rgba(240, 222, 162, 0.5);
   background-color: transparent;
   height: 60px;
