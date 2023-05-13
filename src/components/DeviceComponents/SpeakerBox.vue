@@ -110,8 +110,28 @@ const saveButtonDisabled = computed(() => {
   return !isFormValid.value;
 });
 
+const songPlayingName = computed( ()=>{
+  if ( !deviceState.value.song )
+    return "-"
+  return deviceState.value.song.title
+})
 
+const songPlayingArtist = computed( ()=>{
+  if ( !deviceState.value.song )
+    return "-"
+  return deviceState.value.song.artist
+})
 
+const playingTime = computed( ()=>{
+  if ( !deviceState.value.song )
+    return "00:00"
+  return deviceState.value.song.progress;
+})
+const durationTime = computed( ()=>{
+  if ( !deviceState.value.song )
+    return "00:00"
+  return deviceState.value.song.duration;
+})
 //setVolume[num], play[], stop[], pause[], resume[], nextSong[], previousSong[],
 //setGenre[classical/country/dance/latina/pop/rock],
 //getPlaylist[],
@@ -179,7 +199,7 @@ async function playButton(){
         console.log(progress.value)
         if (deviceStateRT.status !== 'playing') {
             clearInterval(intervalId);
-        }
+        }s
       }, 1000);
       break;
 
@@ -262,6 +282,10 @@ async function increaseVolume() {
   volumeLevel.value += 1
 }
 
+// falopa
+
+
+
 </script>
 
 <template>
@@ -271,7 +295,7 @@ async function increaseVolume() {
       <v-row >
         <v-col cols="9">
           <v-btn @click="openSpeakerSettings" text color="transparent">
-            <v-card-title class="font-weight-bold text-h4 mb-0  card-title">{{ deviceName }}</v-card-title>
+            <v-card-title class="font-weight-bold text-h4  card-title">{{ deviceName }}</v-card-title>
             <v-tooltip
                   activator="parent"
                   location="right"
@@ -289,7 +313,7 @@ async function increaseVolume() {
 
     <v-card-text>
 
-      <v-row  justify="center">
+      <v-row  justify="center" style="margin-top: -20px;">
         <v-col class="text-center" cols="4">
           <!-- row de volumen -->
           <v-text-field
@@ -322,7 +346,7 @@ async function increaseVolume() {
           </v-col>
         <v-col cols="2">
           <v-btn icon @click="openPlaylistDialog" style="background-color: transparent; color:#204516;" flat>
-            <v-icon>mdi-playlist-play</v-icon>
+            <v-icon>mdi-playlist-music</v-icon>
             <v-tooltip
                   activator="parent"
                   location="right"
@@ -333,53 +357,73 @@ async function increaseVolume() {
       </v-row>
     </v-card-text>
 
-    <v-card-actions class="actions-style " style="height: 120px;">
-      <v-row justify="center">
-        <v-col cols="3">
-          <v-btn icon @click="decreaseVolume"  style="background-color: #0000000b; color:#f1edcd; margin-left: 30px; margin-top: 10px;"  flat>
-            <v-icon>mdi-volume-minus</v-icon>
-          </v-btn>
-        </v-col>
-        <v-col cols="6">
-
-          <!-- row de play -->
-          <v-row  justify="center">
-            <v-col class="text-center" cols="12">
-              <v-btn icon @click="previousSong" style="background-color: transparent;" color="common">
-                <v-icon>mdi-skip-previous</v-icon>
-              </v-btn>
-              <v-btn icon @click="playButton" style="background-color: #f1edcd;" color="black">
-                <v-icon>{{ isPlaying ? 'mdi-pause' :'mdi-play' }}</v-icon>
-              </v-btn>
-              <v-btn icon @click="nextSong" style="background-color: transparent;" color="common">
-                <v-icon>mdi-skip-next</v-icon>
-              </v-btn>
-            </v-col>
-          </v-row>
-
-          <!-- mostrador de tiempo de cancion -->
-
-          <v-row >
-            <v-col cols="2">
-            </v-col>
-            <v-col cols="8">
-              <v-progress-linear
-              v-model="progress"
-              :min="0"
-              :max="100"
-              color="common2"
-              ></v-progress-linear>
-            </v-col>
-            <v-col cols="2">
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col cols="3">
-          <v-btn icon @click="increaseVolume" style="background-color: #0000000b; color:#f1edcd; margin-top: 10px;" flat>
-            <v-icon>mdi-volume-plus</v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
+    <v-card-actions class="actions-style " style="height: 140px;">
+      <v-col>
+        <v-row style="margin-top: -30px;" v-if="songPlayingName!='-'">
+          <v-col cols="12" class="text-center">
+            <div class="text-container">
+            <span style="color: #35a35c"> <b>{{songPlayingName}}</b> - {{songPlayingArtist}}</span>
+            </div>
+          </v-col>
+        </v-row>
+        
+        <v-row justify="center" style="margin-top: -20px;">
+          <v-col cols="3">
+            <v-btn icon @click="decreaseVolume"  style="background-color: #0000000b; color:#f1edcd; margin-left: 30px; margin-top: 10px;"  flat>
+              <v-icon>mdi-volume-minus</v-icon>
+            </v-btn>
+            <v-row>
+              <div style="margin-left: 105px; margin-top: 15px;">
+                <span style="color:#f1edcd ; font-size: 12px; ">{{ playingTime }}</span>
+              </div>
+            </v-row>
+          </v-col>
+          <v-col cols="6">
+            
+            <!-- row de play -->
+            <v-row  justify="center">
+              <v-col class="text-center" cols="12">
+                <v-btn icon @click="previousSong" style="background-color: transparent;" color="common">
+                  <v-icon>mdi-skip-previous</v-icon>
+                </v-btn>
+                <v-btn icon @click="playButton" style="background-color: #f1edcd;" color="black">
+                  <v-icon>{{ isPlaying ? 'mdi-pause' :'mdi-play' }}</v-icon>
+                </v-btn>
+                <v-btn icon @click="nextSong" style="background-color: transparent;" color="common">
+                  <v-icon>mdi-skip-next</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+  
+            <!-- mostrador de tiempo de cancion -->
+  
+            <v-row >
+              <v-col cols="2">
+              </v-col>
+              <v-col cols="8">
+                    <v-progress-linear
+                    v-model="progress"
+                    :min="0"
+                    :max="100"
+                    color="common2"
+                    ></v-progress-linear>
+              </v-col>
+              <v-col cols="2">
+              </v-col>
+            </v-row>
+          </v-col>
+          <v-col cols="3">
+            <v-btn icon @click="increaseVolume" style="background-color: #0000000b; color:#f1edcd; margin-top: 10px;" flat>
+              <v-icon>mdi-volume-plus</v-icon>
+            </v-btn>
+            <v-row>
+              <div style="margin-left: -40px; margin-top: 15px;">
+                <span style="color:#f1edcd ;font-size: 12px; ">{{ durationTime }}</span>
+              </div>
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-col>
     </v-card-actions>
 
 
@@ -457,6 +501,24 @@ async function increaseVolume() {
 
 
 <style scoped>
+.text-container {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  animation: marquee 8s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(200%);
+  }
+  100% {
+    transform: translateX(-200%);
+  }
+}
+
+
+
 .toggle-card {
   cursor: pointer;
   padding: 16px;
