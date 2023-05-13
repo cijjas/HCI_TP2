@@ -134,7 +134,6 @@
     })
 
     const routineActionsLength = computed(()=>{
-      console.log("number of actions: " + store.getARoutine(props.routineId).actions.length)
       return store.getARoutine(props.routineId).actions.length;
     })
 
@@ -264,7 +263,7 @@
       height: 40px;
       border-radius: 10px;
       box-shadow: 0 2px 4px rgba(24, 15, 15, 0.589);
-      background-color: #778da9;
+      background-color: #ec0000;
 }
 
 .ok-button {

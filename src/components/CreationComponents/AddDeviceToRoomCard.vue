@@ -77,7 +77,7 @@ import { computed } from 'vue';
       <v-toolbar color="transparent" dense dark style="height: 120px;">
         <v-col cols="12" >
             <v-row >
-                <v-toolbar-title class="font-weight-bold text-h4 title-style mt-16 ml-8">Add Device</v-toolbar-title>
+                <v-toolbar-title class="font-weight-bold text-h4 title-style mt-16 ml-8">Add Device to <br>{{ localDeviceRoom }}</v-toolbar-title>
             </v-row>
         </v-col>
       </v-toolbar>
