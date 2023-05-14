@@ -20,7 +20,8 @@ const props = defineProps({
     required: true
   }
 })
-  // const props = defineProps(['roomName', 'devicesCount']);
+
+  const idOfInterval = ref("");
   const componentId = ref(props.componentId);
   const componentRoom = ref(props.componentRoom);
   const sliderValue = ref(10);
@@ -75,6 +76,7 @@ const props = defineProps({
 
 
   const deleteDevice = () => {
+    clearInterval(idOfInterval.value);
     store.deleteADeviceByName(deviceName.value);
     openDeleteDialog();
     cancelSettings();
@@ -135,6 +137,7 @@ function changeStatus(){
 async function open() {
   await store.updateADeviceState(props.componentId, "open", []);        // le avisa la api que arranque a abrir, local storage "opened"
   const intervalId = setInterval(async () => {
+    idOfInterval.value = intervalId;
     moving.value = true;
     const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
     deviceState.value = deviceStateRT;
@@ -151,6 +154,7 @@ async function open() {
 async function close() {
   await store.updateADeviceState(props.componentId, "close", []);
   const intervalId = setInterval(async () => {
+    idOfInterval.value = intervalId;
     moving.value = true;
     const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
     deviceState.value = deviceStateRT

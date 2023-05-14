@@ -18,6 +18,8 @@
     required: true
   }
 })
+
+  const idOfInterval = ref("");
   // const props = defineProps(['roomName', 'devicesCount']);
   const componentId = ref(props.componentId);
   const componentRoom = ref(props.componentRoom);
@@ -83,7 +85,10 @@
     isDialogOpen.value = false;
   };
   const deleteDevice = () => {
-    store.deleteADeviceByName(deviceName.value);
+    close(); //cierro canilla 
+    status.value = "closed";
+    clearInterval(idOfInterval.value); //corto el polling
+    store.deleteADeviceByName(deviceName.value); //borro de la api
     openDeleteDialog();
     cancelSettings();
 };
@@ -137,6 +142,7 @@ async function dispense() {
 
   //polling para chequear estado -> 
   const intervalId = setInterval(async () => {
+    idOfInterval.value = intervalId;
     const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
     deviceState.value = deviceStateRT;
 

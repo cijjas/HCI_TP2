@@ -28,7 +28,7 @@
   }
 })
   // const props = defineProps(['roomName', 'devicesCount']);
-
+  const idOfInterval = ref("");
   const isDialogOpen = ref(false);
   const isDeleteDialogOpen = ref(false);
   const volumeLevel = ref(store.getDeviceState(props.componentId).volume);
@@ -46,6 +46,7 @@
     return /^[a-zA-Z0-9\s]+$/.test(value);
   };
   const deleteDevice = () => {
+    clearInterval(idOfInterval.value);
     store.deleteADeviceByName(deviceName.value);
     openDeleteDialog();
     cancelSettings();
@@ -189,6 +190,7 @@ async function playButton(){
       await store.updateADeviceState(props.componentId, "resume", []);
         // polling para el tiempo de avance de la cancion
       var intervalId = setInterval(async () => {
+        idOfInterval.value = intervalId;
         const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
         deviceState.value = deviceStateRT;
         deviceState.value.song = deviceStateRT.song
@@ -203,6 +205,7 @@ async function playButton(){
       await store.updateADeviceState(props.componentId, "play", []);
         // polling para el tiempo de avance de la cancion
       var intervalId = setInterval(async () => {
+        idOfInterval.value = intervalId;
         const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
         deviceState.value = deviceStateRT;
         deviceState.value.song = deviceStateRT.song
