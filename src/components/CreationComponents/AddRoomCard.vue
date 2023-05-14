@@ -26,6 +26,7 @@ const openCreateDialog = () => {
 const {handleSubmit, handleReset} = useForm({
   validationSchema:{
     roomName(value){
+      if(!value) return 'Name is required.'
       const repeated = store.getARoomByName(value) ? true : false;
       if(repeated) {
         return 'Room name already in use.'

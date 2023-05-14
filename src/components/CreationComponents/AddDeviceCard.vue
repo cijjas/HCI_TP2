@@ -39,6 +39,7 @@
           return 'Select a device type.'
         },
         name(value){ // agregar testeo de si ya existe el nombre
+          if(!value) return 'Name is required.'
           const repeated = store.getADeviceByName(value) ? true : false;
           if(repeated) {
             return 'Name already in use.' ;

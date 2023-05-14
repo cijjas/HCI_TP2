@@ -46,6 +46,7 @@ import { computed } from 'vue';
           return 'Select a device type.'
         },
         name(value){
+          if(!value) return 'Name is required.'
           const repeated = store.getADeviceByName(value) ? true : false;
           if(repeated) {
             return 'Device name already in use.'
