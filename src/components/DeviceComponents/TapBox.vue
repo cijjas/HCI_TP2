@@ -30,7 +30,6 @@
   const amountValue = ref(1);
   const selectedUnit = ref(null);
   const unit = ref(['litres', 'gallons', 'mililitres', 'ounces']);
-  const dispensing = ref(false);
 
   const tempDeviceName = ref(deviceName.value);
   const tempAmountValue = ref(amountValue.value);
@@ -123,7 +122,10 @@ async function open() {
 async function close() {
   await store.updateADeviceState(props.componentId, "close", []);
 }
-const isDispensing = ref(false);
+const isDispensing = computed( ()=>{
+  return status.value == 'opened'
+})
+
 async function dispense() {
   if(amountValue.value < 1 || amountValue.value > 100 || selectedUnit.value == null ) {
     //mal la cantidad
@@ -131,7 +133,6 @@ async function dispense() {
   }
   
   status.value = "opened";
-  isDispensing.value = true;
   await store.updateADeviceState(props.componentId, "dispense", [amountValue.value, selectedUnit.value]);        // le avisa la api que arranque a abrir, local storage "opened"
 
   //polling para chequear estado -> 
@@ -142,7 +143,6 @@ async function dispense() {
     //cuando se dispensó todo, el state es 'closed' -> termino el polling
     if (deviceStateRT.status == 'closed') {
       clearInterval(intervalId);
-      isDispensing.value = false;
       status.value = "closed";
     }
   }, 1000);
