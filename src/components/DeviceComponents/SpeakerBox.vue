@@ -194,7 +194,7 @@ async function playButton(){
         deviceState.value.song = deviceStateRT.song
         if (deviceStateRT.status !== 'playing') {
             clearInterval(intervalId);
-        }s
+        }
       }, 1000);
       break;
 
