@@ -123,7 +123,7 @@ async function open() {
 async function close() {
   await store.updateADeviceState(props.componentId, "close", []);
 }
-
+const isDispensing = ref(false);
 async function dispense() {
   if(amountValue.value < 1 || amountValue.value > 100 || selectedUnit.value == null ) {
     //mal la cantidad
@@ -131,6 +131,7 @@ async function dispense() {
   }
   
   status.value = "opened";
+  isDispensing.value = true;
   await store.updateADeviceState(props.componentId, "dispense", [amountValue.value, selectedUnit.value]);        // le avisa la api que arranque a abrir, local storage "opened"
 
   //polling para chequear estado -> 
@@ -141,10 +142,12 @@ async function dispense() {
     //cuando se dispensó todo, el state es 'closed' -> termino el polling
     if (deviceStateRT.status == 'closed') {
       clearInterval(intervalId);
+      isDispensing.value = false;
       status.value = "closed";
     }
   }, 1000);
 }
+const isUnitSelected = ref(false);
 
 </script>
 
@@ -187,7 +190,7 @@ async function dispense() {
       <v-card-action class="actions-style" style="height: 90px; margin: 20px ">
         <v-card-text>
           <v-row >
-            <v-col>
+            <v-col cols="4">
                 <v-text-field 
                     v-model="amountValue" 
                     type="number" 
@@ -200,7 +203,7 @@ async function dispense() {
                     :rules="[rules.validAmount, rules.required]"
                     bg-color='transparent' flat/>
             </v-col>
-            <v-col >
+            <v-col cols="4">
               <v-select 
                   v-model="selectedUnit" 
                   :disabled="isOn" 
@@ -208,15 +211,24 @@ async function dispense() {
                   label="Unit" 
                   variant="solo" 
                   class="rounded-select green-text"  
-                  bg-color='transparent' flat />
+                  bg-color='transparent' flat 
+                  @update:model-value="isUnitSelected=true"
+                  />
             </v-col>
-            <v-col >
-              <v-btn 
-                :disabled="isOn" 
+            <v-col cols="4">
+              <v-btn v-if="!isDispensing"
+                :disabled="isOn || !isUnitSelected || amountValue < 1 || amountValue > 100" 
                 color="primary" 
-                @click="dispense();" 
-                class="small-button"
+                @click="dispense(); isUnitSelected=false" 
+                class="small-button ml-2"
                 >Dispense</v-btn>
+                <v-chip v-if="isDispensing"
+                  class="ma-2 dispensing-chip"
+                  color="green"
+                  text-color="white"
+                >
+                  Dispensing
+                </v-chip>
             </v-col>
           </v-row>
         </v-card-text>
@@ -262,6 +274,22 @@ async function dispense() {
 </template>
 
 <style scoped>
+.dispensing-chip {
+  animation: grow-shrink 2s infinite ease-in-out;
+  transform-origin: center;
+}
+
+@keyframes grow-shrink {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 .actions-style {
     position: absolute;
     bottom: 0;

@@ -258,7 +258,7 @@ async function decreaseVolume() {
   await store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value - 1]);
   volumeLevel.value = parseInt(volumeLevel.value) - 1;
 }
-
+ 
 async function increaseVolume() {
   if(!(volumeLevel.value < 10) ){
     return  
