@@ -78,7 +78,6 @@ const props = defineProps({
     store.deleteADeviceByName(deviceName.value);
     openDeleteDialog();
     cancelSettings();
-    router.push('/');
 };
 
 const openDeleteDialog = () => {

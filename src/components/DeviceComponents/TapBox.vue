@@ -191,7 +191,7 @@ const isUnitSelected = ref(false);
         <v-card-text>
           <v-row >
             <v-col cols="4">
-                <v-text-field 
+                <v-text-field v-if="!isDispensing"
                     v-model="amountValue" 
                     type="number" 
                     label="Amount" 
@@ -204,7 +204,7 @@ const isUnitSelected = ref(false);
                     bg-color='transparent' flat/>
             </v-col>
             <v-col cols="4">
-              <v-select 
+              <v-select v-if="!isDispensing"
                   v-model="selectedUnit" 
                   :disabled="isOn" 
                   :items="unit" 
@@ -223,11 +223,12 @@ const isUnitSelected = ref(false);
                 class="small-button ml-2"
                 >Dispense</v-btn>
                 <v-chip v-if="isDispensing"
-                  class="ma-2 dispensing-chip"
+                  class="dispensing-chip"
+                  style="width: 300px; height: 40px;"
                   color="green"
                   text-color="white"
                 >
-                  Dispensing
+                  Dispensing 
                 </v-chip>
             </v-col>
           </v-row>
