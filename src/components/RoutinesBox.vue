@@ -192,7 +192,6 @@ color: #2c432e;
 .toggle-card-popup {
 padding: 30px;
 border-radius: 15px !important;
-background-image: url("./DeviceAssets/fuego.png");
 background-position-x: 50%;
 background-position-y: -100px ;
 background-size: 1200px;

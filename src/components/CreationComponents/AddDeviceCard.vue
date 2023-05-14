@@ -73,12 +73,24 @@
         <v-col cols="12" >
             <v-row >
                 <v-toolbar-title class="font-weight-bold text-h4 title-style mt-16 ml-8">Add Device</v-toolbar-title>
+                <v-btn icon class="mt-16 mr-10">
+                  <v-icon color="primary">mdi-information-outline</v-icon>
+                  <v-tooltip
+                    activator="parent"
+                    location="right"
+                  > To add a device you must select a room, <br>
+                   a device type and a name for the device.<br>
+                    If no rooms are available, you must create<br>
+                   one first.
+
+                </v-tooltip>
+                </v-btn>
             </v-row>
         </v-col>
       </v-toolbar>
 
         <v-form @submit.prevent="submit">
-                <v-select
+                <v-select v-if="store.getRoomNames.length > 0"
                     v-model="room.value.value"
                     :error-messages="room.errorMessage.value"
                     :items="store.getRoomNames"
@@ -87,8 +99,17 @@
                     class="pl-8 pt-8 pr-8"
                     base-color="primary"
                     color="verdatim"
-
                 ></v-select>
+                <v-btn v-else to="/Rooms" 
+                  class="ml-8"
+                  type="submit" 
+                  style="background-color: #0d432d; color:antiquewhite"
+                  >
+                  <v-icon class="white-text">
+                    mdi-plus
+                  </v-icon>
+                  ADD Room
+                </v-btn>
                 <v-select
                     v-model="type.value.value"
                     :error-messages="type.errorMessage.value"
@@ -186,5 +207,6 @@
   .v-card__title {
     padding: 0;
   }
+  
   </style>
   

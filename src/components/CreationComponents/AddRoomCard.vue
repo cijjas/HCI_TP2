@@ -60,6 +60,14 @@ const submit = handleSubmit(values => {
         <v-col cols="12" >
             <v-row >
                 <v-toolbar-title class="font-weight-bold text-h4 title-style mt-16 ml-8">Add Room</v-toolbar-title>
+                <v-btn icon class="mt-16 mr-10">
+                  <v-icon color="primary">mdi-information-outline</v-icon>
+                  <v-tooltip
+                    activator="parent"
+                    location="right"
+                  > Select a room name and click ADD to create a new room.
+                </v-tooltip>
+                </v-btn>
             </v-row>
         </v-col>
       </v-toolbar>
