@@ -37,6 +37,10 @@
                     <v-card-text class="text-secondary">
                       support@homehive.com
                     </v-card-text>
+                    <v-card-text>
+                      {{store.rooms}}<br><br>
+                      {{ store.devices}}
+                    </v-card-text>
                   
                 </v-card>
 

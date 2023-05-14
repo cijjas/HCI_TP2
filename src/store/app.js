@@ -179,6 +179,7 @@ export const useAppStore = defineStore('app', {
           },
           name : deviceName,
           meta : {
+            intervalId : "",
             component : "default"
           }
         }
@@ -213,6 +214,7 @@ export const useAppStore = defineStore('app', {
         // local
         var room = this.getARoomByName(roomName);
         room.meta.devices.push(result.id);
+        
         // remoto
         this.updateARoom(room.id, room.name);
 
@@ -242,6 +244,7 @@ export const useAppStore = defineStore('app', {
           id : id,
           name : newname,
           meta: {
+            intervalId: this.getADevice(id).meta.intervalId,
             component : this.getADevice(id).meta.component
           }
         }
@@ -467,6 +470,7 @@ export const useAppStore = defineStore('app', {
       if ( room === undefined )
         return;
       for ( let i = 0; i < room.meta.devices.length ; i++ ){
+        clearInterval(this.getADevice(room.meta.devices[i]).meta.intervalId);
         removeItemFromArray(this.devices, room.meta.devices[i] );
         await DevicesApi.remove(room.meta.devices[i]);
       }
@@ -831,5 +835,6 @@ export const useAppStore = defineStore('app', {
 
   }
 })
+
 
 

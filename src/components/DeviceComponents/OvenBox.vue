@@ -168,6 +168,8 @@ async function changeState() {
   //cuando me cambian datos dentro del popup y apretan save, se prende el horno
   await turnOn();
 
+  await store.updateADevice(componentId.value, deviceName.value);
+
   await store.updateADeviceState(componentId.value, "setGrill", [tempGrillMode.value]);
 
   await store.updateADeviceState(componentId.value, "setHeat", [tempheatMode.value]);

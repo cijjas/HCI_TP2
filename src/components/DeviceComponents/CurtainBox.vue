@@ -51,11 +51,12 @@ const props = defineProps({
     tempDeviceName.value = deviceName.value;
   };
 
-  const saveSettings = () => {
+  const saveSettings = async() => {
     if(!deviceNameIsValid()) {
         return;
     }
     deviceName.value = tempDeviceName.value;
+    await store.updateADevice(componentId.value, deviceName.value);
     isDialogOpen.value = false;
   };
 
@@ -137,6 +138,7 @@ function changeStatus(){
 async function open() {
   await store.updateADeviceState(props.componentId, "open", []);        // le avisa la api que arranque a abrir, local storage "opened"
   const intervalId = setInterval(async () => {
+    store.getADevice(componentId.value).meta.intervalId = intervalId;
     idOfInterval.value = intervalId;
     moving.value = true;
     const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
@@ -154,6 +156,7 @@ async function open() {
 async function close() {
   await store.updateADeviceState(props.componentId, "close", []);
   const intervalId = setInterval(async () => {
+    store.getADevice(componentId.value).meta.intervalId = intervalId;
     idOfInterval.value = intervalId;
     moving.value = true;
     const deviceStateRT = await store.getDeviceStateAPI(props.componentId);

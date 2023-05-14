@@ -77,11 +77,12 @@
     isDialogOpen.value = false;
     tempDeviceName.value = deviceName.value;
   };
-  const saveSettings = () => {
+  const saveSettings = async() => {
     if(!deviceNameIsValid()) {
         return;
     }
     deviceName.value = tempDeviceName.value;
+    await store.updateADevice(componentId.value, deviceName.value);
     isDialogOpen.value = false;
   };
   const deleteDevice = () => {
@@ -148,6 +149,7 @@ async function dispense() {
 
     //cuando se dispensó todo, el state es 'closed' -> termino el polling
     if (deviceStateRT.status == 'closed') {
+      store.getADevice(componentId.value).meta.intervalId = intervalId;
       clearInterval(intervalId);
       status.value = "closed";
     }

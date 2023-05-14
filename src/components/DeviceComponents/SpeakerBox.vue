@@ -90,13 +90,16 @@ const cancelSettings = () => {
   tempVolumeLevel.value = volumeLevel.value;
   tempDeviceName.value = deviceName.value;
 };
-const saveSettings = () => {
+const saveSettings = async() => {
+  console.log("receiving name: " + tempDeviceName.value);
   if(!deviceNameIsValid()) {
         return;
     }
-  isDialogOpen.value = false;
+  
   volumeLevel.value = tempVolumeLevel.value;
   deviceName.value = tempDeviceName.value;
+  await store.updateADevice(componentId.value, tempDeviceName.value);
+  isDialogOpen.value = false;
 };
 function playButtonIcon(){
   if(playButtonIcon.value == 'mdi-play'){
@@ -190,6 +193,7 @@ async function playButton(){
       await store.updateADeviceState(props.componentId, "resume", []);
         // polling para el tiempo de avance de la cancion
       var intervalId = setInterval(async () => {
+        store.getADevice(componentId.value).meta.intervalId = intervalId;
         idOfInterval.value = intervalId;
         const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
         deviceState.value = deviceStateRT;
@@ -205,6 +209,7 @@ async function playButton(){
       await store.updateADeviceState(props.componentId, "play", []);
         // polling para el tiempo de avance de la cancion
       var intervalId = setInterval(async () => {
+        store.getADevice(componentId.value).meta.intervalId = intervalId;
         idOfInterval.value = intervalId;
         const deviceStateRT = await store.getDeviceStateAPI(props.componentId);
         deviceState.value = deviceStateRT;
@@ -455,7 +460,7 @@ const clicked= ref(false);
     <v-dialog v-model="isDialogOpen" width="700px" >
       <v-card class="toggle-card-popup">
         <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
-          <v-card-title class="font-weight-bold text-h5 card-title">{{ deviceName }} Settings</v-card-title>
+          <v-card-title class="font-weight-bold text-h5 card-title">Speaker Settings</v-card-title>
         </v-toolbar>
         <v-form v-model="isFormValid" @submit.prevent="saveSettings">
           <v-card-text>

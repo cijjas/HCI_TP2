@@ -117,6 +117,8 @@ const deviceState = ref(store.getDeviceState(props.componentId));           // e
 
 async function changeState() {
 
+  await store.updateADevice(componentId.value, deviceName.value);
+
   await store.updateADeviceState(componentId.value, "setFreezerTemperature", [freezerTemperature.value]);
   
   await store.updateADeviceState(componentId.value, "setTemperature", [fridgeTemperature.value]);

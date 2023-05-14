@@ -36,10 +36,10 @@ const openCreateDialog = () => {
   }, 2000);
 };
 
-const saveName = () => {
+const saveName = async() => {
   if (tempRoomName.value !== '') {
       nameRoom.value = tempRoomName.value; // Update the roomName variable with the new value
-      store.updateARoom(roomId.value, nameRoom.value);
+      await store.updateARoom(roomId.value, tempRoomName.value);
   }
   openEditDialog();
   // isDialogOpen.value = !isDialogOpen.value;
