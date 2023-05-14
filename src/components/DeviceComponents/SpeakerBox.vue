@@ -249,21 +249,24 @@ async function updateGenre(selection){
 
 
 async function setVolume() {
-  await store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value]);
+  await store.updateADeviceState(props.componentId, "setVolume", [parseInt(volumeLevel.value)]);
 }
 async function decreaseVolume() {
   if(!(volumeLevel.value > 0) ){
     return  
   }
-  await store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value - 1]);
+  await store.updateADeviceState(props.componentId, "setVolume", [parseInt(volumeLevel.value) - 1]);
   volumeLevel.value = parseInt(volumeLevel.value) - 1;
 }
 
 async function increaseVolume() {
+  console.log(volumeLevel.value);
   if(!(volumeLevel.value < 10) ){
+    console.log("entre al if")
     return  
   }
-  await store.updateADeviceState(props.componentId, "setVolume", [volumeLevel.value + 1]);
+  console.log("pase el if");
+  await store.updateADeviceState(props.componentId, "setVolume", [parseInt(volumeLevel.value) + 1]);
   volumeLevel.value = parseInt(volumeLevel.value) + 1;
 }
 function changed (){
