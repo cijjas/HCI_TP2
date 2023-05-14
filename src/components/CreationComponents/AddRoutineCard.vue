@@ -41,7 +41,7 @@ const routineActions = ref([]);
 
 const rules = {
     required: value => !!value || 'Required.',
-    min: (value) => value.length >= 1 || 'Min 1 characters',
+    min: (value) => value.length >= 3 || 'Min 3 characters',
     max: (value) => value.length <= 15 || 'Max 15 characters',
     notRepeated: (value) => !store.getRoutinesNames.includes(value) || 'Routine already exists',
     isNumber: (value) => !isNaN(value) || 'Must be a number',

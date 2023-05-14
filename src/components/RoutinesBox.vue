@@ -4,7 +4,7 @@
 <template>
   <v-card :class="bg-on" class="toggle-card"  @click="toggleCard" >
     <v-toolbar :rounded="true" class="rounded-toolbar" transparent>
-      <v-toolbar-title class="text--white font-weight-bold text-h4 mb-0">
+      <v-toolbar-title @click="isDialogOpen=true" class="text--white font-weight-bold text-h4 mb-0">
           {{ nameRoutine }}
       </v-toolbar-title>
       
@@ -47,13 +47,20 @@
       <v-card class="toggle-card-popup">
         <v-card-title class="headline">Edit '{{ nameRoutine }}'</v-card-title>
         <v-card-text>
-          <v-text-field label="New Routine Name" v-model="tempRoutineName" :placeholder="nameRoutine"></v-text-field>
+          <v-text-field 
+          :rules="[rules.required, rules.notRepeated, rules.alphanumeric, rules.min, rules.max]" 
+          label="New Routine Name" 
+          v-model="tempRoutineName" 
+          :placeholder="nameRoutine"></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-btn class="delete-button" color="white" @click="openDeleteDialog"> Delete Routine</v-btn>
           <v-spacer></v-spacer>
           <v-btn color="primary" @click="openEditDialog">Cancel</v-btn>
-          <v-btn color="primary" variant="flat" @click="saveName">Save</v-btn>
+          <v-btn 
+          color="primary" 
+          variant="flat" 
+          @click="saveName">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -107,8 +114,23 @@ onMounted(async () => {             // cuando se monta la pagina pido los datos
   console.error(error);
   }
   });
-
+  const rules = {
+    required: value => !!value || 'Required.',
+    min: (value) => value.length >= 3 || 'Min 3 characters',
+    max: (value) => value.length <= 15 || 'Max 15 characters',
+    notRepeated: (value) => !store.getRoutinesNames.includes(value) || 'Routine already exists',
+    alphanumeric : value => /^[a-zA-Z0-9\s]+$/.test(value) || 'Only alphanumeric characters'
+};
 async function saveName()  {
+  if(tempRoutineName.value.length < 3 || tempRoutineName.value.length > 15){
+      return;
+  }
+  if(store.getRoutinesNames.includes(tempRoutineName.value)){
+      return;
+  }
+  if(!/^[a-zA-Z0-9\s]+$/.test(tempRoutineName.value)){
+      return;
+  }
   if (tempRoutineName.value !== '') {
       nameRoutine.value = tempRoutineName.value; // Update the routineName variable with the new value
       await store.updateARoutineName(routineId.value, tempRoutineName.value);

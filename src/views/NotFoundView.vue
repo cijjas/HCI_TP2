@@ -26,7 +26,7 @@
     margin: 100px; 
     margin-left: 600px; 
     border-radius: 30px
-} 
+}
 .actions-style {
     position: absolute;
     bottom: 0;
